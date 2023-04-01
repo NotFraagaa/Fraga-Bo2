@@ -58,13 +58,22 @@ Origins
 
 
 DVars
-SPH_start                                           //What round sph starts showing, default is 30
-timer 1 0                                           //Enables timer, default is enabled
-round_timer 1 0                                     //Enables round timer, default is enabled
-timer_yposition                                     //Changes timer position
-timer_xposition                                     //Changes timer position
-timer_color "x x x"                                 //Changes timer color
-fontscale                                           //Changes the size of the HUD
-tramplesteam_counter 0 1                            //enables or disables the counter, default is enabled
-turbine_counter 0 1                                 //enables or disables the counter, default is enabled
-resonator_counter 0 1                               //enables or disables the counter, default is enabled
+SPH_start
+    What round sph starts showing, default is 30
+timer 1 0
+    Enables timer, default is enabled
+round_timer 1 0
+    Enables round timer, default is enabled
+timer_yposition
+timer_xposition
+    Changes timer position
+timer_color "x x x"
+    Changes timer color
+fontscale
+    Changes the size of the HUD
+tramplesteam_counter 0 1
+    Enables or disables the counter, default is enabled
+turbine_counter 0 1
+    Enables or disables the counter, default is enabled
+resonator_counter 0 1
+    Enables or disables the counter, default is enabled
