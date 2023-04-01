@@ -59,37 +59,38 @@ Origins
 
 DVars
 
-    SPH_start
+SPH_start
 
         What round sph starts showing, default is 30
     
-    timer 1 0
+timer 1 0
 
         Enables timer, default is enabled
-    round_timer 1 0
+round_timer 1 0
 
        Enables round timer, default is enabled
     
-    timer_yposition
-    timer_xposition
+timer_yposition
+timer_xposition
 
         Changes timer position
     
-    timer_color "x x x"
+timer_color "x x x"
 
       Changes timer color
     
-    fontscale
+fontscale
 
         Changes the size of the HUD
-    tramplesteam_counter 0 1
+        
+tramplesteam_counter 0 1
 
        Enables or disables the counter, default is enabled
     
-    turbine_counter 0 1
+turbine_counter 0 1
 
       Enables or disables the counter, default is enabled
     
-    resonator_counter 0 1
+resonator_counter 0 1
 
       Enables or disables the counter, default is enabled
