@@ -1,7 +1,5 @@
 # Fraga-Bo2
 
-This script makes changes that are convenient for highround / speedrun players
-
 HUD CHANGES
 
     Game timer
