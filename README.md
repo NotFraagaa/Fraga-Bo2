@@ -7,7 +7,8 @@ HUD CHANGES
     Trap timer
     SPH meter (default start at 30)
     HUD color and position can be changed
-MAP CHANGES
+
+# MAP CHANGES
 
 Tranzit
 
