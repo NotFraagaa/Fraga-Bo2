@@ -57,11 +57,17 @@ Origins
 # Splits
 
 Round 5: Rounds 1,2,3,4,5
+
 Round 30: Rounds 5, 10, 15, 20, 25, 30
+
 Round 50: Rounds 10, 20, 30, 40, 50
+
 Round 70: Rounds 10, 20, 30, 40, 50, 60, 70
+
 Round 100: Rounds 30, 50, 70, 80, 90, 100
+
 Round 150: Rounds 50, 70, 100, 125, 130, 140, 150
+
 Round 200: Rounds 50, 70, 100, 150, 175, 200
 
 To change the sr use the following DVars:
@@ -69,11 +75,17 @@ To change the sr use the following DVars:
     there can only be one at the same time, for changing them you need to do a fast_restart
 
 5SR 1
+
 30SR 1
+
 50SR 1
+
 70SR 1
+
 100SR 1
+
 150SR 1
+
 200SR 1
 
 DVars
