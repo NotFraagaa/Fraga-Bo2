@@ -260,12 +260,12 @@ onconnect()
 
 	if(level.script == "zm_tomb")
 	{
-		replacefunc(get_pack_a_punch_weapon_options(), origins_pap_camo());
+		replacefunc(maps\mp\zombies\_zm_weapons::get_pack_a_punch_weapon_options, ::origins_pap_camo);
 	}
 
 	if(level.script == "zm_buried")
 	{
-		replacefunc(get_pack_a_punch_weapon_options(), buried_pap_camo());
+		replacefunc(maps\mp\zombies\_zm_weapons::get_pack_a_punch_weapon_options, ::buried_pap_camo);
 	}
 }
 
