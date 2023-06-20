@@ -74,7 +74,7 @@ init()
 
 	if(GetDvar("5SR") == "1")
     {
-        level thread timer( strtok("Round 1|Round 2|Round 3|Round 4|Round 5", "|"), 50, 0);
+        level thread timer( strtok("Round 2|Round 3|Round 4|Round 5", "|"), 50, 0);
     }
     if(GetDvar("30SR") == "1")
     {
@@ -100,41 +100,8 @@ init()
     {
         level thread timer( strtok("Round 50|Round 70|Round 100|Round 150|Round 175|Round 200", "|"), 50, 0);
     }
-	level.fraga_splits_active_color = (0.82, 0.97, 0.97);
-    level.fraga_splits_complete_color = (0, 0, 0);
+    level.fraga_splits_complete_color = (0, 1, 1);
     
-}
-
-enable_cheats()
-{
-	setdvar("sv_cheats", 1);
-	setdvar("cg_ufo_scaler", 0.7);
-}
-
-fix_highround()
-{
-	while(level.round_number > 155)
-	{
-		zombies = getaiarray("axis");
-		i = 0;
-		while(i < zombies.size)
-		{
-			if(zombies[i].targetname != "zombie")
-			{
-				continue;
-			}
-			if(zombies[i].targetname == "zombie")
-			{
-				if(!isdefined(zombies[i].health_override))
-				{
-					zombies[i].health_override = 1;
-					zombies[i].health = 1044606723;
-				}
-			}
-			i++;
-		}
-		wait(0.1);
-	}
 }
 
 onplayerconnect()
@@ -172,57 +139,6 @@ onplayerconnect()
 		{
 			player thread survivalmap();
 		}
-	}
-}
-
-//Better way of doing this
-isvictismap()
-{
-	if (level.script == "zm_transit")
-	{
-		return 1;
-	}
-	else if (level.script == "zm_highrise")
-	{
-		return 1;
-	}
-	else if (level.script == "zm_buried")
-	{
-		return 1;
-	}
-	else
-	{
-		return 0;
-	}
-
-}
-
-startbox(start_chest)
-{
-	self endon("disconnect");
-	level waittill("initial_players_connected");
-
-	for(i = 0; i < level.chests.size; i++)
-	{
-		if(level.chests[i].script_noteworthy == start_chest)
-		{
-			desired_chest_index = i;
-			continue;
-		}
-
-		if(level.chests[i].hidden == 0)
-		{
-			nondesired_chest_index = i;
-		}
-	}
-
-	if(isdefined(nondesired_chest_index) && nondesired_chest_index < desired_chest_index)
-	{
-		level.chests[nondesired_chest_index] hide_chest();
-		level.chests[nondesired_chest_index].hidden = 1;
-		level.chests[desired_chest_index].hidden = 0;
-		level.chests[desired_chest_index] show_chest();
-		level.chest_index = desired_chest_index;
 	}
 }
 
@@ -269,19 +185,47 @@ onconnect()
 	}
 }
 
-fill_up_bank()
+onplayerspawned()
 {
-	level endon("end_game");
+	self waittill("spawned_player");
 	self endon("disconnect");
-
-	flag_wait("initial_blackscreen_passed");
-
-    if (level.round_number == 1)
+	persistent_upgrades = array("pers_boarding", "pers_revivenoperk", "pers_multikill_headshots", "pers_cash_back_bought", "pers_cash_back_prone", "pers_insta_kill", "pers_jugg", "pers_carpenter", "pers_flopper_counter", "pers_perk_lose_counter", "pers_pistol_points_counter", "pers_double_points_counter", "pers_sniper_counter");
+	persistent_upgrade_values = [];
+	persistent_upgrade_values["pers_boarding"] = 74;
+	persistent_upgrade_values["pers_revivenoperk"] = 17;
+	persistent_upgrade_values["pers_multikill_headshots"] = 5;
+	persistent_upgrade_values["pers_cash_back_bought"] = 50;
+	persistent_upgrade_values["pers_cash_back_prone"] = 15;
+	persistent_upgrade_values["pers_insta_kill"] = 2;
+	persistent_upgrade_values["pers_jugg"] = 3;
+	persistent_upgrade_values["pers_carpenter"] = 1;
+	persistent_upgrade_values["pers_flopper_counter"] = 1;
+	persistent_upgrade_values["pers_perk_lose_counter"] = 3;
+	persistent_upgrade_values["pers_pistol_points_counter"] = 1;
+	persistent_upgrade_values["pers_double_points_counter"] = 1;
+	persistent_upgrade_values["pers_sniper_counter"] = 1;
+	foreach(pers_perk in persistent_upgrades)
 	{
-    self.account_value = level.bank_account_max;		
+		if(GetDvar(pers_perk) == "")
+		{
+			setdvar(pers_perk, 1);
+		}
+		statval = GetDvarInt(pers_perk) > 0 * persistent_upgrade_values[pers_perk];
+		maps\mp\zombies\_zm_stats::set_client_stat(pers_perk, statval);
+	}
+	if(GetDvar("full_bank") == "")
+	{
+		setdvar("full_bank", 1);
+	}
+	bank_points = GetDvarInt("full_bank") > 0 * 250;
+	if(bank_points)
+	{
+		self maps\mp\zombies\_zm_stats::set_map_stat("depositBox", bank_points, level.banking_map);
+		self.account_value = bank_points;
 	}
 }
 
+//TIMERS
 timer_fraga()
 {
 	if(isdefined(level.strat_tester) && level.strat_tester)
@@ -303,10 +247,10 @@ timer_fraga()
 	self.timer_fraga.vertalign = "user_top";
 	self.timer_fraga.x = self.timer_fraga.x + 4;
 	self.timer_fraga.y = self.timer_fraga.y + 324;
-	self.timer_fraga.fontscale = GetDvarFloat("fontscale");
 	self.timer_fraga.alpha = 0;
 	self.timer_fraga.color = (0.505, 0.478, 0.721);
 	self.timer_fraga.hidewheninmenu = 1;
+	self.timer_fraga.fontscale = 1.7;
 	self thread timer_fraga_watcher();
 	self thread round_timer_fraga();
 	flag_wait("initial_blackscreen_passed");
@@ -364,8 +308,8 @@ round_timer_fraga()
 	self.round_timer_fraga.vertalign = "user_top";
 	self.round_timer_fraga.x = self.round_timer_fraga.x + 4;
 	self.round_timer_fraga.y = self.round_timer_fraga.y + 339;
-	self.round_timer_fraga.fontscale = GetDvarFloat("fontscale");
 	self.round_timer_fraga.alpha = 0;
+	self.round_timer_fraga.fontscale = 1.7;
 	self.round_timer_fraga.color = (0.505, 0.478, 0.721);
 	self.round_timer_fraga.hidewheninmenu = 1;
 	flag_wait("initial_blackscreen_passed");
@@ -470,7 +414,6 @@ round_timer_fraga_watcher()
 	}
 }
 
-
 trap_timer_fraga()
 {
 	if( level.script != "zm_prison" || !level.hud_trap_timer )
@@ -530,6 +473,7 @@ trap_timer_cooldown_fraga()
 	while( 1 )
 	{
 		level waittill( "trap_activated" );
+
 		if( !level.trap_activated )
 		{
 			wait 25.5;
@@ -540,6 +484,120 @@ trap_timer_cooldown_fraga()
 		}
 	}
 }
+
+//HEALTH FIX
+
+fix_highround()
+{
+	while(level.round_number > 155)
+	{
+		zombies = getaiarray("axis");
+		i = 0;
+		while(i < zombies.size)
+		{
+			if(zombies[i].targetname != "zombie")
+			{
+				continue;
+			}
+			if(zombies[i].targetname == "zombie")
+			{
+				if(!isdefined(zombies[i].health_override))
+				{
+					zombies[i].health_override = 1;
+					zombies[i].health = 1044606723;
+				}
+			}
+			i++;
+		}
+		wait(0.1);
+	}
+}
+
+//BOX LOCATION
+
+startbox(start_chest)
+{
+	self endon("disconnect");
+	level waittill("initial_players_connected");
+
+	for(i = 0; i < level.chests.size; i++)
+	{
+		if(level.chests[i].script_noteworthy == start_chest)
+		{
+			desired_chest_index = i;
+			continue;
+		}
+
+		if(level.chests[i].hidden == 0)
+		{
+			nondesired_chest_index = i;
+		}
+	}
+
+	if(isdefined(nondesired_chest_index) && nondesired_chest_index < desired_chest_index)
+	{
+		level.chests[nondesired_chest_index] hide_chest();
+		level.chests[nondesired_chest_index].hidden = 1;
+		level.chests[desired_chest_index].hidden = 0;
+		level.chests[desired_chest_index] show_chest();
+		level.chest_index = desired_chest_index;
+	}
+}
+
+//BANK AND FRIDGE
+
+isvictismap()
+{
+	switch(level.script)
+	{
+		case "zm_transit": return true;
+		case "zm_highrise": return true;
+		case "zm_buried": return true;
+		default: return false;
+	}	
+}
+
+fill_up_bank()
+{
+	level endon("end_game");
+	self endon("disconnect");
+
+	flag_wait("initial_blackscreen_passed");
+
+    if (level.round_number == 1)
+	{
+    self.account_value = level.bank_account_max;		
+	}
+}
+
+clear_stored_weapondata()
+{
+	flag_wait("initial_blackscreen_passed");
+
+	if(level.script == "zm_highrise")
+	{
+		self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "name", "an94_upgraded_zm+mms");
+		self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "stock", 600);
+		self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "clip", 50);
+	}
+
+	else if(level.script == "zm_buried")
+	{
+		self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "name", "an94_upgraded_zm+mms");
+		self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "stock", 600);
+		self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "clip", 50);
+	}
+
+	else if(level.script == "zm_transit")
+	{
+		self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "name", "mp5k_upgraded_zm");
+	}
+
+	self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "stock", 600);
+	self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "clip", 50);
+}
+
+//HANDS
 
 hands()
 {
@@ -552,8 +610,8 @@ give_personality_characters()
 	{
 		return;
 	}
-
 	self detachall();
+
 	if(level.script == "zm_transit")
 	{
 		self.characterindex = 1;
@@ -679,32 +737,570 @@ ciaalways()
 
 }
 
-clear_stored_weapondata()
+enable_cheats()
 {
-	flag_wait("initial_blackscreen_passed");
-
-	if(level.script == "zm_highrise")
-	{
-		self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "name", "an94_upgraded_zm+mms");
-		self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "stock", 600);
-		self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "clip", 50);
-	}
-
-	else if(level.script == "zm_buried")
-	{
-		self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "name", "an94_upgraded_zm+mms");
-		self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "stock", 600);
-		self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "clip", 50);
-	}
-
-	else if(level.script == "zm_transit")
-	{
-		self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "name", "mp5k_upgraded_zm");
-	}
-
-	self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "stock", 600);
-	self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "clip", 50);
+	setdvar("sv_cheats", 1);
+	setdvar("cg_ufo_scaler", 0.7);
 }
+
+customdvars()
+{
+	self thread timer_x_position();
+	self thread timer_y_position();
+	self thread sph_start();
+	self thread alphatramplesteam();
+	self thread alphaturbine();
+	self thread alpharesonator();
+	self thread fontscale();
+}
+
+//BUILDABLES
+
+alpharesonator()
+{
+	self endon("disconnect");
+	if(GetDvar("resonator") == "")
+	{
+		setdvar("resonator", 1);
+	}
+}
+
+alphaturbine()
+{
+	self endon("disconnect");
+	if(GetDvar("turbine") == "")
+	{
+		setdvar("turbine", 1);
+	}
+}
+
+alphatramplesteam()
+{
+	self endon("disconnect");
+	if(GetDvar("trample") == "")
+	{
+		setdvar("trample", 1);
+	}
+}
+
+buildablesdierise()
+{
+	self.tramplehud = newclienthudelem(self);
+	self.tramplehud.alignx = "left";
+	self.tramplehud.horzalign = "user_left";
+	self.tramplehud.vertalign = "user_top";
+	self.tramplehud.aligny = "top";
+	self.tramplehud.x = 2;
+	self.tramplehud.fontscale = 1.1;
+	self.tramplehud.y = 0;
+	self.tramplehud.sort = 1;
+	self.tramplehud.label = &"^5Springpads ^6";
+	self.tramplehud.hidewheninmenu = 1;
+	self.tramplehud setvalue(0);
+	buildablesmenu_watcher();
+
+	while(1)
+	{
+		which = self waittill_any_return("equip_springpad_zm_given");
+		if(which == "equip_springpad_zm_given")
+		{
+			self.trampuseddr = self.trampuseddr + 1;
+			self.tramplehud setvalue(self.trampuseddr);
+		}
+	}
+}
+
+buildablesmenu()
+{
+	self endon("disconnect");
+
+	self.turbine = newclienthudelem(self);
+	self.turbine.alignx = "left";
+	self.turbine.horzalign = "user_left";
+	self.turbine.vertalign = "user_top";
+	self.turbine.aligny = "top";
+	self.turbine.x = self.turbine.x + 2;
+	self.turbine.y = self.turbine.y + 0;
+	self.turbine.sort = 1;
+	self.turbine.fontscale = 1.1;
+	self.turbine.label = &"^5Tur^7bines ^6";
+	self.turbine.hidewheninmenu = 1;
+	self.turbine setvalue(0);
+	self.resonator = newclienthudelem(self);
+	self.resonator.alignx = "left";
+	self.resonator.horzalign = "user_left";
+	self.resonator.vertalign = "user_top";
+	self.resonator.aligny = "top";
+	self.resonator.x = 2;
+	self.resonator.fontscale = 1.1;
+	self.resonator.y = 11;
+	self.resonator.sort = 1;
+	self.resonator.label = &"Sub^5woo^7fers ^6";
+	self.resonator.hidewheninmenu = 1;
+	self.resonator setvalue(0);
+	self.trample = newclienthudelem(self);
+	self.trample.alignx = "left";
+	self.trample.horzalign = "user_left";
+	self.trample.vertalign = "user_top";
+	self.trample.aligny = "top";
+	self.trample.x = 2;
+	self.trample.fontscale = 1.1;
+	self.trample.y = 22;
+	self.trample.sort = 1;
+	self.trample.label = &"Springp^5ads ^6";
+	self.trample.hidewheninmenu = 1;
+	self.trample setvalue(0);
+	buildablesmenu_watcher();
+
+	while(1)
+	{
+		which = self waittill_any_return("equip_turbine_zm_given", "equip_springpad_zm_given", "equip_subwoofer_zm_given");
+		if(which == "equip_turbine_zm_given")
+		{
+			self.turbinesused = self.turbinesused + 1;
+			self.turbinehud setvalue(self.turbinesused);
+		}
+		if(which == "equip_springpad_zm_given")
+		{
+			self.trampused = self.trampused + 1;
+			self.tramplehud setvalue(self.trampused);
+		}
+		if(which == "equip_subwoofer_zm_given")
+		{
+			self.resoused = self.resoused + 1;
+			self.resohud setvalue(self.resoused);
+		}
+	}
+}
+
+//SPLITS
+
+timer( split_list, y_offset, branching )
+{
+    level endon( "game_ended" );
+
+    foreach(split in split_list)
+        create_new_split(split, y_offset);
+
+    if(!isdefined(level.fraga_splits_start_time))
+    {
+        flag_wait("initial_blackscreen_passed");
+        level.fraga_splits_start_time = gettime();
+    }
+
+    for(i = 0; i < split_list.size - branching; i++)
+    {
+        split = split_list[i];
+        unhide(split);
+        split(split, wait_split(split));
+    }
+}
+
+create_new_split(split_name, y_offset)
+{
+    y =y_offset;
+
+    if(isdefined(level.fraga_splits_splits)) y += level.fraga_splits_splits.size * 16;
+    level.fraga_splits_splits[split_name] = newhudelem();
+    level.fraga_splits_splits[split_name].alignx = "left";
+    level.fraga_splits_splits[split_name].aligny = "center";
+    level.fraga_splits_splits[split_name].horzalign = "left";
+    level.fraga_splits_splits[split_name].vertalign = "top";
+    level.fraga_splits_splits[split_name].x = -62;
+    level.fraga_splits_splits[split_name].y = -30 + y;
+    level.fraga_splits_splits[split_name].fontscale = 1.4;
+    level.fraga_splits_splits[split_name].hidewheninmenu = 1;
+    level.fraga_splits_splits[split_name].alpha = 0;
+    level.fraga_splits_splits[split_name].color = (1, 0.5, 1);
+    level thread split_start_thread(split_name);
+    set_split_label(split_name);
+}
+
+split_start_thread(split_name)
+{
+    flag_wait("initial_blackscreen_passed");
+    level.fraga_splits_splits[split_name] settenthstimerup(0.01);
+}
+
+set_split_label(split_name)
+{
+        switch(split_name)
+        {
+            case "Round 2": level.fraga_splits_splits[split_name].label = &"^3Round 2 ^7"; break;    
+            case "Round 3": level.fraga_splits_splits[split_name].label = &"^3Round 3 ^7"; break;    
+            case "Round 4": level.fraga_splits_splits[split_name].label = &"^3Round 4 ^7"; break;    
+            case "Round 5": level.fraga_splits_splits[split_name].label = &"^3Round 5 ^7"; break;
+            case "Round 5": level.fraga_splits_splits[split_name].label = &"^3Round 5 ^7"; break;  
+            case "Round 10": level.fraga_splits_splits[split_name].label = &"^3Round 10 ^7"; break;  
+            case "Round 15": level.fraga_splits_splits[split_name].label = &"^3Round 15 ^7"; break;  
+            case "Round 20": level.fraga_splits_splits[split_name].label = &"^3Round 20 ^7"; break;  
+            case "Round 25": level.fraga_splits_splits[split_name].label = &"^3Round 25 ^7"; break;  
+            case "Round 30": level.fraga_splits_splits[split_name].label = &"^3Round 30 ^7"; break;  
+            case "Round 40": level.fraga_splits_splits[split_name].label = &"^3Round 40 ^7"; break;  
+            case "Round 50": level.fraga_splits_splits[split_name].label = &"^3Round 50 ^7"; break;   
+            case "Round 60": level.fraga_splits_splits[split_name].label = &"^3Round 60 ^7"; break;  
+            case "Round 70": level.fraga_splits_splits[split_name].label = &"^3Round 70 ^7"; break;  
+            case "Round 80": level.fraga_splits_splits[split_name].label = &"^3Round 80 ^7"; break; 
+            case "Round 90": level.fraga_splits_splits[split_name].label = &"^3Round 90 ^7"; break; 
+            case "Round 95": level.fraga_splits_splits[split_name].label = &"^3Round 95 ^7"; break; 
+            case "Round 100": level.fraga_splits_splits[split_name].label = &"^3Round 100 ^7"; break;
+            case "Round 125": level.fraga_splits_splits[split_name].label = &"^3Round 125 ^7"; break;
+            case "Round 130": level.fraga_splits_splits[split_name].label = &"^3Round 130 ^7"; break;
+            case "Round 140": level.fraga_splits_splits[split_name].label = &"^3Round 140 ^7"; break;
+            case "Round 150": level.fraga_splits_splits[split_name].label = &"^3Round 150 ^7"; break; 
+            case "Round 175": level.fraga_splits_splits[split_name].label = &"^3Round 175 ^7"; break;
+            case "Round 200": level.fraga_splits_splits[split_name].label = &"^3Round 200 ^7"; break;                   
+        }
+}
+
+unhide(split_name)
+{
+    level.fraga_splits_splits[split_name].alpha = 0.8;
+}
+
+split(split_name, time)
+{
+    level.fraga_splits_splits[split_name].color = level.fraga_splits_complete_color;
+    level.fraga_splits_splits[split_name] settext(game_time_string(time - level.fraga_splits_start_time));
+}
+
+wait_split(split)
+{
+    switch (split)
+    {
+        case "Round 2":
+            while(level.round_number < 2) wait 1;
+            break;
+        case "Round 3":
+            while(level.round_number < 3) wait 1;
+            break;
+        case "Round 4":
+            while(level.round_number < 4) wait 1;
+            break;
+        case "Round 5":
+            while(level.round_number < 5) wait 1;
+            break;
+        case "Round 10":
+            while(level.round_number < 10) wait 1;
+            break;
+        case "Round 15":
+            while(level.round_number < 15) wait 1;
+            break;
+        case "Round 20":
+            while(level.round_number < 20) wait 1;
+            break;
+        case "Round 25":
+            while(level.round_number < 25) wait 1;
+            break;
+        case "Round 30":
+            while(level.round_number < 30) wait 1;
+            break;
+        case "Round 40":
+            while(level.round_number < 40) wait 1;
+            break;
+        case "Round 50":
+            while(level.round_number < 50) wait 1;
+            break;
+        case "Round 60":
+            while(level.round_number < 60) wait 1;
+            break;
+        case "Round 70":
+            while(level.round_number < 70) wait 1;
+            break;
+        case "Round 80":
+            while(level.round_number < 80) wait 1;
+            break;
+        case "Round 90":
+            while(level.round_number < 90) wait 1;
+            break;
+        case "Round 100":
+            while(level.round_number < 100) wait 1;
+            break;
+        case "Round 125":
+            while(level.round_number < 125) wait 1;
+            break;
+        case "Round 130":
+            while(level.round_number < 130) wait 1;
+            break;
+        case "Round 140":
+            while(level.round_number < 140) wait 1;
+            break;
+        case "Round 150":
+            while(level.round_number < 150) wait 1;
+            break;
+        case "Round 175":
+            while(level.round_number < 175) wait 1;
+            break;
+        case "Round 200":
+            while(level.round_number < 200) wait 1;
+            break;
+    }
+    return gettime();
+}
+
+game_time_string(duration)
+{
+    total_sec = int(duration / 1000);
+    total_min = int(total_sec / 60);
+    total_hours = int(total_min / 60);
+    remaining_ms = (duration % 1000) / 10;
+    remaining_sec = total_sec % 60;
+    remaining_min = total_min % 60;
+    time_string = "";
+
+    if(total_hours > 0)     { time_string += total_hours + ":"; }
+    else
+    {
+    if(total_min > 9)       { time_string += total_min + ":"; }
+    else                    { time_string += "0" + total_min + ":"; }
+    if(remaining_sec > 9)   { time_string += remaining_sec; }
+    else                    { time_string += "0" + remaining_sec; }
+    return time_string;
+	}
+}
+
+RoundSplits()
+{
+    //5SR
+	if(GetDvar("5SR") == "")
+	{
+		setdvar("5SR", "0");
+	}
+    //30SR
+	if(GetDvar("30SR") == "")
+	{
+		setdvar("30SR", "0");
+	}
+    //50SR
+	if(GetDvar("50SR") == "")
+	{
+		setdvar("50SR", "0");
+	}
+    //70SR
+	if(GetDvar("70SR") == "")
+	{
+		setdvar("70SR", "0");
+	}
+    //100SR
+	if(GetDvar("100SR") == "")
+	{
+		setdvar("100SR", "0");
+	}
+    //150SR
+	if(GetDvar("150SR") == "")
+	{
+		setdvar("150SR", "0");
+	}
+    //200SR
+	if(GetDvar("200SR") == "")
+	{
+		setdvar("200SR", "1");
+	}
+    //Desable other DVARS
+    //5SR
+	if(GetDvar("5SR") == "1")
+	{
+		setdvar("30SR", "0");
+		setdvar("50SR", "0");
+		setdvar("70SR", "0");
+		setdvar("150SR", "0");
+		setdvar("200SR", "0");
+		setdvar("200SR", "0");
+		setdvar("100SR", "0");
+	}
+    //30SR
+	if(GetDvar("30SR") == "1")
+	{
+		setdvar("5SR", "0");
+		setdvar("50SR", "0");
+		setdvar("70SR", "0");
+		setdvar("150SR", "0");
+		setdvar("200SR", "0");
+		setdvar("200SR", "0");
+		setdvar("100SR", "0");
+	}
+    //50SR
+	if(GetDvar("50SR") == "1")
+	{
+		setdvar("5SR", "0");
+		setdvar("30SR", "0");
+		setdvar("70SR", "0");
+		setdvar("150SR", "0");
+		setdvar("200SR", "0");
+		setdvar("200SR", "0");
+		setdvar("100SR", "0");
+	}
+    //70SR
+	if(GetDvar("70SR") == "1")
+	{
+		setdvar("5SR", "0");
+		setdvar("50SR", "0");
+		setdvar("30SR", "0");
+		setdvar("150SR", "0");
+		setdvar("200SR", "0");
+		setdvar("200SR", "0");
+		setdvar("100SR", "0");
+	}
+    //100SR
+	if(GetDvar("100SR") == "1")
+	{
+		setdvar("5SR", "0");
+		setdvar("50SR", "0");
+		setdvar("70SR", "0");
+		setdvar("30SR", "0");
+		setdvar("150SR", "0");
+		setdvar("200SR", "0");
+		setdvar("200SR", "0");
+	}
+    //150SR
+	if(GetDvar("150SR") == "1")
+	{
+		setdvar("5SR", "0");
+		setdvar("50SR", "0");
+		setdvar("70SR", "0");
+		setdvar("30SR", "0");
+		setdvar("200SR", "0");
+		setdvar("200SR", "0");
+		setdvar("100SR", "0");
+	}
+    //200SR
+	if(GetDvar("150SR") == "1")
+	{
+		setdvar("5SR", "0");
+		setdvar("50SR", "0");
+		setdvar("70SR", "0");
+		setdvar("30SR", "0");
+		setdvar("200SR", "0");
+		setdvar("200SR", "0");
+		setdvar("100SR", "0");
+	}   
+}
+
+//TIMER UTILITY
+
+fontscale()
+{
+	self endon("disconnect");
+	if(GetDvar("fontscale") == "")
+	{
+		setdvar("fontscale", "1.7");
+	}
+	fontscale = GetDvar("fontscale");
+	prev_fontscale = "1.7";
+}
+
+color_hud_watcher()
+{
+	self endon("disconnect");
+
+	if(GetDvar("timer_color") == "")
+	{
+		setdvar("timer_color", "0.505 0.478 0.721");
+	}
+
+	color = GetDvar("timer_color");
+	prev_color = "0.505 0.478 0.721";
+	while(1)
+	{
+		while(color == prev_color)
+		{
+			color = GetDvar("timer_color");
+			wait(0.1);
+		}
+
+		colors = strtok(color, " ");
+		if(colors.size != 3)
+		{
+			continue;
+		}
+
+		prev_color = color;
+		self.timer_fraga.color = (string_to_float(colors[0]), string_to_float(colors[1]), string_to_float(colors[2]));
+		self.round_timer_fraga.color = (string_to_float(colors[0]), string_to_float(colors[1]), string_to_float(colors[2]));
+	}
+}
+
+sph_start()
+{
+	self endon("disconnect");
+
+	if(GetDvar("sph_start") == "")
+	{
+		setdvar("sph_start", "30");
+	}
+
+	sph_start = GetDvar("sph_start");
+	prev_sph_start = "30";
+
+	while(1)
+	{
+		while(sph_start == prev_sph_start)
+		{
+			sph_start = GetDvar("sph_start");
+			wait(0.1);
+		}
+		prev_sph_start = sph_start;
+	}
+}
+
+timer_y_position()
+{
+	self endon("disconnect");
+
+	if(GetDvar("timer_yposition") == "")
+	{
+		setdvar("timer_yposition", "339");
+	}
+
+	timerypos = GetDvar("timer_yposition");
+	prev_timerypos = "339";
+
+	while(1)
+	{
+		while(timerypos == prev_timerypos)
+		{
+			timerypos = GetDvar("timer_yposition");
+			wait(0.1);
+		}
+
+		prev_timerypos = timerypos;
+		self.round_timer_fraga.y = GetDvarInt("timer_yposition");
+		self.timer_fraga.y = GetDvarInt("timer_yposition") - 15 * GetDvarInt("fontscale");
+	}
+}
+
+timer_x_position()
+{
+	self endon("disconnect");
+
+	if(GetDvar("timer_xposition") == "")
+	{
+		setdvar("timer_xposition", "4");
+	}
+
+	timerxpos = GetDvar("timer_xposition");
+	prev_timerxpos = "4";
+
+	while(1)
+	{
+		while(timerxpos == prev_timerxpos)
+		{
+			timerxpos = GetDvar("timer_xposition");
+			wait(0.1);
+		}
+
+		prev_timerxpos = timerxpos;
+		self.round_timer_fraga.x = GetDvarInt("timer_xposition");
+		self.timer_fraga.x = GetDvarInt("timer_xposition");
+	}
+}
+
+
+// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
+// ------------------------ Replaced Functions ---------------------------
+// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 
 origins_pap_camo(weapon)
 {
@@ -858,601 +1454,32 @@ buried_pap_camo(weapon)
 	return self.pack_a_punch_weapon_options[weapon];
 }
 
+//TESTS
 
-fontscale()
+buildablesmenu_watcher()
 {
 	self endon("disconnect");
-	if(GetDvar("fontscale") == "")
+	level endon("end_game");
+	if(GetDvar("buildablesmenu") == "")
 	{
-		setdvar("fontscale", "1.7");
+		setdvar("buildablesmenu", 1);
 	}
-	fontscale = GetDvar("fontscale");
-	prev_fontscale = "1.6";
-}
-
-alpharesonator()
-{
-	self endon("disconnect");
-	if(GetDvar("showresonatorcounter") == "")
-	{
-		setdvar("showresonatorcounter", 1);
-	}
-}
-
-alphaturbine()
-{
-	self endon("disconnect");
-	if(GetDvar("showturbinecounter") == "")
-	{
-		setdvar("showturbinecounter", 1);
-	}
-}
-
-alphatramplesteam()
-{
-	self endon("disconnect");
-	if(GetDvar("showtramplecounter") == "")
-	{
-		setdvar("showtramplecounter", 1);
-	}
-}
-
-sph_start()
-{
-	self endon("disconnect");
-
-	if(GetDvar("sph_start") == "")
-	{
-		setdvar("sph_start", "30");
-	}
-
-	sph_start = GetDvar("sph_start");
-	prev_sph_start = "30";
 
 	while(1)
 	{
-		while(sph_start == prev_sph_start)
+		while(GetDvarInt("buildablesmenu") == 0)
 		{
-			sph_start = GetDvar("sph_start");
 			wait(0.1);
 		}
-		prev_sph_start = sph_start;
-	}
-}
-
-timer_y_position()
-{
-	self endon("disconnect");
-
-	if(GetDvar("timer_yposition") == "")
-	{
-		setdvar("timer_yposition", "339");
-	}
-
-	timerypos = GetDvar("timer_yposition");
-	prev_timerypos = "339";
-
-	while(1)
-	{
-		while(timerypos == prev_timerypos)
+		self.turbine.alpha = 1;
+		self.resonator.alpha = 1;
+		self.trample.alpha = 1;
+		while(GetDvarInt("buildablesmenu") >= 1)
 		{
-			timerypos = GetDvar("timer_yposition");
 			wait(0.1);
 		}
-
-		prev_timerypos = timerypos;
-		self.round_timer_fraga.y = GetDvarInt("timer_yposition");
-		self.timer_fraga.y = GetDvarInt("timer_yposition") - 15 * GetDvarInt("fontscale");
+		self.turbine.alpha = 0;
+		self.resonator.alpha = 0;
+		self.trample.alpha = 0;
 	}
 }
-
-timer_x_position()
-{
-	self endon("disconnect");
-
-	if(GetDvar("timer_xposition") == "")
-	{
-		setdvar("timer_xposition", "4");
-	}
-
-	timerxpos = GetDvar("timer_xposition");
-	prev_timerxpos = "4";
-
-	while(1)
-	{
-		while(timerxpos == prev_timerxpos)
-		{
-			timerxpos = GetDvar("timer_xposition");
-			wait(0.1);
-		}
-
-		prev_timerxpos = timerxpos;
-		self.round_timer_fraga.x = GetDvarInt("timer_xposition");
-		self.timer_fraga.x = GetDvarInt("timer_xposition");
-	}
-}
-
-customdvars()
-{
-	self thread timer_x_position();
-	self thread timer_y_position();
-	self thread sph_start();
-	self thread alphatramplesteam();
-	self thread alphaturbine();
-	self thread alpharesonator();
-	self thread fontscale();
-}
-
-color_hud_watcher()
-{
-	self endon("disconnect");
-
-	if(GetDvar("timer_color") == "")
-	{
-		setdvar("timer_color", "0.505 0.478 0.721");
-	}
-
-	color = GetDvar("timer_color");
-	prev_color = "0.505 0.478 0.721";
-	while(1)
-	{
-		while(color == prev_color)
-		{
-			color = GetDvar("timer_color");
-			wait(0.1);
-		}
-
-		colors = strtok(color, " ");
-		if(colors.size != 3)
-		{
-			continue;
-		}
-
-		prev_color = color;
-		self.timer_fraga.color = (string_to_float(colors[0]), string_to_float(colors[1]), string_to_float(colors[2]));
-		self.round_timer_fraga.color = (string_to_float(colors[0]), string_to_float(colors[1]), string_to_float(colors[2]));
-	}
-}
-
-buildablesdierise()
-{
-	self.tramplehud = newclienthudelem(self);
-	self.tramplehud.alpha = GetDvarInt("showretramplecounter");
-	self.tramplehud.alignx = "left";
-	self.tramplehud.horzalign = "user_left";
-	self.tramplehud.vertalign = "user_top";
-	self.tramplehud.aligny = "top";
-	self.tramplehud.x = 2;
-	self.tramplehud.fontscale = GetDvarFloat("fontscale") - 0.2;
-	self.tramplehud.y = 0;
-	self.tramplehud.sort = 1;
-	self.tramplehud.label = &"^5Springpads ^6";
-	self.tramplehud.hidewheninmenu = 1;
-	self.tramplehud setvalue(0);
-
-	while(1)
-	{
-		which = self waittill_any_return("equip_springpad_zm_given");
-		if(which == "equip_springpad_zm_given")
-		{
-			self.trampuseddr = self.trampuseddr + 1;
-			self.tramplehud setvalue(self.trampuseddr);
-		}
-	}
-}
-
-buildablesmenu()
-{
-	self endon("disconnect");
-
-	self.turbinehud = newclienthudelem(self);
-	self.turbinehud.alpha = GetDvarInt("showturbinecounter");
-	self.turbinehud.alignx = "left";
-	self.turbinehud.horzalign = "user_left";
-	self.turbinehud.vertalign = "user_top";
-	self.turbinehud.aligny = "top";
-	self.turbinehud.x = self.turbinehud.x + 2;
-	self.turbinehud.y = self.turbinehud.y + 0;
-	self.turbinehud.sort = 1;
-	self.turbinehud.fontscale = 1.1;
-	self.turbinehud.label = &"^5Tur^7bines ^6";
-	self.turbinehud.hidewheninmenu = 1;
-	self.turbinehud setvalue(0);
-	self.resohud = newclienthudelem(self);
-	self.resohud.alpha = GetDvarInt("showresonatorcounter");
-	self.resohud.alignx = "left";
-	self.resohud.horzalign = "user_left";
-	self.resohud.vertalign = "user_top";
-	self.resohud.aligny = "top";
-	self.resohud.x = 2;
-	self.resohud.fontscale = 1.1;
-	self.resohud.y = 11;
-	self.resohud.sort = 1;
-	self.resohud.label = &"Sub^5woo^7fers ^6";
-	self.resohud.hidewheninmenu = 1;
-	self.resohud setvalue(0);
-	self.tramplehud = newclienthudelem(self);
-	self.tramplehud.alpha = GetDvarInt("showtramplecounter");
-	self.tramplehud.alignx = "left";
-	self.tramplehud.horzalign = "user_left";
-	self.tramplehud.vertalign = "user_top";
-	self.tramplehud.aligny = "top";
-	self.tramplehud.x = 2;
-	self.tramplehud.fontscale = 1.1;
-	self.tramplehud.y = 22;
-	self.tramplehud.sort = 1;
-	self.tramplehud.label = &"Springp^5ads ^6";
-	self.tramplehud.hidewheninmenu = 1;
-	self.tramplehud setvalue(0);
-
-	while(1)
-	{
-		which = self waittill_any_return("equip_turbine_zm_given", "equip_springpad_zm_given", "equip_subwoofer_zm_given");
-		if(which == "equip_turbine_zm_given")
-		{
-			self.turbinesused = self.turbinesused + 1;
-			self.turbinehud setvalue(self.turbinesused);
-		}
-		if(which == "equip_springpad_zm_given")
-		{
-			self.trampused = self.trampused + 1;
-			self.tramplehud setvalue(self.trampused);
-		}
-		if(which == "equip_subwoofer_zm_given")
-		{
-			self.resoused = self.resoused + 1;
-			self.resohud setvalue(self.resoused);
-		}
-	}
-}
-
-onplayerspawned()
-{
-	self waittill("spawned_player");
-	self endon("disconnect");
-	persistent_upgrades = array("pers_boarding", "pers_revivenoperk", "pers_multikill_headshots", "pers_cash_back_bought", "pers_cash_back_prone", "pers_insta_kill", "pers_jugg", "pers_carpenter", "pers_flopper_counter", "pers_perk_lose_counter", "pers_pistol_points_counter", "pers_double_points_counter", "pers_sniper_counter");
-	persistent_upgrade_values = [];
-	persistent_upgrade_values["pers_boarding"] = 74;
-	persistent_upgrade_values["pers_revivenoperk"] = 17;
-	persistent_upgrade_values["pers_multikill_headshots"] = 5;
-	persistent_upgrade_values["pers_cash_back_bought"] = 50;
-	persistent_upgrade_values["pers_cash_back_prone"] = 15;
-	persistent_upgrade_values["pers_insta_kill"] = 2;
-	persistent_upgrade_values["pers_jugg"] = 3;
-	persistent_upgrade_values["pers_carpenter"] = 1;
-	persistent_upgrade_values["pers_flopper_counter"] = 1;
-	persistent_upgrade_values["pers_perk_lose_counter"] = 3;
-	persistent_upgrade_values["pers_pistol_points_counter"] = 1;
-	persistent_upgrade_values["pers_double_points_counter"] = 1;
-	persistent_upgrade_values["pers_sniper_counter"] = 1;
-	foreach(pers_perk in persistent_upgrades)
-	{
-		if(GetDvar(pers_perk) == "")
-		{
-			setdvar(pers_perk, 1);
-		}
-		statval = GetDvarInt(pers_perk) > 0 * persistent_upgrade_values[pers_perk];
-		maps\mp\zombies\_zm_stats::set_client_stat(pers_perk, statval);
-	}
-	if(GetDvar("full_bank") == "")
-	{
-		setdvar("full_bank", 1);
-	}
-	bank_points = GetDvarInt("full_bank") > 0 * 250;
-	if(bank_points)
-	{
-		self maps\mp\zombies\_zm_stats::set_map_stat("depositBox", bank_points, level.banking_map);
-		self.account_value = bank_points;
-	}
-}
-
-//Spluts
-timer( split_list, y_offset, branching )
-{
-    level endon( "game_ended" );
-
-    foreach(split in split_list)
-        create_new_split(split, y_offset);
-
-    if(!isdefined(level.fraga_splits_start_time))
-    {
-        flag_wait("initial_blackscreen_passed");
-        level.fraga_splits_start_time = gettime();
-    }
-
-    for(i = 0; i < split_list.size - branching; i++)
-    {
-        split = split_list[i];
-        unhide(split);
-        split(split, wait_split(split));
-    }
-}
-
-create_new_split(split_name, y_offset)
-{
-    y =y_offset;
-
-    if(isdefined(level.fraga_splits_splits)) y += level.fraga_splits_splits.size * 16;
-    level.fraga_splits_splits[split_name] = newhudelem();
-    level.fraga_splits_splits[split_name].alignx = "left";
-    level.fraga_splits_splits[split_name].aligny = "center";
-    level.fraga_splits_splits[split_name].horzalign = "left";
-    level.fraga_splits_splits[split_name].vertalign = "top";
-    level.fraga_splits_splits[split_name].x = -62;
-    level.fraga_splits_splits[split_name].y = -50 + y;
-    level.fraga_splits_splits[split_name].fontscale = 1.4;
-    level.fraga_splits_splits[split_name].hidewheninmenu = 1;
-    level.fraga_splits_splits[split_name].alpha = 0;
-    level.fraga_splits_splits[split_name].color = level.fraga_splits_active_color;
-
-    level thread split_start_thread(split_name);
-    set_split_label(split_name);
-}
-
-split_start_thread(split_name)
-{
-    flag_wait("initial_blackscreen_passed");
-    level.fraga_splits_splits[split_name] settenthstimerup(0.01);
-}
-
-set_split_label(split_name)
-{
-        switch(split_name)
-        {
-            case "Round 1": level.fraga_splits_splits[split_name].label = &"^6Round 1 ^7"; break;    
-            case "Round 2": level.fraga_splits_splits[split_name].label = &"^6Round 2 ^7"; break;    
-            case "Round 3": level.fraga_splits_splits[split_name].label = &"^6Round 3 ^7"; break;    
-            case "Round 4": level.fraga_splits_splits[split_name].label = &"^6Round 4 ^7"; break;    
-            case "Round 5": level.fraga_splits_splits[split_name].label = &"^6Round 5 ^7"; break;
-            case "Round 5": level.fraga_splits_splits[split_name].label = &"^6Round 5 ^7"; break;  
-            case "Round 10": level.fraga_splits_splits[split_name].label = &"^6Round 10 ^7"; break;  
-            case "Round 15": level.fraga_splits_splits[split_name].label = &"^6Round 15 ^7"; break;  
-            case "Round 20": level.fraga_splits_splits[split_name].label = &"^6Round 20 ^7"; break;  
-            case "Round 25": level.fraga_splits_splits[split_name].label = &"^6Round 25 ^7"; break;  
-            case "Round 30": level.fraga_splits_splits[split_name].label = &"^6Round 30 ^7"; break;  
-            case "Round 40": level.fraga_splits_splits[split_name].label = &"^6Round 40 ^7"; break;  
-            case "Round 50": level.fraga_splits_splits[split_name].label = &"^6Round 50 ^7"; break;   
-            case "Round 60": level.fraga_splits_splits[split_name].label = &"^6Round 60 ^7"; break;  
-            case "Round 70": level.fraga_splits_splits[split_name].label = &"^6Round 70 ^7"; break;  
-            case "Round 80": level.fraga_splits_splits[split_name].label = &"^6Round 80 ^7"; break; 
-            case "Round 90": level.fraga_splits_splits[split_name].label = &"^6Round 90 ^7"; break; 
-            case "Round 95": level.fraga_splits_splits[split_name].label = &"^6Round 95 ^7"; break; 
-            case "Round 100": level.fraga_splits_splits[split_name].label = &"^6Round 100 ^7"; break;
-            case "Round 125": level.fraga_splits_splits[split_name].label = &"^6Round 125 ^7"; break;
-            case "Round 130": level.fraga_splits_splits[split_name].label = &"^6Round 130 ^7"; break;
-            case "Round 140": level.fraga_splits_splits[split_name].label = &"^6Round 140 ^7"; break;
-            case "Round 150": level.fraga_splits_splits[split_name].label = &"^6Round 150 ^7"; break; 
-            case "Round 175": level.fraga_splits_splits[split_name].label = &"^6Round 175 ^7"; break;
-            case "Round 200": level.fraga_splits_splits[split_name].label = &"^6Round 200 ^7"; break;                   
-        }
-}
-
-unhide(split_name)
-{
-    level.fraga_splits_splits[split_name].alpha = 0.8;
-}
-
-split(split_name, time)
-{
-    level.fraga_splits_splits[split_name].color = level.fraga_splits_complete_color;
-    level.fraga_splits_splits[split_name] settext(game_time_string(time - level.fraga_splits_start_time));
-}
-
-wait_split(split)
-{
-    switch (split)
-    {
-        case "Round 1":
-            while(level.round_number < 1) wait 1;
-            break;
-        case "Round 2":
-            while(level.round_number < 2) wait 1;
-            break;
-        case "Round 3":
-            while(level.round_number < 3) wait 1;
-            break;
-        case "Round 4":
-            while(level.round_number < 4) wait 1;
-            break;
-        case "Round 5":
-            while(level.round_number < 5) wait 1;
-            break;
-        case "Round 10":
-            while(level.round_number < 10) wait 1;
-            break;
-        case "Round 15":
-            while(level.round_number < 15) wait 1;
-            break;
-        case "Round 20":
-            while(level.round_number < 20) wait 1;
-            break;
-        case "Round 25":
-            while(level.round_number < 25) wait 1;
-            break;
-        case "Round 30":
-            while(level.round_number < 30) wait 1;
-            break;
-        case "Round 40":
-            while(level.round_number < 40) wait 1;
-            break;
-        case "Round 50":
-            while(level.round_number < 50) wait 1;
-            break;
-        case "Round 60":
-            while(level.round_number < 60) wait 1;
-            break;
-        case "Round 70":
-            while(level.round_number < 70) wait 1;
-            break;
-        case "Round 80":
-            while(level.round_number < 80) wait 1;
-            break;
-        case "Round 90":
-            while(level.round_number < 90) wait 1;
-            break;
-        case "Round 100":
-            while(level.round_number < 100) wait 1;
-            break;
-        case "Round 125":
-            while(level.round_number < 125) wait 1;
-            break;
-        case "Round 130":
-            while(level.round_number < 130) wait 1;
-            break;
-        case "Round 140":
-            while(level.round_number < 140) wait 1;
-            break;
-        case "Round 150":
-            while(level.round_number < 150) wait 1;
-            break;
-        case "Round 175":
-            while(level.round_number < 175) wait 1;
-            break;
-        case "Round 200":
-            while(level.round_number < 200) wait 1;
-            break;
-    }
-    return gettime();
-}
-
-
-
-game_time_string(duration)
-{
-    total_sec = int(duration / 1000);
-    total_min = int(total_sec / 60);
-    total_hours = int(total_min / 60);
-    remaining_ms = (duration % 1000) / 10;
-    remaining_sec = total_sec % 60;
-    remaining_min = total_min % 60;
-    time_string = "";
-
-    if(total_hours > 0)     { time_string += total_hours + ":"; }
-    else
-    {
-    if(total_min > 9)       { time_string += total_min + ":"; }
-    else                    { time_string += "0" + total_min + ":"; }
-    if(remaining_sec > 9)   { time_string += remaining_sec; }
-    else                    { time_string += "0" + remaining_sec; }
-    return time_string;
-	}
-}
-
-RoundSplits()
-{
-    //5SR
-	if(GetDvar("5SR") == "")
-	{
-		setdvar("5SR", "0");
-	}
-    //30SR
-	if(GetDvar("30SR") == "")
-	{
-		setdvar("30SR", "0");
-	}
-    //50SR
-	if(GetDvar("50SR") == "")
-	{
-		setdvar("50SR", "0");
-	}
-    //70SR
-	if(GetDvar("70SR") == "")
-	{
-		setdvar("70SR", "0");
-	}
-    //100SR
-	if(GetDvar("100SR") == "")
-	{
-		setdvar("100SR", "0");
-	}
-    //150SR
-	if(GetDvar("150SR") == "")
-	{
-		setdvar("150SR", "0");
-	}
-    //200SR
-	if(GetDvar("200SR") == "")
-	{
-		setdvar("200SR", "1");
-	}
-    //Desable other DVARS
-    //5SR
-	if(GetDvar("5SR") == "1")
-	{
-		setdvar("30SR", "0");
-		setdvar("50SR", "0");
-		setdvar("70SR", "0");
-		setdvar("150SR", "0");
-		setdvar("200SR", "0");
-		setdvar("200SR", "0");
-		setdvar("100SR", "0");
-	}
-    //30SR
-	if(GetDvar("30SR") == "1")
-	{
-		setdvar("5SR", "0");
-		setdvar("50SR", "0");
-		setdvar("70SR", "0");
-		setdvar("150SR", "0");
-		setdvar("200SR", "0");
-		setdvar("200SR", "0");
-		setdvar("100SR", "0");
-	}
-    //50SR
-	if(GetDvar("50SR") == "1")
-	{
-		setdvar("5SR", "0");
-		setdvar("30SR", "0");
-		setdvar("70SR", "0");
-		setdvar("150SR", "0");
-		setdvar("200SR", "0");
-		setdvar("200SR", "0");
-		setdvar("100SR", "0");
-	}
-    //70SR
-	if(GetDvar("70SR") == "1")
-	{
-		setdvar("5SR", "0");
-		setdvar("50SR", "0");
-		setdvar("30SR", "0");
-		setdvar("150SR", "0");
-		setdvar("200SR", "0");
-		setdvar("200SR", "0");
-		setdvar("100SR", "0");
-	}
-    //100SR
-	if(GetDvar("100SR") == "1")
-	{
-		setdvar("5SR", "0");
-		setdvar("50SR", "0");
-		setdvar("70SR", "0");
-		setdvar("30SR", "0");
-		setdvar("150SR", "0");
-		setdvar("200SR", "0");
-		setdvar("200SR", "0");
-	}
-    //150SR
-	if(GetDvar("150SR") == "1")
-	{
-		setdvar("5SR", "0");
-		setdvar("50SR", "0");
-		setdvar("70SR", "0");
-		setdvar("30SR", "0");
-		setdvar("200SR", "0");
-		setdvar("200SR", "0");
-		setdvar("100SR", "0");
-	}
-    //200SR
-	if(GetDvar("150SR") == "1")
-	{
-		setdvar("5SR", "0");
-		setdvar("50SR", "0");
-		setdvar("70SR", "0");
-		setdvar("30SR", "0");
-		setdvar("200SR", "0");
-		setdvar("200SR", "0");
-		setdvar("100SR", "0");
-	}   
-}
-
-//FX

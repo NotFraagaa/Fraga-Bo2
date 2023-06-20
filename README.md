@@ -119,14 +119,11 @@ fontscale
 
     Changes the size of the HUD (needs a fast_restart)
         
-tramplesteam_counter 0 1
+buildablesmenu 0 1
 
-    Enables or disables the counter, default is enabled (needs a fast_restart)
-    
-turbine_counter 0 1
+    Shows/Hides the buildables menu on Die Rise / Buried
 
-    Enables or disables the counter, default is enabled (needs a fast_restart)
-    
-resonator_counter 0 1
+# Useful binds
 
-    Enables or disables the counter, default is enabled (needs a fast_restart)
+bind o "toggle buildablesmenu 0 1"
+bind 7 "toggle traptimer 0 1"
