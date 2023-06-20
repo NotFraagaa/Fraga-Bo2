@@ -53,6 +53,7 @@ Origins
 
     Richtofen always all players
     Box set to gen 2
+    Wunderfizz set to gen 4
     Animated pap camo
 
 # Splits

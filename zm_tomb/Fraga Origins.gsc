@@ -23,6 +23,11 @@
 init()
 {
 	level thread fizzStartLocation();
+	if(GetDvar("DoubleTap") == "")
+	{
+		setdvar("DoubleTap", 0);
+	}
+	level thread doubletap();
 }
 
 fizzStartLocation()
@@ -47,4 +52,17 @@ fizzStartLocation()
 		level notify("wunderfizz_setup");
 		machine thread maps\mp\zombies\_zm_perk_random::machine_think();
 	}
+}
+
+doubletap()
+{
+	if(GetDvarInt("DoubleTap") == 1)
+	{
+		replaceFunc(maps\mp\zombies\_zm_perk_random::get_weighted_random_perk, ::getWeightedRandomPerk);
+	}
+}
+
+getWeightedRandomPerk( player ) 
+{
+    return "specialty_rof";
 }
