@@ -72,7 +72,7 @@ Round 150: Rounds 50, 70, 100, 125, 130, 140, 150
 
 Round 200: Rounds 50, 70, 100, 150, 175, 200
 
-To change the sr use the following DVars:
+To change the SR use the following DVars:
 
     there can only be one at the same time, for changing them you need to do a fast_restart
 
@@ -116,10 +116,6 @@ timer_color "x x x"
 
     Changes timer color (x can be any number from 0 to 1; example: 0.5245)
     
-fontscale
-
-    Changes the size of the HUD (needs a fast_restart)
-        
 buildablesmenu 0 1
 
     Shows/Hides the buildables menu on Die Rise / Buried
