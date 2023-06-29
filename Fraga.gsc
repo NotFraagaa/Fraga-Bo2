@@ -172,6 +172,7 @@ onconnect()
 	{
 		self.trampuseddr = 0;
 		self thread buildablesdierise();
+		self thread leapers();
 	}
 
 	if(level.script == "zm_tomb")
@@ -1481,5 +1482,14 @@ buildablesmenu_watcher()
 		self.turbine.alpha = 0;
 		self.resonator.alpha = 0;
 		self.trample.alpha = 0;
+	}
+}
+
+leapers()
+{
+	leaper = flag("leaper_round");
+	if (leaper == true)
+	{
+		self iprintln("^2Cabras: ^7" + level.round_number);
 	}
 }
