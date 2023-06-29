@@ -126,5 +126,6 @@ buildablesmenu 0 1
 
 # Useful binds
 
-bind o "toggle buildablesmenu 0 1"
-bind 7 "toggle traptimer 0 1"
+* bind o "toggle buildablesmenu 0 1"
+* bind 7 "toggle traptimer 0 1"
+* bind 8 "toggle firstbox 1 0"
