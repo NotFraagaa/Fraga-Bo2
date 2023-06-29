@@ -92,6 +92,10 @@ To change the SR use the following DVars:
 
 # DVars
 
+firstbox 1 0
+
+    Disables RNG from the box until roun 10
+
 sph_start
 
      What round sph starts showing, default is 30
