@@ -2,58 +2,18 @@
 #include maps\mp\zombies\_zm_utility;
 #include common_scripts\utility;
 #include maps\mp\_utility;
-#include maps\mp\zm_buried;
-#include maps\mp\zombies\_zm_equip_headchopper;
-#include maps\mp\zombies\_zm_stats;
-#include maps\mp\zombies\_zm_ai_faller;
-#include maps\mp\zombies\_zm_powerups;
-#include maps\mp\zombies\_zm_buildables;
-#include maps\mp\zombies\_zm_devgui;
-#include maps\mp\zombies\_zm_pers_upgrades_functions;
-#include maps\mp\zm_buried_classic;
-#include maps\mp\zombies\_zm_zonemgr;
-#include maps\mp\zombies\_zm_weap_time_bomb;
-#include maps\mp\zm_buried_jail;
-#include maps\mp\zombies\_zm_perk_vulture;
-#include maps\mp\zombies\_zm_perk_divetonuke;
-#include maps\mp\gametypes_zm\_spawning;
 #include maps\mp\teams\_teamset_cdc;
 #include maps\mp\animscripts\zm_death;
-#include maps\mp\zm_buried_buildables;
-#include maps\mp\zm_buried_ffotd;
-#include maps\mp\zm_buried_distance_tracking;
 #include maps\mp\gametypes_zm_hud_message;
-#include maps\mp\zombies\_zm_weap_tomahawk;
-#include maps\mp\zm_alcatraz_utility;
-#include maps\mp\zombies\_zm_craftables;
-#include maps\mp\zm_prison_sq_bg;
-#include maps\mp\zm_alcatraz_craftables;
-#include maps\mp\zombies\_zm_afterlife;
 #include maps\mp\gametypes_zm\_hud_message;
 #include maps\mp\zombies\_zm_magicbox;
 #include maps\mp\gametypes_zm\_globallogic;
-#include maps\mp\zombies\_zm_weapons;
 #include maps\mp\zombies\_zm_weap_claymore;
-#include maps\mp\zombies\_zm;
-#include maps\mp\zombies\_zm_blockers;
-#include maps\mp\zombies\_zm_melee_weapon;
-#include maps\mp\zombies\_zm_clone;
-#include maps\mp\zombies\_zm_laststand;
-#include maps\mp\zombies\_zm_ai_basic;
-#include maps\mp\animscripts\shared;
-#include maps\mp\zombies\_zm_ai_brutus;
 #include maps\mp\zombies\_zm_audio;
-#include maps\mp\zm_alcatraz_sq_nixie;
-#include maps\mp\zombies\_zm_unitrigger;
 #include maps\mp\zombies\_zm_equipment;
-#include maps\mp\zm_alcatraz_sq_vo;
-#include maps\mp\zm_prison_sq_final;
 #include maps\mp\gametypes_zm\_hud;
-#include maps\mp\zombies\_zm_sidequests;
 #include maps\mp\zombies\_zm_score;
-#include maps\_vehicle;
 #include maps\_utility;
-
 
 init()
 {
@@ -66,6 +26,7 @@ init()
 	thread onplayerconnect();
 	thread fix_highround();
 	level thread RoundSplits();
+	level thread enableGraphicTweaks();
 	enable_cheats();
 	if(GetDvar("traptimer") == "")
 	{
@@ -109,36 +70,37 @@ onplayerconnect()
 	while(1)
 	{
 		player thread onconnect();
-		switch(level.scr_zm_map_start_location)
-		{
-			case "tomb":
-				level thread startbox("bunker_tank_chest");
-				break;
-			case "prison":
-				level thread startbox("cafe_chest");
-				break;
-			case "town":
-				level thread startbox("town_chest_2");
-				break;
-		}
-
 		level waittill("connecting", player);
+	}
+}
 
-		if(sessionmodeisonlinegame() && isvictismap() && level.scr_zm_ui_gametype_group == "zclassic")
-		{
-			player thread onplayerspawned();
-			player thread clear_stored_weapondata();
-		}
+enableGraphicTweaks()
+{
+    for (;;)
+    {
+        level waittill("connected", player);
+        player thread connected();
+    }
+}
 
-		if(level.script != "zm_transit")
-		{
-			player thread hands();
-		}
+connected()
+{
+    level endon( "game_ended" );
+    self endon("disconnect");
 
-		else if(level.scr_zm_ui_gametype_group != "zclassic")
+    self.initial_spawn = true;
+
+    for(;;)
+    {
+        self waittill("spawned_player");
+
+    	if(self.initial_spawn)
 		{
-			player thread survivalmap();
-		}
+			self graphic_tweaks();
+			self thread night_mode();
+			self thread rotate_skydome();
+			self set_visionset();
+        }
 	}
 }
 
@@ -147,83 +109,13 @@ onconnect()
 	self waittill("spawned_player");
 	self endon("disconnect");
 
-	self iprintln("^6Fraga^5V6  ^3Loaded");
-	self iprintln("^3Download at ^6https://discord.gg/UWkTzrgd8D ^3or ^6https://github.com/Fraagaa/Fraga-Bo2");
-	self iprintln("Patch includes: ^1autoslpits^7, ^2set hands^7, ^3permanperks^7, ^4full bank^7, ^5timers^7, ^6sph meter^7, ^1buildables counters ^2and more!");
+	self iprintln("^6Fraga^5V8  ^3Loaded");
+	self iprintln("^3Download at ^6discord.gg/UWkTzrgd8D ^3or ^6github.com/Fraagaa/Fraga-Bo2");
 
 	self thread timer_fraga();
 	self thread round_timer_fraga();
-	self thread trap_timer_fraga();
-	self thread trap_timer_cooldown_fraga();
 	self thread color_hud_watcher();
 	self thread customdvars();
-	self thread fill_up_bank();
-	
-
-	if(level.script == "zm_buried")
-	{
-		self thread buildablesmenu();
-		self.turbinesused = 0;
-		self.resoused = 0;
-		self.trampused = 0;
-	}
-
-	if(level.script == "zm_highrise")
-	{
-		self.trampuseddr = 0;
-		self thread buildablesdierise();
-		self thread leapers();
-	}
-
-	if(level.script == "zm_tomb")
-	{
-		replacefunc(maps\mp\zombies\_zm_weapons::get_pack_a_punch_weapon_options, ::origins_pap_camo);
-	}
-
-	if(level.script == "zm_buried")
-	{
-		replacefunc(maps\mp\zombies\_zm_weapons::get_pack_a_punch_weapon_options, ::buried_pap_camo);
-	}
-}
-
-onplayerspawned()
-{
-	self waittill("spawned_player");
-	self endon("disconnect");
-	persistent_upgrades = array("pers_boarding", "pers_revivenoperk", "pers_multikill_headshots", "pers_cash_back_bought", "pers_cash_back_prone", "pers_insta_kill", "pers_jugg", "pers_carpenter", "pers_flopper_counter", "pers_perk_lose_counter", "pers_pistol_points_counter", "pers_double_points_counter", "pers_sniper_counter");
-	persistent_upgrade_values = [];
-	persistent_upgrade_values["pers_boarding"] = 74;
-	persistent_upgrade_values["pers_revivenoperk"] = 17;
-	persistent_upgrade_values["pers_multikill_headshots"] = 5;
-	persistent_upgrade_values["pers_cash_back_bought"] = 50;
-	persistent_upgrade_values["pers_cash_back_prone"] = 15;
-	persistent_upgrade_values["pers_insta_kill"] = 2;
-	persistent_upgrade_values["pers_jugg"] = 3;
-	persistent_upgrade_values["pers_carpenter"] = 1;
-	persistent_upgrade_values["pers_flopper_counter"] = 1;
-	persistent_upgrade_values["pers_perk_lose_counter"] = 3;
-	persistent_upgrade_values["pers_pistol_points_counter"] = 1;
-	persistent_upgrade_values["pers_double_points_counter"] = 1;
-	persistent_upgrade_values["pers_sniper_counter"] = 1;
-	foreach(pers_perk in persistent_upgrades)
-	{
-		if(GetDvar(pers_perk) == "")
-		{
-			setdvar(pers_perk, 1);
-		}
-		statval = GetDvarInt(pers_perk) > 0 * persistent_upgrade_values[pers_perk];
-		maps\mp\zombies\_zm_stats::set_client_stat(pers_perk, statval);
-	}
-	if(GetDvar("full_bank") == "")
-	{
-		setdvar("full_bank", 1);
-	}
-	bank_points = GetDvarInt("full_bank") > 0 * 250;
-	if(bank_points)
-	{
-		self maps\mp\zombies\_zm_stats::set_map_stat("depositBox", bank_points, level.banking_map);
-		self.account_value = bank_points;
-	}
 }
 
 //TIMERS
@@ -267,6 +159,7 @@ timer_fraga()
 		wait(0.1);
 	}
 }
+
 timer_fraga_watcher()
 {
 	self endon("disconnect");
@@ -415,77 +308,6 @@ round_timer_fraga_watcher()
 	}
 }
 
-trap_timer_fraga()
-{
-	if( level.script != "zm_prison" || !level.hud_trap_timer )
-		return;
-
-	self endon( "disconnect" );
-
-	self.trap_timer_fraga = newclienthudelem( self );
-	self.trap_timer_fraga.alignx = "right";
-	self.trap_timer_fraga.aligny = "top";
-	self.trap_timer_fraga.horzalign = "user_right";
-	self.trap_timer_fraga.vertalign = "user_top";
-	self.trap_timer_fraga.x += 0;
-	self.trap_timer_fraga.y += 20;
-	self.trap_timer_fraga.fontscale = 1.4;
-	self.trap_timer_fraga.alpha = 0;
-	self.trap_timer_fraga.color = ( 0, 1, 0 );
-	self.trap_timer_fraga.hidewheninmenu = 1;
-	self.trap_timer_fraga.hidden = 0;
-	self.trap_timer_fraga.label = &"";
-
-	while( 1 )
-	{
-		level waittill( "trap_activated" );
-		if( !level.trap_activated )
-		{
-			wait 0.5;
-			self.trap_timer_fraga.alpha = 1 * GetDvarInt("traptimer");
-			self.trap_timer_fraga settimer( 25 );
-			wait 25;
-			self.trap_timer_fraga.alpha = 0;
-		}
-	}
-}
-
-trap_timer_cooldown_fraga()
-{
-	if( level.script != "zm_prison" || !level.hud_trap_timer )
-		return;
-
-	self endon( "disconnect" );
-
-	self.trap_timer_cooldown_fraga = newclienthudelem( self );
-	self.trap_timer_cooldown_fraga.alignx = "right";
-	self.trap_timer_cooldown_fraga.aligny = "top";
-	self.trap_timer_cooldown_fraga.horzalign = "user_right";
-	self.trap_timer_cooldown_fraga.vertalign = "user_top";
-	self.trap_timer_cooldown_fraga.x += 0;
-	self.trap_timer_cooldown_fraga.y += 20;
-	self.trap_timer_cooldown_fraga.fontscale = 1.4;
-	self.trap_timer_cooldown_fraga.alpha = 0;
-	self.trap_timer_cooldown_fraga.color = ( 1, 0, 0 );
-	self.trap_timer_cooldown_fraga.hidewheninmenu = 1;
-	self.trap_timer_cooldown_fraga.hidden = 0;
-	self.trap_timer_cooldown_fraga.label = &"";
-
-	while( 1 )
-	{
-		level waittill( "trap_activated" );
-
-		if( !level.trap_activated )
-		{
-			wait 25.5;
-			self.trap_timer_cooldown_fraga.alpha = 1 * GetDvarInt("traptimer");
-			self.trap_timer_cooldown_fraga settimer( 25 );
-			wait 25.5;
-			self.trap_timer_cooldown_fraga.alpha = 0;
-		}
-	}
-}
-
 //HEALTH FIX
 
 fix_highround()
@@ -514,366 +336,6 @@ fix_highround()
 	}
 }
 
-//BOX LOCATION
-
-startbox(start_chest)
-{
-	self endon("disconnect");
-	level waittill("initial_players_connected");
-
-	for(i = 0; i < level.chests.size; i++)
-	{
-		if(level.chests[i].script_noteworthy == start_chest)
-		{
-			desired_chest_index = i;
-			continue;
-		}
-
-		if(level.chests[i].hidden == 0)
-		{
-			nondesired_chest_index = i;
-		}
-	}
-
-	if(isdefined(nondesired_chest_index) && nondesired_chest_index < desired_chest_index)
-	{
-		level.chests[nondesired_chest_index] hide_chest();
-		level.chests[nondesired_chest_index].hidden = 1;
-		level.chests[desired_chest_index].hidden = 0;
-		level.chests[desired_chest_index] show_chest();
-		level.chest_index = desired_chest_index;
-	}
-}
-
-//BANK AND FRIDGE
-
-isvictismap()
-{
-	switch(level.script)
-	{
-		case "zm_transit": return true;
-		case "zm_highrise": return true;
-		case "zm_buried": return true;
-		default: return false;
-	}	
-}
-
-fill_up_bank()
-{
-	level endon("end_game");
-	self endon("disconnect");
-
-	flag_wait("initial_blackscreen_passed");
-
-    if (level.round_number == 1)
-	{
-    self.account_value = level.bank_account_max;		
-	}
-}
-
-clear_stored_weapondata()
-{
-	flag_wait("initial_blackscreen_passed");
-
-	if(level.script == "zm_highrise")
-	{
-		self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "name", "an94_upgraded_zm+mms");
-		self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "stock", 600);
-		self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "clip", 50);
-	}
-
-	else if(level.script == "zm_buried")
-	{
-		self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "name", "an94_upgraded_zm+mms");
-		self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "stock", 600);
-		self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "clip", 50);
-	}
-
-	else if(level.script == "zm_transit")
-	{
-		self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "name", "mp5k_upgraded_zm");
-	}
-
-	self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "stock", 600);
-	self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "clip", 50);
-}
-
-//HANDS
-
-hands()
-{
-	level.givecustomcharacters = ::give_personality_characters;
-}
-
-give_personality_characters()
-{
-	if ( isDefined( level.hotjoin_player_setup ) && [[ level.hotjoin_player_setup ]]( "c_zom_farmgirl_viewhands" ) )
-	{
-		return;
-	}
-	self detachall();
-
-	if(level.script == "zm_transit")
-	{
-		self.characterindex = 1;
-	}
-
-	else if(level.script == "zm_highrise")
-	{
-		self.characterindex = 1;
-	}
-
-	else if(level.script == "zm_prison")
-	{
-		self.characterindex = 0;
-	}
-
-	else if(level.script == "zm_buried")
-	{
-		self.characterindex = 1;
-	}
-
-	else if(level.script == "zm_tomb")
-	{
-		self.characterindex = 2;
-	}
-
-	else if(level.script == "zm_nuked")
-	{
-		self.characterindex = 3;
-	}
-
-	self.favorite_wall_weapons_list = [];
-	self.talks_in_danger = 1;
-
-	switch(self.characterindex)
-	{
-		case 0:
-			self setviewmodel("c_zom_arlington_coat_viewhands");
-			self setmodel("c_zom_player_arlington_fb");
-			level.vox maps\mp\zombies\_zm_audio::zmbvoxinitspeaker("player", "vox_plr_", self);
-			self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "blundergat_zm";
-			self set_player_is_female(0);
-			self.character_name = "Billy";
-			break;
-
-		case 1:
-			self setviewmodel("c_zom_farmgirl_viewhands");
-			self setmodel("c_zom_player_farmgirl_dlc1_fb");
-			level.vox maps\mp\zombies\_zm_audio::zmbvoxinitspeaker("player", "vox_plr_", self);
-			self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "rottweil72_zm";
-			self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "870mcs_zm";
-			self setmovespeedscale(1);
-			self setsprintduration(4);
-			self setsprintcooldown(0);
-			self thread set_exert_id();
-			self set_player_is_female(1);
-			break;
-
-		case 2:
-			self setviewmodel("c_zom_richtofen_viewhands");
-			self setmodel("c_zom_tomb_richtofen_fb");
-			level.vox maps\mp\zombies\_zm_audio::zmbvoxinitspeaker("player", "vox_plr_", self);
-			self set_player_is_female(0);
-			self.character_name = "Richtofen";
-			break;
-		case 3:
-			self setmodel("c_zom_player_cdc_fb");
-			self setviewmodel("c_zom_suit_viewhands");
-			break;
-
-	}
-
-	self setmovespeedscale(1);
-	self setsprintduration(4);
-	self setsprintcooldown(0);
-	self thread set_exert_id();
-}
-
-set_exert_id()
-{
-	self endon("disconnect");
-	wait_network_frame();
-	self maps\mp\zombies\_zm_audio::setexertvoice(self.characterindex);
-}
-
-survivalmap()
-{
-	level.givecustomcharacters = ::ciaalways;
-}
-
-ciaalways()
-{
-	self detachall();
-	self set_player_is_female(0);
-
-	self.characterindex = 0;
-
-	switch(self.characterindex)
-	{
-		case 0:
-			self setmodel("c_zom_player_cdc_fb");
-			self setviewmodel("c_zom_suit_viewhands");
-
-			self.voice = "american";
-			self.skeleton = "base";
-
-			self.characterindex = 0;
-
-			break;
-		case 1:
-			self setmodel("c_zom_player_cdc_fb");
-			self setviewmodel("c_zom_hazmat_viewhands");
-
-			self.voice = "american";
-			self.skeleton = "base";
-
-			self.characterindex = 1;
-			break;
-	}
-
-	self setmovespeedscale(1);
-	self setsprintduration(4);
-	self setsprintcooldown(0);
-
-}
-
-enable_cheats()
-{
-	setdvar("sv_cheats", 1);
-	setdvar("cg_ufo_scaler", 0.7);
-}
-
-customdvars()
-{
-	self thread timer_x_position();
-	self thread timer_y_position();
-	self thread sph_start();
-	self thread alphatramplesteam();
-	self thread alphaturbine();
-	self thread alpharesonator();
-	self thread fontscale();
-}
-
-//BUILDABLES
-
-alpharesonator()
-{
-	self endon("disconnect");
-	if(GetDvar("resonator") == "")
-	{
-		setdvar("resonator", 1);
-	}
-}
-
-alphaturbine()
-{
-	self endon("disconnect");
-	if(GetDvar("turbine") == "")
-	{
-		setdvar("turbine", 1);
-	}
-}
-
-alphatramplesteam()
-{
-	self endon("disconnect");
-	if(GetDvar("trample") == "")
-	{
-		setdvar("trample", 1);
-	}
-}
-
-buildablesdierise()
-{
-	self.tramplehud = newclienthudelem(self);
-	self.tramplehud.alignx = "left";
-	self.tramplehud.horzalign = "user_left";
-	self.tramplehud.vertalign = "user_top";
-	self.tramplehud.aligny = "top";
-	self.tramplehud.x = 2;
-	self.tramplehud.fontscale = 1.1;
-	self.tramplehud.y = 0;
-	self.tramplehud.sort = 1;
-	self.tramplehud.label = &"^5Springpads ^6";
-	self.tramplehud.hidewheninmenu = 1;
-	self.tramplehud setvalue(0);
-	buildablesmenu_watcher();
-
-	while(1)
-	{
-		which = self waittill_any_return("equip_springpad_zm_given");
-		if(which == "equip_springpad_zm_given")
-		{
-			self.trampuseddr = self.trampuseddr + 1;
-			self.tramplehud setvalue(self.trampuseddr);
-		}
-	}
-}
-
-buildablesmenu()
-{
-	self endon("disconnect");
-
-	self.turbine = newclienthudelem(self);
-	self.turbine.alignx = "left";
-	self.turbine.horzalign = "user_left";
-	self.turbine.vertalign = "user_top";
-	self.turbine.aligny = "top";
-	self.turbine.x = self.turbine.x + 2;
-	self.turbine.y = self.turbine.y + 0;
-	self.turbine.sort = 1;
-	self.turbine.fontscale = 1.1;
-	self.turbine.label = &"^5Tur^7bines ^6";
-	self.turbine.hidewheninmenu = 1;
-	self.turbine setvalue(0);
-	self.resonator = newclienthudelem(self);
-	self.resonator.alignx = "left";
-	self.resonator.horzalign = "user_left";
-	self.resonator.vertalign = "user_top";
-	self.resonator.aligny = "top";
-	self.resonator.x = 2;
-	self.resonator.fontscale = 1.1;
-	self.resonator.y = 11;
-	self.resonator.sort = 1;
-	self.resonator.label = &"Sub^5woo^7fers ^6";
-	self.resonator.hidewheninmenu = 1;
-	self.resonator setvalue(0);
-	self.trample = newclienthudelem(self);
-	self.trample.alignx = "left";
-	self.trample.horzalign = "user_left";
-	self.trample.vertalign = "user_top";
-	self.trample.aligny = "top";
-	self.trample.x = 2;
-	self.trample.fontscale = 1.1;
-	self.trample.y = 22;
-	self.trample.sort = 1;
-	self.trample.label = &"Springp^5ads ^6";
-	self.trample.hidewheninmenu = 1;
-	self.trample setvalue(0);
-	buildablesmenu_watcher();
-
-	while(1)
-	{
-		which = self waittill_any_return("equip_turbine_zm_given", "equip_springpad_zm_given", "equip_subwoofer_zm_given");
-		if(which == "equip_turbine_zm_given")
-		{
-			self.turbinesused = self.turbinesused + 1;
-			self.turbinehud setvalue(self.turbinesused);
-		}
-		if(which == "equip_springpad_zm_given")
-		{
-			self.trampused = self.trampused + 1;
-			self.tramplehud setvalue(self.trampused);
-		}
-		if(which == "equip_subwoofer_zm_given")
-		{
-			self.resoused = self.resoused + 1;
-			self.resohud setvalue(self.resoused);
-		}
-	}
-}
-
 //SPLITS
 
 timer( split_list, y_offset, branching )
@@ -899,7 +361,7 @@ timer( split_list, y_offset, branching )
 
 create_new_split(split_name, y_offset)
 {
-    y =y_offset;
+    y = y_offset;
 
     if(isdefined(level.fraga_splits_splits)) y += level.fraga_splits_splits.size * 16;
     level.fraga_splits_splits[split_name] = newhudelem();
@@ -909,12 +371,37 @@ create_new_split(split_name, y_offset)
     level.fraga_splits_splits[split_name].vertalign = "top";
     level.fraga_splits_splits[split_name].x = -62;
     level.fraga_splits_splits[split_name].y = -30 + y;
+	level.fraga_splits_splits[split_name].alpha = 0;
     level.fraga_splits_splits[split_name].fontscale = 1.4;
     level.fraga_splits_splits[split_name].hidewheninmenu = 1;
-    level.fraga_splits_splits[split_name].alpha = 0;
-    level.fraga_splits_splits[split_name].color = (1, 0.5, 1);
+    level.fraga_splits_splits[split_name].color = (0, 0, 0);
     level thread split_start_thread(split_name);
+	level thread split_alpha(split_name);
     set_split_label(split_name);
+}
+
+split_alpha(split_name)
+{
+	self endon("disconnect");
+	level endon("end_game");
+	if(GetDvar("splits") == "")
+	{
+		setdvar("splits", 0);
+	}
+
+	while(1)
+	{
+		while(GetDvarInt("splits") == 0)
+		{
+			wait(0.1);
+		}
+		level.fraga_splits_splits[split_name].alpha = 1;
+		while(GetDvarInt("splits") >= 1)
+		{
+			wait(0.1);
+		}
+		level.fraga_splits_splits[split_name].alpha = 0;
+	}
 }
 
 split_start_thread(split_name)
@@ -956,7 +443,7 @@ set_split_label(split_name)
 
 unhide(split_name)
 {
-    level.fraga_splits_splits[split_name].alpha = 0.8;
+    level.fraga_splits_splits[split_name].color = (1, 0.5, 1);
 }
 
 split(split_name, time)
@@ -1177,6 +664,24 @@ RoundSplits()
 	}   
 }
 
+//UTILITY
+
+enable_cheats()
+{
+	setdvar("sv_cheats", 1);
+	setdvar("cg_ufo_scaler", 0.7);
+}
+
+customdvars()
+{
+	self thread timer_x_position();
+	self thread timer_y_position();
+
+	self thread sph_start();
+
+	self thread fontscale();
+}
+
 //TIMER UTILITY
 
 fontscale()
@@ -1297,199 +802,189 @@ timer_x_position()
 }
 
 
-// -----------------------------------------------------------------------
-// -----------------------------------------------------------------------
-// ------------------------ Replaced Functions ---------------------------
-// -----------------------------------------------------------------------
-// -----------------------------------------------------------------------
-
-origins_pap_camo(weapon)
+graphic_tweaks()
 {
-	if(!isdefined(self.pack_a_punch_weapon_options))
-	{
-		self.pack_a_punch_weapon_options = [];
-	}
-
-	if(!is_weapon_upgraded(weapon))
-	{
-		return self calcweaponoptions(0, 0, 0, 0, 0);
-	}
-
-	if(isdefined(self.pack_a_punch_weapon_options[weapon]))
-	{
-		return self.pack_a_punch_weapon_options[weapon];
-	}
-
-	smiley_face_reticle_index = 1;
-	base = get_base_name(weapon);
-	camo_index = 39;
-
-	if(level.script == "zm_tomb")
-	{
-		if(base == "mg08_upgraded_zm" || base == "mg08_zm" || (base == "c96_upgraded_zm" || base == "c96_zm"))
-		{
-			camo_index = 40;
-		}
-		else
-		{
-			camo_index = 40;
-		}
-	}
-
-	lens_index = randomintrange(0, 6);
-	reticle_index = randomintrange(0, 16);
-	reticle_color_index = randomintrange(0, 6);
-	plain_reticle_index = 16;
-	r = randomint(10);
-	use_plain = r < 3;
-
-	if(base == "saritch_upgraded_zm")
-	{
-		reticle_index = smiley_face_reticle_index;
-	}
-
-	else if(use_plain)
-	{
-		reticle_index = plain_reticle_index;
-	}
-
-	scary_eyes_reticle_index = 8;
-	purple_reticle_color_index = 3;
-	if(reticle_index == scary_eyes_reticle_index)
-	{
-		reticle_color_index = purple_reticle_color_index;
-	}
-
-	letter_a_reticle_index = 2;
-	pink_reticle_color_index = 6;
-	
-	if(reticle_index == letter_a_reticle_index)
-	{
-		reticle_color_index = pink_reticle_color_index;
-	}
-
-	letter_e_reticle_index = 7;
-	green_reticle_color_index = 1;
-	if(reticle_index == letter_e_reticle_index)
-	{
-		reticle_color_index = green_reticle_color_index;
-	}
-
-	self.pack_a_punch_weapon_options[weapon] = self calcweaponoptions(camo_index, lens_index, reticle_index, reticle_color_index);
-	return self.pack_a_punch_weapon_options[weapon];
+	if( level.script != "zm_tomb")
+	self setclientdvar("r_dof_enable", 0);
+	self setclientdvar("r_lodBiasRigid", -1000);
+	self setclientdvar("r_lodBiasSkinned", -1000);
+	self setClientDvar("r_lodScaleRigid", 1);
+	self setClientDvar("r_lodScaleSkinned", 1);
+	self setclientdvar("sm_sunquality", 2);
+	self setclientdvar("r_enablePlayerShadow", 1);
+	self setclientdvar( "vc_fbm", "0 0 0 0" );
+	self setclientdvar( "vc_fsm", "1 1 1 1" );
+	self setclientdvar( "vc_fgm", "1 1 1 1" );
 }
 
-buried_pap_camo(weapon)
+night_mode()
 {
-	if(!isdefined(self.pack_a_punch_weapon_options))
+	if ( !isDefined( self.night_mode ) )
 	{
-		self.pack_a_punch_weapon_options = [];
+		self.night_mode = true;
+	}
+	else
+	{
+		return;
 	}
 
-	if(!is_weapon_upgraded(weapon))
-	{
-		return self calcweaponoptions(0, 0, 0, 0, 0);
-	}
+	flag_wait( "start_zombie_round_logic" );
+	wait 0.05;	
 
-	if(isdefined(self.pack_a_punch_weapon_options[weapon]))
-	{
-		return self.pack_a_punch_weapon_options[weapon];
-	}
-
-	smiley_face_reticle_index = 1;
-	base = get_base_name(weapon);
-	camo_index = 39;
-
-	if(level.script == "zm_buried")
-	{
-		if(base == "rnma_upgraded_zm" || base == "rnma_zm")
-		{
-			camo_index = 39;
-		}
-		else
-		{
-			camo_index = 40;
-		}
-	}
-
-	lens_index = randomintrange(0, 6);
-	reticle_index = randomintrange(0, 16);
-	reticle_color_index = randomintrange(0, 6);
-	plain_reticle_index = 16;
-	r = randomint(10);
-	use_plain = r < 3;
-
-	if(base == "saritch_upgraded_zm")
-	{
-		reticle_index = smiley_face_reticle_index;
-	}
-
-	else if(use_plain)
-	{
-		reticle_index = plain_reticle_index;
-	}
-
-	scary_eyes_reticle_index = 8;
-	purple_reticle_color_index = 3;
-	if(reticle_index == scary_eyes_reticle_index)
-	{
-		reticle_color_index = purple_reticle_color_index;
-	}
-
-	letter_a_reticle_index = 2;
-	pink_reticle_color_index = 6;
-	if(reticle_index == letter_a_reticle_index)
-	{
-		reticle_color_index = pink_reticle_color_index;
-	}
-
-	letter_e_reticle_index = 7;
-	green_reticle_color_index = 1;
-
-	if(reticle_index == letter_e_reticle_index)
-	{
-		reticle_color_index = green_reticle_color_index;
-	}
-
-	self.pack_a_punch_weapon_options[weapon] = self calcweaponoptions(camo_index, lens_index, reticle_index, reticle_color_index);
-	return self.pack_a_punch_weapon_options[weapon];
+	self thread night_mode_watcher();
 }
 
-//TESTS
+night_mode_watcher()
+{	
+	if( getDvar( "night_mode") == "" )
+		setDvar( "night_mode", 0 );
 
-buildablesmenu_watcher()
-{
-	self endon("disconnect");
-	level endon("end_game");
-	if(GetDvar("buildablesmenu") == "")
-	{
-		setdvar("buildablesmenu", 1);
-	}
+	wait 1;
 
 	while(1)
 	{
-		while(GetDvarInt("buildablesmenu") == 0)
+		while( !getDvarInt( "night_mode" ) )
 		{
-			wait(0.1);
+			wait 0.1;
 		}
-		self.turbine.alpha = 1;
-		self.resonator.alpha = 1;
-		self.trample.alpha = 1;
-		while(GetDvarInt("buildablesmenu") >= 1)
+		self thread enable_night_mode();
+		self thread visual_fix();
+
+		while( getDvarInt( "night_mode" ) )
 		{
-			wait(0.1);
+			wait 0.1;
 		}
-		self.turbine.alpha = 0;
-		self.resonator.alpha = 0;
-		self.trample.alpha = 0;
+		self thread disable_night_mode();
 	}
 }
 
-leapers()
+enable_night_mode()
 {
-	leaper = flag("leaper_round");
-	if (leaper == true)
+	if( !isDefined( level.default_r_exposureValue ) )
+		level.default_r_exposureValue = getDvar( "r_exposureValue" );
+	if( !isDefined( level.default_r_lightTweakSunLight ) )
+		level.default_r_lightTweakSunLight = getDvar( "r_lightTweakSunLight" );
+	if( !isDefined( level.default_r_sky_intensity_factor0 ) )
+		level.default_r_sky_intensity_factor0 = getDvar( "r_sky_intensity_factor0" );
+	// if( !isDefined( level.default_r_sky_intensity_factor0 ) )
+	// 	level.default_r_lightTweakSunColor = getDvar( "r_lightTweakSunColor" );
+
+	//self setclientdvar( "r_fog", 0 );
+	self setclientdvar( "r_filmUseTweaks", 1 );
+	self setclientdvar( "r_bloomTweaks", 1 );
+	self setclientdvar( "r_exposureTweak", 1 );
+	self setclientdvar( "vc_rgbh", "0.07 0 0.25 0" );
+	self setclientdvar( "vc_yl", "0 0 0.25 0" );
+	self setclientdvar( "vc_yh", "0.015 0 0.07 0" );
+	self setclientdvar( "vc_rgbl", "0.015 0 0.07 0" );
+	self setclientdvar( "vc_rgbh", "0.015 0 0.07 0" );
+	self setclientdvar( "r_exposureValue", 3.9 );
+	self setclientdvar( "r_lightTweakSunLight", 16 );
+	self setclientdvar( "r_sky_intensity_factor0", 3 );
+	//self setclientdvar( "r_lightTweakSunColor", ( 0.015, 0, 0.07 ) );
+	if( level.script == "zm_buried" )
 	{
-		self iprintln("^2Cabras: ^7" + level.round_number);
+		self setclientdvar( "r_exposureValue", 3.5 );
 	}
+	else if( level.script == "zm_tomb" )
+	{
+		self setclientdvar( "r_exposureValue", 4 );
+	}
+	else if( level.script == "zm_nuked" )
+	{
+		self setclientdvar( "r_exposureValue", 5.6 );
+	}
+	else if( level.script == "zm_highrise" )
+	{
+		self setclientdvar( "r_exposureValue", 3 );
+	}
+}
+
+disable_night_mode()
+{
+	self notify( "disable_nightmode" );
+	self setclientdvar( "r_filmUseTweaks", 0 );
+	self setclientdvar( "r_bloomTweaks", 0 );
+	self setclientdvar( "r_exposureTweak", 0 );
+	self setclientdvar( "vc_rgbh", "0 0 0 0" );
+	self setclientdvar( "vc_yl", "0 0 0 0" );
+	self setclientdvar( "vc_yh", "0 0 0 0" );
+	self setclientdvar( "vc_rgbl", "0 0 0 0" );
+	self setclientdvar( "r_exposureValue", int( level.default_r_exposureValue ) );
+	self setclientdvar( "r_lightTweakSunLight", int( level.default_r_lightTweakSunLight ) );
+	self setclientdvar( "r_sky_intensity_factor0", int( level.default_r_sky_intensity_factor0 ) );
+}
+
+visual_fix()
+{
+	level endon( "game_ended" );
+	self endon( "disconnect" );
+	self endon( "disable_nightmode" );
+	if( level.script == "zm_buried" )
+	{
+		while( getDvar( "r_sky_intensity_factor0" ) != 0 )
+		{	
+			self setclientdvar( "r_lightTweakSunLight", 1 );
+			self setclientdvar( "r_sky_intensity_factor0", 0 );
+			wait 0.05;
+		}
+	}
+	else if( level.script == "zm_prison" || level.script == "zm_tomb" )
+	{
+		while( getDvar( "r_lightTweakSunLight" ) != 0 )
+		{
+			for( i = getDvar( "r_lightTweakSunLight" ); i >= 0; i = ( i - 0.05 ) )
+			{
+				self setclientdvar( "r_lightTweakSunLight", i );
+				wait 0.05;
+			}
+			wait 0.05;
+		}
+	}
+	else return;
+}
+
+rotate_skydome()
+{
+	if ( level.script == "zm_tomb" )
+	{
+		return;
+	}
+	
+	x = 360;
+	
+	self endon("disconnect");
+	for(;;)
+	{
+		x -= 0.025;
+		if ( x < 0 )
+		{
+			x += 360;
+		}
+		self setclientdvar( "r_skyRotation", x );
+		wait 0.1;
+	}
+}
+
+change_skydome()
+{
+	x = 6500;
+	
+	self endon("disconnect");
+	for(;;)
+	{
+		x += 1.626;
+		if ( x > 25000 )
+		{
+			x -= 23350;
+		}
+		self setclientdvar( "r_skyColorTemp", x );
+		wait 0.1;
+	}
+}
+
+set_visionset()
+{
+	self useservervisionset(1);
+	self setvisionsetforplayer(GetDvar( "mapname" ), 1.0 );
 }
