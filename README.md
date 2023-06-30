@@ -27,7 +27,6 @@ Town
     
 Die Rise
 
-    Misty always all players
     Bank full for all players
     All perman perks are given on spawn to all players
     AN94 upgraded on the weapon locker for all players
@@ -35,14 +34,12 @@ Die Rise
     
 Mob of the Dead
 
-    Weasel always all players
     Trap timer
     Box set to cafeteria always
     Key always spawns at cafeteria
     
 Buried
 
-    Misty always all players
     Bank full for all players
     All perman perks are given on spawn to all players
     AN94 upgraded on the weapon locker for all players
@@ -51,7 +48,6 @@ Buried
 
 Origins
 
-    Richtofen always all players
     Box set to gen 2
     Wunderfizz set to gen 4
     Animated pap camo
