@@ -9,6 +9,10 @@
 
 init()
 {
+	if(GetDvar("character") == "")
+	{
+		setdvar("character", 1);
+	}
     level thread connected();
 }
 
@@ -24,6 +28,7 @@ connected()
 		level waittill("connecting", player);
         player thread onconnect();
         player thread fridge();
+		player thread hands();
 		if(sessionmodeisonlinegame() && level.scr_zm_ui_gametype_group == "zclassic")
 		{
 			player thread perks();
@@ -92,4 +97,63 @@ bank()
 	{
     self.account_value = level.bank_account_max;		
 	}
+}
+
+
+hands()
+{
+	level.givecustomcharacters = ::set_character_option;
+}
+
+set_character_option()
+{
+    switch( getDvarInt("character") )
+    {
+        case 1:
+            self character\c_transit_player_farmgirl::main();
+            self setviewmodel( "c_zom_farmgirl_viewhands" );
+            level.vox maps\mp\zombies\_zm_audio::zmbvoxinitspeaker( "player", "vox_plr_", self );
+            self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "rottweil72_zm";
+            self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "870mcs_zm";
+            self set_player_is_female( 1 );
+            break;
+        case 2:
+            self character\c_transit_player_oldman::main();
+            self setviewmodel( "c_zom_oldman_viewhands" );
+            level.vox maps\mp\zombies\_zm_audio::zmbvoxinitspeaker( "player", "vox_plr_", self );
+            self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "frag_grenade_zm";
+            self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "claymore_zm";
+            self set_player_is_female( 0 );
+            break;
+        case 3:
+            self character\c_transit_player_reporter::main();
+            self setviewmodel( "c_zom_reporter_viewhands" );
+            level.vox maps\mp\zombies\_zm_audio::zmbvoxinitspeaker( "player", "vox_plr_", self );
+            self.talks_in_danger = 1;
+            level.rich_sq_player = self;
+            self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "beretta93r_zm";
+            self set_player_is_female( 0 );
+            break;
+        case 4:
+            self character\c_transit_player_engineer::main();
+            self setviewmodel( "c_zom_engineer_viewhands" );
+            level.vox maps\mp\zombies\_zm_audio::zmbvoxinitspeaker( "player", "vox_plr_", self );
+            self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "m14_zm";
+            self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "m16_zm";
+            self set_player_is_female( 0 );
+            break;
+    }
+
+	self setmovespeedscale( 1 );
+	self setsprintduration( 4 );
+	self setsprintcooldown( 0 );
+	self thread set_exert_id();
+}
+
+
+set_exert_id()
+{
+	self endon("disconnect");
+	wait_network_frame();
+	self maps\mp\zombies\_zm_audio::setexertvoice(self.characterindex);
 }

@@ -109,7 +109,7 @@ onconnect()
 	self waittill("spawned_player");
 	self endon("disconnect");
 
-	self iprintln("^6Fraga^5V8  ^3Loaded");
+	self iprintln("^6Fraga^5V6  ^3Loaded");
 	self iprintln("^3Download at ^6discord.gg/UWkTzrgd8D ^3or ^6github.com/Fraagaa/Fraga-Bo2");
 
 	self thread timer_fraga();

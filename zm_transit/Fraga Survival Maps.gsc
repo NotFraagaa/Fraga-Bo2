@@ -14,18 +14,18 @@ init()
 		setdvar("character", 1);
 	}
     level thread connected();
-	thread onplayerconnect();
+	if(level.scr_zm_map_start_location == "town")
+	{
+		thread onplayerconnect();
+	}
 }
 
 onplayerconnect()
 {
 	while(1)
 	{
-		if(level.scr_zm_map_start_location == "town")
-		{
 		level thread startbox("town_chest_2");
 		level waittill("connecting", player);
-		}
 	}
 }
 
