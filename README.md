@@ -17,10 +17,6 @@ Tranzit
     All perman perks are given on spawn to all players
     MP5 upgraded on weapon locker for all players
     
-Survival Maps:
-
-    CIA always all players
-    
 Town
 
     Box is set to double tap
@@ -92,7 +88,7 @@ To change the SR use the following DVars (there can only be one at the same time
 
 ## DVars
 
-character 1 2 3 4
+character 1 2 3 4 5
 
     1 = Misty, Richtophen, Arlington
     2 = Russman, Dempsei, Finn
@@ -106,7 +102,7 @@ splits 1 0
 
 firstbox 1 0
 
-    Disables RNG from the box until roun 10
+    Disables RNG from the box until round 10
 
 sph_start
 
