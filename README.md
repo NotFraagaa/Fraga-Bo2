@@ -1,6 +1,6 @@
 # Fraga-Bo2
 
-HUD CHANGES
+## HUD CHANGES
 
     Game timer
     Round timer
@@ -9,7 +9,7 @@ HUD CHANGES
     HUD color and position can be changed
     Splits
 
-# MAP CHANGES
+## MAP CHANGES
 
 Tranzit
 
@@ -56,7 +56,7 @@ Origins
     Wunderfizz set to gen 4
     Animated pap camo
 
-# Splits
+## Splits
 
 Round 5: Rounds 1,2,3,4,5
 
@@ -72,9 +72,7 @@ Round 150: Rounds 50, 70, 100, 125, 130, 140, 150
 
 Round 200: Rounds 50, 70, 100, 150, 175, 200
 
-To change the SR use the following DVars:
-
-    there can only be one at the same time, for changing them you need to do a fast_restart
+To change the SR use the following DVars (there can only be one at the same time, for changing them you need to do a fast_restart):
 
 5SR 1
 
@@ -90,7 +88,25 @@ To change the SR use the following DVars:
 
 200SR 1
 
-# DVars
+## Graphic Changes
+
+- Animated Skyboxes
+- Night mode
+- Player shadows
+
+## DVars
+
+character 1 2 3 4
+
+    1 = Misty, Richtophen, Arlington
+    2 = Russman, Dempsei, Finn
+    3 = Marlton, Nikolai, Sal
+    4 = Stuthlinger, Takeo, Billy
+    5 = Ghost (mob)
+
+splits 1 0
+
+    Shows/hides splits
 
 firstbox 1 0
 
@@ -124,8 +140,9 @@ buildablesmenu 0 1
 
     Shows/Hides the buildables menu on Die Rise / Buried
 
-# Useful binds
+## Useful binds
 
 * bind o "toggle buildablesmenu 0 1"
 * bind 7 "toggle traptimer 0 1"
 * bind 8 "toggle firstbox 1 0"
+* bind N "toggle night_mode 1 0"
