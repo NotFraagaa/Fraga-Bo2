@@ -21,6 +21,7 @@
 #include maps\mp\_utility;
 #include common_scripts\utility;
 #include maps\mp\zombies\_zm_magicbox;
+
 init()
 {
 	replacefunc(maps\mp\zombies\_zm_weapons::get_pack_a_punch_weapon_options, ::origins_pap_camo);
@@ -93,6 +94,16 @@ hands()
 
 set_character_option()
 {
+    self detachall();
+
+    if ( !isdefined( self.characterindex ) )
+	{
+		self.characterindex = assign_lowest_unused_character_index();
+	}
+
+    self.favorite_wall_weapons_list = [];
+    self.talks_in_danger = 0;
+
     switch( getDvarInt("character") )
     {
 	case 1:
@@ -251,4 +262,59 @@ origins_pap_camo(weapon)
 
 	self.pack_a_punch_weapon_options[weapon] = self calcweaponoptions(camo_index, lens_index, reticle_index, reticle_color_index);
 	return self.pack_a_punch_weapon_options[weapon];
+}
+
+
+assign_lowest_unused_character_index()
+{
+    charindexarray = [];
+    charindexarray[0] = 0;
+    charindexarray[1] = 1;
+    charindexarray[2] = 2;
+    charindexarray[3] = 3;
+    players = get_players();
+
+    if ( players.size == 1 )
+    {
+        charindexarray = array_randomize( charindexarray );
+
+        if ( charindexarray[0] == 2 )
+            level.has_richtofen = 1;
+
+        return charindexarray[0];
+    }
+    else
+    {
+        n_characters_defined = 0;
+
+        foreach ( player in players )
+        {
+            if ( isdefined( player.characterindex ) )
+            {
+                arrayremovevalue( charindexarray, player.characterindex, 0 );
+                n_characters_defined++;
+            }
+        }
+
+        if ( charindexarray.size > 0 )
+        {
+            if ( n_characters_defined == players.size - 1 )
+            {
+                if ( !( isdefined( level.has_richtofen ) && level.has_richtofen ) )
+                {
+                    level.has_richtofen = 1;
+                    return 2;
+                }
+            }
+
+            charindexarray = array_randomize( charindexarray );
+
+            if ( charindexarray[0] == 2 )
+                level.has_richtofen = 1;
+
+            return charindexarray[0];
+        }
+    }
+
+    return 0;
 }

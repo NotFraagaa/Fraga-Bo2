@@ -49,7 +49,8 @@ set_character_option()
     switch( getDvarInt("character") )
     {
         case 1:
-            self setviewmodel( "c_zom_farmgirl_viewhands" );
+            self setmodel( "c_zom_player_farmgirl_dlc1_fb" );
+            self.whos_who_shader = "c_zom_player_farmgirl_dlc1_fb";
             self.voice = "american";
             self.skeleton = "base";
             self setviewmodel( "c_zom_farmgirl_viewhands" );
@@ -58,14 +59,10 @@ set_character_option()
             self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "870mcs_zm";
             self set_player_is_female( 1 );
             self.characterindex = 2;
-            if( level.script == "zm_highrise" )
-            {
-                self setmodel( "c_zom_player_farmgirl_dlc1_fb" );
-                self.whos_who_shader = "c_zom_player_farmgirl_dlc1_fb";
-            }
             break;
         case 2:
-            self setmodel( "c_zom_player_oldman_fb" );
+            self setmodel( "c_zom_player_oldman_dlc1_fb" );
+            self.whos_who_shader = "c_zom_player_oldman_dlc1_fb";
             self.voice = "american";
             self.skeleton = "base";
             self setviewmodel( "c_zom_oldman_viewhands" );
@@ -74,14 +71,10 @@ set_character_option()
             self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "claymore_zm";
             self set_player_is_female( 0 );
             self.characterindex = 0;
-            if( level.script == "zm_highrise" )
-            {
-                self setmodel( "c_zom_player_oldman_dlc1_fb" );
-                self.whos_who_shader = "c_zom_player_oldman_dlc1_fb";
-            }
             break;
         case 3:
-            self setmodel( "c_zom_player_reporter_fb" );
+			self setmodel( "c_zom_player_reporter_dlc1_fb" );
+			self.whos_who_shader = "c_zom_player_reporter_dlc1_fb";
             self.voice = "american";
             self.skeleton = "base";
             self setviewmodel( "c_zom_reporter_viewhands" );
@@ -91,14 +84,10 @@ set_character_option()
             level.rich_sq_player = self;
             self set_player_is_female( 0 );
             self.characterindex = 1;
-            if( level.script == "zm_highrise" )
-            {
-                self setmodel( "c_zom_player_reporter_dlc1_fb" );
-                self.whos_who_shader = "c_zom_player_reporter_dlc1_fb";
-            }
             break;
         case 4:
-            self setmodel( "c_zom_player_engineer_fb" );
+            self setmodel( "c_zom_player_engineer_dlc1_fb" );
+            self.whos_who_shader = "c_zom_player_engineer_dlc1_fb";
             self.voice = "american";
             self.skeleton = "base";
             self setviewmodel( "c_zom_engineer_viewhands" );
@@ -107,11 +96,6 @@ set_character_option()
             self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "m16_zm";
             self set_player_is_female( 0 );
             self.characterindex = 3;
-            if( level.script == "zm_highrise" )
-            {
-                self setmodel( "c_zom_player_engineer_dlc1_fb" );
-                self.whos_who_shader = "c_zom_player_engineer_dlc1_fb";
-            }
             break;
     }
 

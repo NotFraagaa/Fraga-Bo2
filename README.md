@@ -1,5 +1,13 @@
 # Fraga-Bo2
 
+## Game Changes
+
+- Backspeed fixed
+- Zombie health fix
+- Animated Skyboxes
+- Night mode
+- Player shadows
+
 ## HUD CHANGES
 
     Game timer
@@ -8,6 +16,7 @@
     SPH meter (default start at 30)
     HUD color and position can be changed
     Splits
+    Velocity meter
 
 ## MAP CHANGES
 
@@ -80,12 +89,6 @@ To change the SR use the following DVars (there can only be one at the same time
 
 200SR 1
 
-## Graphic Changes
-
-- Animated Skyboxes
-- Night mode
-- Player shadows
-
 ## DVars
 
 character 1 2 3 4 5
@@ -99,6 +102,10 @@ character 1 2 3 4 5
 splits 1 0
 
     Shows/hides splits
+
+velocity 1 0
+
+    Shows/hides velocity meter
 
 firstbox 1 0
 
@@ -134,6 +141,7 @@ buildablesmenu 0 1
 
 ## Useful binds
 
+* bind v "toggle velocity 1 0"
 * bind o "toggle buildablesmenu 0 1"
 * bind 7 "toggle traptimer 0 1"
 * bind 8 "toggle firstbox 1 0"

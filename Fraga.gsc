@@ -14,6 +14,9 @@
 #include maps\mp\gametypes_zm\_hud;
 #include maps\mp\zombies\_zm_score;
 #include maps\_utility;
+#include maps\mp\animscripts\zm_utility;
+#include maps\mp\zombies\_zm_net;
+
 
 init()
 {
@@ -62,16 +65,27 @@ init()
         level thread timer( strtok("Round 50|Round 70|Round 100|Round 150|Round 175|Round 200", "|"), 50, 0);
     }
     level.fraga_splits_complete_color = (0, 1, 1);
+	if(GetDvar("velocity") == "")
+	{
+		setdvar("velocity", 0);
+	}
+	if(GetDvar("hordes") == "")
+	{
+		setdvar("hordes", 0);
+	}
     
 }
 
 onplayerconnect()
 {
+	level endon("end_game");
 	while(1)
 	{
 		player thread onconnect();
 		level waittill("connecting", player);
 	}
+	level waittill("initial_players_connected");
+	flag_wait("initial_blackscreen_passed");
 }
 
 enableGraphicTweaks()
@@ -109,9 +123,10 @@ onconnect()
 	self waittill("spawned_player");
 	self endon("disconnect");
 
-	self iprintln("^6Fraga^5V6  ^3Loaded");
+	self iprintln("^6Fraga^5V9  ^3Loaded");
 	self iprintln("^3Download at ^6discord.gg/UWkTzrgd8D ^3or ^6github.com/Fraagaa/Fraga-Bo2");
 
+	self thread velocity_meter();
 	self thread timer_fraga();
 	self thread round_timer_fraga();
 	self thread color_hud_watcher();
@@ -987,4 +1002,127 @@ set_visionset()
 {
 	self useservervisionset(1);
 	self setvisionsetforplayer(GetDvar( "mapname" ), 1.0 );
+}
+
+
+
+
+
+velocity_meter(vel)
+{
+    self endon("disconnect");
+    level endon("end_game");
+
+    self.hud_velocity = createfontstring("default" , 1.2);
+	self.hud_velocity.hidewheninmenu = 1;
+	self.hud_velocity.y = 350;
+
+	self thread velocity_watcher(vel);
+
+    while (true)
+    {
+		if (isDefined(level.custom_velocity_behaviour))
+			[[level.custom_velocity_behaviour]](self.hud_velocity);
+
+		velocity = int(length(self getvelocity() * (1, 1, 0)));
+		velocity_meter_scale(velocity, self.hud_velocity);
+        self.hud_velocity setValue(velocity);
+
+        wait 0.05;
+    }
+}
+
+velocity_meter_scale(vel, hud)
+{
+	hud.color = ( 0.6, 0, 0 );
+	hud.glowcolor = ( 0.3, 0, 0 );
+
+	if ( vel < 330 )
+	{
+		hud.color = ( 0.6, 1, 0.6 );
+		hud.glowcolor = ( 0.4, 0.7, 0.4 );
+	}
+
+	else if ( vel <= 340 )
+	{
+		hud.color = ( 0.8, 1, 0.6 );
+		hud.glowcolor = ( 0.6, 0.7, 0.4 );
+	}
+
+	else if ( vel <= 350 )
+	{
+		hud.color = ( 1, 1, 0.6 );
+		hud.glowcolor = ( 0.7, 0.7, 0.4 );
+	}
+
+	else if ( vel <= 360 )
+	{
+		hud.color = ( 1, 0.8, 0.4 );
+		hud.glowcolor = ( 0.7, 0.6, 0.2 );
+	}
+
+	else if ( vel <= 370 )
+	{
+		hud.color = ( 1, 0.6, 0.2 );
+		hud.glowcolor = ( 0.7, 0.4, 0.1 );
+	}
+
+	else if ( vel <= 380 )
+	{
+		hud.color = ( 1, 0.2, 0 );
+		hud.glowcolor = ( 0.7, 0.1, 0 );
+	}
+	
+	return;
+}
+/*
+velocity_meter_size(hud)
+{
+    self endon("disconnect");
+    level endon("end_game");
+
+	while (1)
+	{
+		message = undefined;
+
+		level waittill("say", message, player);
+
+		if (isSubStr(message, "vel") && player.name == self.name)
+		{
+			new_size = string_to_float(getSubStr(message, 4));
+
+			// Fontscale does not accept values outside that range
+			if (new_size < 1 || new_size > 4)
+				continue;
+
+			debug_print("Velocity: Current size: " + hud.fontscale + " / New size: " + new_size + " detected for player " + self.name);
+
+			hud.fontscale = new_size;
+			
+			new_size = undefined;
+		}
+	}
+}*/
+
+velocity_watcher(vel)
+{
+	self endon("disconnect");
+	level endon("end_game");
+
+	while(1)
+	{
+		while(GetDvarInt("velocity") == 0)
+		{
+			wait(0.1);
+		}
+
+		self.hud_velocity.alpha = 0.75;
+
+		while(GetDvarInt("velocity") >= 1)
+		{
+			wait(0.1);
+		}
+		
+		self.hud_velocity.alpha = 0;	
+	}
 }
