@@ -31,6 +31,7 @@ connected()
 		player thread hands();
         player thread onconnect();
         player thread fridge();
+		player thread lastleaperround();
 		if(sessionmodeisonlinegame() && level.scr_zm_ui_gametype_group == "zclassic")
 		{
 			player thread perks();
@@ -232,5 +233,33 @@ buildablesmenu_watcher()
 		self.turbine.alpha = 0;
 		self.resonator.alpha = 0;
 		self.trample.alpha = 0;
+	}
+}
+
+lastleaperround()
+{
+	self endon("disconnect");
+	leaper_round = flag("leaper_round");
+
+	self.lastleaperround = newclienthudelem(self);
+	self.lastleaperround.alignx = "left";
+	self.lastleaperround.horzalign = "user_left";
+	self.lastleaperround.vertalign = "user_top";
+	self.lastleaperround.aligny = "top";
+	self.lastleaperround.x = 2;
+	self.lastleaperround.y = 10;
+	self.lastleaperround.fontscale = 1.1;
+	self.lastleaperround.sort = 1;
+	self.lastleaperround.color = (1, 1 ,1);
+	self.lastleaperround.label = &"Last Leaper Round: ^2";
+	self.lastleaperround.hidewheninmenu = 1;
+	self.lastleaperround.alpha = 1;
+	while(1)
+	{
+		if(flag("leaper_round"))
+		{
+		self.lastleaperround setvalue(level.round_number);
+		}
+		level waittill("leaper_round");
 	}
 }
