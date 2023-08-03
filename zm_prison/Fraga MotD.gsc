@@ -29,6 +29,7 @@ connected()
 		level waittill("connecting", player);
 		player thread hands();
         player thread onconnect();
+		player thread lastbrutusround();
 
 	}
 }
@@ -222,5 +223,30 @@ trap_timer_cooldown_fraga()
 			wait 25.5;
 			self.trap_timer_cooldown_fraga.alpha = 0;
 		}
+	}
+}
+
+lastbrutusround()
+{
+	self endon("disconnect");
+	brutus_killed = flag("brutus_killed");
+
+	self.lastbrutusround = newclienthudelem(self);
+	self.lastbrutusround.alignx = "left";
+	self.lastbrutusround.horzalign = "user_left";
+	self.lastbrutusround.vertalign = "user_top";
+	self.lastbrutusround.aligny = "top";
+	self.lastbrutusround.x = 2;
+	self.lastbrutusround.y = 0;
+	self.lastbrutusround.fontscale = 1.1;
+	self.lastbrutusround.sort = 1;
+	self.lastbrutusround.color = (1, 1 ,1);
+	self.lastbrutusround.label = &"Last Brutus Round: ^2";
+	self.lastbrutusround.hidewheninmenu = 1;
+	self.lastbrutusround.alpha = 1;
+	while(1)
+	{ 
+		self.lastbrutusround setvalue(level.round_number);
+		level waittill("brutus_killed");
 	}
 }
