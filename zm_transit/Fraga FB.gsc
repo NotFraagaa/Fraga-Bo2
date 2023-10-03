@@ -28,7 +28,7 @@ firstbox()
 	level waittill("connecting", player);
 	player thread showConnectMessage();
 	boxRevertRound = 10;
-    level thread boxWeapons(level.script, boxRevertRound);
+    level thread boxWeapons(boxRevertRound);
 }
 
 startBox(start_chest)

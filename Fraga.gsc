@@ -20,60 +20,25 @@
 
 init()
 {
-	setdvar("player_strafeSpeedScale", "1");
-	setdvar("player_backSpeedScale", "1");
-	setdvar("r_dof_enable", "0");
+	thread setdvars();
+	thread SRswitch();
+	if(GetDvarInt("SR") == "")
+	{
+		setdvar("SR", 0);
+	}
+	/*
+	if(GetDvarInt("debug") == "1")
+	{
+		thread fragaDebug();
+	}
+	*/
     self endon( "disconnect" );
     self.init = 0;
 	
 	thread onplayerconnect();
 	thread fix_highround();
-	level thread RoundSplits();
 	level thread enableGraphicTweaks();
 	enable_cheats();
-	if(GetDvar("traptimer") == "")
-	{
-		setdvar("traptimer", "0");
-	}
-
-	if(GetDvar("5SR") == "1")
-    {
-        level thread timer( strtok("Round 2|Round 3|Round 4|Round 5", "|"), 50, 0);
-    }
-    if(GetDvar("30SR") == "1")
-    {
-        level thread timer( strtok("Round 5|Round 10|Round 15|Round 20|Round 25|Round 30", "|"), 50, 0);
-    }
-    if(GetDvar("50SR") == "1")
-    {
-        level thread timer( strtok("Round 10|Round 20|Round 30|Round 40|Round 50", "|"), 50, 0);
-    }
-    if(GetDvar("70SR") == "1")
-    {
-        level thread timer( strtok("Round 10|Round 20|Round 30|Round 40|Round 50|Round 60|Round 70", "|"), 50, 0);
-    }
-    if(GetDvar("100SR") == "1")
-    {
-        level thread timer( strtok("Round 30|Round 50|Round 70|Round 80|Round 90|Round 95|Round 100", "|"), 50, 0);
-    }
-    if(GetDvar("150SR") == "1")
-    {
-        level thread timer( strtok("Round 50|Round 70|Round 100|Round 125|Round 130|Round 140|Round 150", "|"), 50, 0);
-    }
-    if(GetDvar("2000SR") == "1")
-    {
-        level thread timer( strtok("Round 50|Round 70|Round 100|Round 150|Round 175|Round 200", "|"), 50, 0);
-    }
-    level.fraga_splits_complete_color = (0, 1, 1);
-	if(GetDvar("velocity") == "")
-	{
-		setdvar("velocity", 0);
-	}
-	if(GetDvar("hordes") == "")
-	{
-		setdvar("hordes", 0);
-	}
-    
 }
 
 onplayerconnect()
@@ -123,10 +88,9 @@ onconnect()
 	self waittill("spawned_player");
 	self endon("disconnect");
 
-	self iprintln("^6Fraga^5V9  ^3Loaded");
+	self iprintln("^6Fraga^5V10  ^3Loaded");
 	self iprintln("^3Download at ^6discord.gg/UWkTzrgd8D ^3or ^6github.com/Fraagaa/Fraga-Bo2");
 
-	self thread velocity_meter();
 	self thread timer_fraga();
 	self thread round_timer_fraga();
 	self thread color_hud_watcher();
@@ -142,11 +106,6 @@ timer_fraga()
 	}
 
 	self endon("disconnect");
-
-	if(GetDvar("timer") == "")
-	{
-		setdvar("timer", 1);
-	}
 
 	self.timer_fraga = newclienthudelem(self);
 	self.timer_fraga.alignx = "left";
@@ -205,11 +164,6 @@ round_timer_fraga()
 
 	self endon("disconnect");
 
-	if(GetDvar("round_timer") == "")
-	{
-		setdvar("round_timer", 1);
-	}
-
 	self.round_timer_fraga = newclienthudelem(self);
 	self.round_timer_fraga.alignx = "left";
 	self.round_timer_fraga.aligny = "top";
@@ -251,7 +205,7 @@ display_round_time(time, hordes, dog_round, leaper_round)
 	timer_for_hud = time - 0.1;
 	sph_off = 1;
 
-	if(level.round_number > GetDvarInt("sph_start") && !dog_round && !leaper_round)
+	if(level.round_number > GetDvarInt("sph") && !dog_round && !leaper_round)
 	{
 		sph_off = 0;
 	}
@@ -399,10 +353,6 @@ split_alpha(split_name)
 {
 	self endon("disconnect");
 	level endon("end_game");
-	if(GetDvar("splits") == "")
-	{
-		setdvar("splits", 0);
-	}
 
 	while(1)
 	{
@@ -562,123 +512,6 @@ game_time_string(duration)
 	}
 }
 
-RoundSplits()
-{
-    //5SR
-	if(GetDvar("5SR") == "")
-	{
-		setdvar("5SR", "0");
-	}
-    //30SR
-	if(GetDvar("30SR") == "")
-	{
-		setdvar("30SR", "0");
-	}
-    //50SR
-	if(GetDvar("50SR") == "")
-	{
-		setdvar("50SR", "0");
-	}
-    //70SR
-	if(GetDvar("70SR") == "")
-	{
-		setdvar("70SR", "0");
-	}
-    //100SR
-	if(GetDvar("100SR") == "")
-	{
-		setdvar("100SR", "0");
-	}
-    //150SR
-	if(GetDvar("150SR") == "")
-	{
-		setdvar("150SR", "0");
-	}
-    //200SR
-	if(GetDvar("200SR") == "")
-	{
-		setdvar("200SR", "1");
-	}
-    //Desable other DVARS
-    //5SR
-	if(GetDvar("5SR") == "1")
-	{
-		setdvar("30SR", "0");
-		setdvar("50SR", "0");
-		setdvar("70SR", "0");
-		setdvar("150SR", "0");
-		setdvar("200SR", "0");
-		setdvar("200SR", "0");
-		setdvar("100SR", "0");
-	}
-    //30SR
-	if(GetDvar("30SR") == "1")
-	{
-		setdvar("5SR", "0");
-		setdvar("50SR", "0");
-		setdvar("70SR", "0");
-		setdvar("150SR", "0");
-		setdvar("200SR", "0");
-		setdvar("200SR", "0");
-		setdvar("100SR", "0");
-	}
-    //50SR
-	if(GetDvar("50SR") == "1")
-	{
-		setdvar("5SR", "0");
-		setdvar("30SR", "0");
-		setdvar("70SR", "0");
-		setdvar("150SR", "0");
-		setdvar("200SR", "0");
-		setdvar("200SR", "0");
-		setdvar("100SR", "0");
-	}
-    //70SR
-	if(GetDvar("70SR") == "1")
-	{
-		setdvar("5SR", "0");
-		setdvar("50SR", "0");
-		setdvar("30SR", "0");
-		setdvar("150SR", "0");
-		setdvar("200SR", "0");
-		setdvar("200SR", "0");
-		setdvar("100SR", "0");
-	}
-    //100SR
-	if(GetDvar("100SR") == "1")
-	{
-		setdvar("5SR", "0");
-		setdvar("50SR", "0");
-		setdvar("70SR", "0");
-		setdvar("30SR", "0");
-		setdvar("150SR", "0");
-		setdvar("200SR", "0");
-		setdvar("200SR", "0");
-	}
-    //150SR
-	if(GetDvar("150SR") == "1")
-	{
-		setdvar("5SR", "0");
-		setdvar("50SR", "0");
-		setdvar("70SR", "0");
-		setdvar("30SR", "0");
-		setdvar("200SR", "0");
-		setdvar("200SR", "0");
-		setdvar("100SR", "0");
-	}
-    //200SR
-	if(GetDvar("150SR") == "1")
-	{
-		setdvar("5SR", "0");
-		setdvar("50SR", "0");
-		setdvar("70SR", "0");
-		setdvar("30SR", "0");
-		setdvar("200SR", "0");
-		setdvar("200SR", "0");
-		setdvar("100SR", "0");
-	}   
-}
-
 //UTILITY
 
 enable_cheats()
@@ -692,7 +525,7 @@ customdvars()
 	self thread timer_x_position();
 	self thread timer_y_position();
 
-	self thread sph_start();
+	self thread sph();
 
 	self thread fontscale();
 }
@@ -702,10 +535,6 @@ customdvars()
 fontscale()
 {
 	self endon("disconnect");
-	if(GetDvar("fontscale") == "")
-	{
-		setdvar("fontscale", "1.7");
-	}
 	fontscale = GetDvar("fontscale");
 	prev_fontscale = "1.7";
 }
@@ -714,18 +543,13 @@ color_hud_watcher()
 {
 	self endon("disconnect");
 
-	if(GetDvar("timer_color") == "")
-	{
-		setdvar("timer_color", "0.505 0.478 0.721");
-	}
-
-	color = GetDvar("timer_color");
+	color = GetDvar("color");
 	prev_color = "0.505 0.478 0.721";
 	while(1)
 	{
 		while(color == prev_color)
 		{
-			color = GetDvar("timer_color");
+			color = GetDvar("color");
 			wait(0.1);
 		}
 
@@ -741,26 +565,21 @@ color_hud_watcher()
 	}
 }
 
-sph_start()
+sph()
 {
 	self endon("disconnect");
 
-	if(GetDvar("sph_start") == "")
-	{
-		setdvar("sph_start", "30");
-	}
-
-	sph_start = GetDvar("sph_start");
-	prev_sph_start = "30";
+	sph = GetDvar("sph");
+	prev_sph = "30";
 
 	while(1)
 	{
-		while(sph_start == prev_sph_start)
+		while(sph == prev_sph)
 		{
-			sph_start = GetDvar("sph_start");
+			sph = GetDvar("sph");
 			wait(0.1);
 		}
-		prev_sph_start = sph_start;
+		prev_sph = sph;
 	}
 }
 
@@ -768,25 +587,20 @@ timer_y_position()
 {
 	self endon("disconnect");
 
-	if(GetDvar("timer_yposition") == "")
-	{
-		setdvar("timer_yposition", "339");
-	}
-
-	timerypos = GetDvar("timer_yposition");
+	timerypos = GetDvar("timery");
 	prev_timerypos = "339";
 
 	while(1)
 	{
 		while(timerypos == prev_timerypos)
 		{
-			timerypos = GetDvar("timer_yposition");
+			timerypos = GetDvar("timery");
 			wait(0.1);
 		}
 
 		prev_timerypos = timerypos;
-		self.round_timer_fraga.y = GetDvarInt("timer_yposition");
-		self.timer_fraga.y = GetDvarInt("timer_yposition") - 15 * GetDvarInt("fontscale");
+		self.round_timer_fraga.y = GetDvarInt("timery");
+		self.timer_fraga.y = GetDvarInt("timery") - 15 * GetDvarInt("fontscale");
 	}
 }
 
@@ -794,25 +608,20 @@ timer_x_position()
 {
 	self endon("disconnect");
 
-	if(GetDvar("timer_xposition") == "")
-	{
-		setdvar("timer_xposition", "4");
-	}
-
-	timerxpos = GetDvar("timer_xposition");
+	timerxpos = GetDvar("timerx");
 	prev_timerxpos = "4";
 
 	while(1)
 	{
 		while(timerxpos == prev_timerxpos)
 		{
-			timerxpos = GetDvar("timer_xposition");
+			timerxpos = GetDvar("timerx");
 			wait(0.1);
 		}
 
 		prev_timerxpos = timerxpos;
-		self.round_timer_fraga.x = GetDvarInt("timer_xposition");
-		self.timer_fraga.x = GetDvarInt("timer_xposition");
+		self.round_timer_fraga.x = GetDvarInt("timerx");
+		self.timer_fraga.x = GetDvarInt("timerx");
 	}
 }
 
@@ -1005,124 +814,76 @@ set_visionset()
 }
 
 
-
-
-
-velocity_meter(vel)
+setdvars()
 {
-    self endon("disconnect");
-    level endon("end_game");
-
-    self.hud_velocity = createfontstring("default" , 1.2);
-	self.hud_velocity.hidewheninmenu = 1;
-	self.hud_velocity.y = 350;
-
-	self thread velocity_watcher(vel);
-
-    while (true)
-    {
-		if (isDefined(level.custom_velocity_behaviour))
-			[[level.custom_velocity_behaviour]](self.hud_velocity);
-
-		velocity = int(length(self getvelocity() * (1, 1, 0)));
-		velocity_meter_scale(velocity, self.hud_velocity);
-        self.hud_velocity setValue(velocity);
-
-        wait 0.05;
-    }
-}
-
-velocity_meter_scale(vel, hud)
-{
-	hud.color = ( 0.6, 0, 0 );
-	hud.glowcolor = ( 0.3, 0, 0 );
-
-	if ( vel < 330 )
-	{
-		hud.color = ( 0.6, 1, 0.6 );
-		hud.glowcolor = ( 0.4, 0.7, 0.4 );
-	}
-
-	else if ( vel <= 340 )
-	{
-		hud.color = ( 0.8, 1, 0.6 );
-		hud.glowcolor = ( 0.6, 0.7, 0.4 );
-	}
-
-	else if ( vel <= 350 )
-	{
-		hud.color = ( 1, 1, 0.6 );
-		hud.glowcolor = ( 0.7, 0.7, 0.4 );
-	}
-
-	else if ( vel <= 360 )
-	{
-		hud.color = ( 1, 0.8, 0.4 );
-		hud.glowcolor = ( 0.7, 0.6, 0.2 );
-	}
-
-	else if ( vel <= 370 )
-	{
-		hud.color = ( 1, 0.6, 0.2 );
-		hud.glowcolor = ( 0.7, 0.4, 0.1 );
-	}
-
-	else if ( vel <= 380 )
-	{
-		hud.color = ( 1, 0.2, 0 );
-		hud.glowcolor = ( 0.7, 0.1, 0 );
-	}
+	if(GetDvar("fontscale") == "")
+	setdvar("fontscale", "1.7");
+	if(GetDvar("color") == "")
+	setdvar("color", "0.505 0.478 0.721");
+	if(GetDvar("sph") == "")
+	setdvar("sph", "30");
+	if(GetDvar("timery") == "")
+	setdvar("timery", "339");
+	if(GetDvar("timerx") == "")
+	setdvar("timerx", "4");	
 	
-	return;
+	if(GetDvar("5SR") == "")
+	setdvar("5SR", 0);
+	if(GetDvar("30SR") == "")
+	setdvar("30SR", 0);
+	if(GetDvar("50SR") == "")
+	setdvar("50SR", 0);
+	if(GetDvar("70SR") == "")
+	setdvar("70SR", 0);
+	if(GetDvar("100SR") == "")
+	setdvar("100SR", 0);
+	if(GetDvar("150SR") == "")
+	setdvar("150SR", 0);
+	if(GetDvar("200SR") == "")
+	setdvar("200SR", 0);
+	
+	setdvar("player_strafeSpeedScale", 1);
+	setdvar("player_backSpeedScale", 1);
+	setdvar("r_dof_enable", 0);
+	if(GetDvar("traptimer") == "")
+	setdvar("traptimer", 0);
+	if(GetDvar("timer") == "")
+	setdvar("timer", 1);
+	if(GetDvar("round_timer") == "")
+	setdvar("round_timer", 1);
+	if(GetDvar("splits") == "")
+	setdvar("splits", 0);
+	if(GetDvar("debug") == "")
+	setDvar("debug", 0);
 }
-/*
-velocity_meter_size(hud)
+
+SRswitch()
 {
-    self endon("disconnect");
-    level endon("end_game");
-
-	while (1)
+	level.fraga_splits_complete_color = (0, 1, 1);
+	switch(GetDvarInt("SR"))
 	{
-		message = undefined;
-
-		level waittill("say", message, player);
-
-		if (isSubStr(message, "vel") && player.name == self.name)
-		{
-			new_size = string_to_float(getSubStr(message, 4));
-
-			// Fontscale does not accept values outside that range
-			if (new_size < 1 || new_size > 4)
-				continue;
-
-			debug_print("Velocity: Current size: " + hud.fontscale + " / New size: " + new_size + " detected for player " + self.name);
-
-			hud.fontscale = new_size;
-			
-			new_size = undefined;
-		}
-	}
-}*/
-
-velocity_watcher(vel)
-{
-	self endon("disconnect");
-	level endon("end_game");
-
-	while(1)
-	{
-		while(GetDvarInt("velocity") == 0)
-		{
-			wait(0.1);
-		}
-
-		self.hud_velocity.alpha = 0.75;
-
-		while(GetDvarInt("velocity") >= 1)
-		{
-			wait(0.1);
-		}
-		
-		self.hud_velocity.alpha = 0;	
+		case 5:
+        	level thread timer( strtok("Round 2|Round 3|Round 4|Round 5", "|"), 50, 0);
+		break;
+		case 30:
+       		level thread timer( strtok("Round 5|Round 10|Round 15|Round 20|Round 25|Round 30", "|"), 50, 0);
+		break;
+		case 50:
+        	level thread timer( strtok("Round 10|Round 20|Round 30|Round 40|Round 50", "|"), 50, 0);
+		break;
+		case 70:
+        	level thread timer( strtok("Round 10|Round 20|Round 30|Round 40|Round 50|Round 60|Round 70", "|"), 50, 0);
+		break;
+		case 100:
+        	level thread timer( strtok("Round 30|Round 50|Round 70|Round 80|Round 90|Round 95|Round 100", "|"), 50, 0);
+		break;
+		case 150:
+        	level thread timer( strtok("Round 50|Round 70|Round 100|Round 125|Round 130|Round 140|Round 150", "|"), 50, 0);
+		break;
+		case 200:
+        	level thread timer( strtok("Round 50|Round 70|Round 100|Round 150|Round 175|Round 200", "|"), 50, 0);
+		break;
+		default:
+		break;
 	}
 }

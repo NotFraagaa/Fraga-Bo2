@@ -15,8 +15,7 @@
     Trap timer
     SPH meter (default start at 30)
     HUD color and position can be changed
-    Splits
-    Velocity meter
+    Round Splits
 
 ## MAP CHANGES
 
@@ -73,21 +72,8 @@ Round 150: Rounds 50, 70, 100, 125, 130, 140, 150
 
 Round 200: Rounds 50, 70, 100, 150, 175, 200
 
-To change the SR use the following DVars (there can only be one at the same time, for changing them you need to do a fast_restart):
-
-5SR 1
-
-30SR 1
-
-50SR 1
-
-70SR 1
-
-100SR 1
-
-150SR 1
-
-200SR 1
+SR **RoundNumeber** (you need to do a fast_restart):
+Example: SR 30
 
 ## DVars
 
@@ -103,15 +89,11 @@ splits 1 0
 
     Shows/hides splits
 
-velocity 1 0
-
-    Shows/hides velocity meter
-
 firstbox 1 0
 
     Disables RNG from the box until round 10
 
-sph_start
+sph
 
      What round sph starts showing, default is 30
     
@@ -127,22 +109,25 @@ traptimer 1 0
 
     Enables trap timer, default is disabled
     
-timer_yposition and timer_xposition
+timerx and timery
 
     Changes timer position
     
-timer_color "x x x"
+color "x x x"
 
-    Changes timer color (x can be any number from 0 to 1; example: 0.5245)
+    Changes timer color (RGB format)
     
-buildablesmenu 0 1
+buildables 0 1
 
     Shows/Hides the buildables menu on Die Rise / Buried
 
+SR
+
+    5 30 50 70 100 150 200
+
 ## Useful binds
 
-* bind v "toggle velocity 1 0"
-* bind o "toggle buildablesmenu 0 1"
+* bind o "toggle buildables 0 1"
 * bind 7 "toggle traptimer 0 1"
 * bind 8 "toggle firstbox 1 0"
 * bind N "toggle night_mode 1 0"

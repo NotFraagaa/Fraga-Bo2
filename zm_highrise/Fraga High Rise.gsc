@@ -18,9 +18,7 @@ init()
 
 onconnect()
 {
-    self thread buildablesmenu();
     self thread bank();
-    self.trampused = 0;
 }
 
 connected()
@@ -128,7 +126,7 @@ perks()
 {
 	self waittill("spawned_player");
 	self endon("disconnect");
-	persistent_upgrades = array("pers_boarding", "pers_revivenoperk", "pers_multikill_headshots", "pers_cash_back_bought", "pers_cash_back_prone", "pers_insta_kill", "pers_jugg", "pers_carpenter", "pers_flopper_counter", "pers_perk_lose_counter", "pers_pistol_points_counter", "pers_double_points_counter", "pers_sniper_counter");
+	persistent_upgrades = array("pers_boarding", "pers_revivenoperk", "pers_multikill_headshots", "pers_cash_back_bought", "pers_cash_back_prone", "pers_insta_kill", "pers_jugg","pers_nube", "pers_carpenter", "pers_flopper_counter", "pers_perk_lose_counter", "pers_pistol_points_counter", "pers_double_points_counter", "pers_sniper_counter");
 	persistent_upgrade_values = [];
 	persistent_upgrade_values["pers_boarding"] = 74;
 	persistent_upgrade_values["pers_revivenoperk"] = 17;
@@ -137,6 +135,7 @@ perks()
 	persistent_upgrade_values["pers_cash_back_prone"] = 15;
 	persistent_upgrade_values["pers_insta_kill"] = 2;
 	persistent_upgrade_values["pers_jugg"] = 3;
+	persistent_upgrade_values["pers_nube"] = 1;
 	persistent_upgrade_values["pers_carpenter"] = 1;
 	persistent_upgrade_values["pers_flopper_counter"] = 1;
 	persistent_upgrade_values["pers_perk_lose_counter"] = 3;
@@ -177,65 +176,6 @@ bank()
 	}
 }
 
-
-buildablesmenu()
-{
-	self endon("disconnect");
-
-	self.trample = newclienthudelem(self);
-	self.trample.alignx = "left";
-	self.trample.horzalign = "user_left";
-	self.trample.vertalign = "user_top";
-	self.trample.aligny = "top";
-	self.trample.x = 2;
-	self.trample.fontscale = 1.1;
-	self.trample.y = 0;
-	self.trample.sort = 1;
-	self.trample.label = &"Springpads ^6";
-	self.trample.hidewheninmenu = 1;
-	self.trample setvalue(0);
-	buildablesmenu_watcher();
-
-	while(1)
-	{
-        which = self waittill_any_return("equip_turbine_zm_given", "equip_springpad_zm_given", "equip_subwoofer_zm_given");
-		if(which == "equip_springpad_zm_given")
-		{
-			self.trampused = self.trampused + 1;
-			self.tramplehud setvalue(self.trampused);
-		}
-	}
-}
-
-
-buildablesmenu_watcher()
-{
-	self endon("disconnect");
-	level endon("end_game");
-	if(GetDvar("buildablesmenu") == "")
-	{
-		setdvar("buildablesmenu", 1);
-	}
-
-	while(1)
-	{
-		while(GetDvarInt("buildablesmenu") == 0)
-		{
-			wait(0.1);
-		}
-		self.turbine.alpha = 1;
-		self.resonator.alpha = 1;
-		self.trample.alpha = 1;
-		while(GetDvarInt("buildablesmenu") >= 1)
-		{
-			wait(0.1);
-		}
-		self.turbine.alpha = 0;
-		self.resonator.alpha = 0;
-		self.trample.alpha = 0;
-	}
-}
-
 lastleaperround()
 {
 	self endon("disconnect");
@@ -247,7 +187,7 @@ lastleaperround()
 	self.lastleaperround.vertalign = "user_top";
 	self.lastleaperround.aligny = "top";
 	self.lastleaperround.x = 2;
-	self.lastleaperround.y = 10;
+	self.lastleaperround.y = 0;
 	self.lastleaperround.fontscale = 1.1;
 	self.lastleaperround.sort = 1;
 	self.lastleaperround.color = (1, 1 ,1);

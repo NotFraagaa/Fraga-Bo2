@@ -9,11 +9,18 @@
 
 init()
 {
-	if(GetDvar("character") == "")
+    if ( level.script == "zm_transit" && level.scr_zm_map_start_location == "transit" && level.scr_zm_ui_gametype_group == "zclassic" )
 	{
-		setdvar("character", 1);
+		if(GetDvar("character") == "")
+		{
+			setdvar("character", 1);
+		}
+		level thread connected();
 	}
-    level thread connected();
+	if(level.scr_zm_map_start_location == "town")
+	{
+		thread onplayerconnect();
+	}
 }
 
 onconnect()
@@ -156,4 +163,42 @@ set_exert_id()
 	self endon("disconnect");
 	wait_network_frame();
 	self maps\mp\zombies\_zm_audio::setexertvoice(self.characterindex);
+}
+
+onplayerconnect()
+{
+	while(1)
+	{
+		level thread startbox("town_chest_2");
+		level waittill("connecting", player);
+	}
+}
+
+startbox(start_chest)
+{
+	self endon("disconnect");
+	level waittill("initial_players_connected");
+
+	for(i = 0; i < level.chests.size; i++)
+	{
+		if(level.chests[i].script_noteworthy == start_chest)
+		{
+			desired_chest_index = i;
+			continue;
+		}
+
+		if(level.chests[i].hidden == 0)
+		{
+			nondesired_chest_index = i;
+		}
+	}
+
+	if(isdefined(nondesired_chest_index) && nondesired_chest_index < desired_chest_index)
+	{
+		level.chests[nondesired_chest_index] hide_chest();
+		level.chests[nondesired_chest_index].hidden = 1;
+		level.chests[desired_chest_index].hidden = 0;
+		level.chests[desired_chest_index] show_chest();
+		level.chest_index = desired_chest_index;
+	}
 }

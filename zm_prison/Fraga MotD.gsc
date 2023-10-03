@@ -127,7 +127,7 @@ set_character_option()
             self set_player_is_female( 0 );
             self.character_name = "Billy";
             break;
-    }
+    	}
 
 	self setmovespeedscale( 1 );
 	self setsprintduration( 4 );
@@ -245,8 +245,11 @@ lastbrutusround()
 	self.lastbrutusround.hidewheninmenu = 1;
 	self.lastbrutusround.alpha = 1;
 	while(1)
-	{ 
-		self.lastbrutusround setvalue(level.round_number);
+	{
+		if(flag("brutus_killed"))
+		{
+			self.lastbrutusround setvalue(level.round_number);
+		}
 		level waittill("brutus_killed");
 	}
 }

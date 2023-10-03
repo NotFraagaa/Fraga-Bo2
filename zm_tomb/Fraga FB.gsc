@@ -59,7 +59,7 @@ boxWeapons(map_name, boxRevertRound)
 {
 	self endon("disconnect");
 	flag_wait("initial_blackscreen_passed");
-	forced_box_guns = array("raygun_mark2_zm", "cymbal_monkey_zm", "scar_zm");
+	forced_box_guns = array("scar_zm", "raygun_mark2_zm", "cymbal_monkey_zm");
 
 	level.special_weapon_magicbox_check = undefined;
 	foreach(weapon in level.zombie_weapons) 

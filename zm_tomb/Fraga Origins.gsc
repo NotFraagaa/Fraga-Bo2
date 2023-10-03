@@ -21,6 +21,7 @@
 #include maps\mp\_utility;
 #include common_scripts\utility;
 #include maps\mp\zombies\_zm_magicbox;
+#include maps\mp\zombies\_zm_perks;
 
 init()
 {
@@ -176,15 +177,26 @@ fizzStartLocation()
 
 doubletap()
 {
-	if(GetDvarInt("DoubleTap") == 1)
+	if(GetDvarInt("DoubleTap") >= 1)
 	{
 		replaceFunc(maps\mp\zombies\_zm_perk_random::get_weighted_random_perk, ::getWeightedRandomPerk);
 	}
 }
 
+
+//No funciona
 getWeightedRandomPerk( player ) 
 {
-    return "specialty_rof";
+	while(1)
+	{
+		wait(1);
+		if (self HasPerk("specialty_rof"))
+			{
+				return "specialty_divetonuke";
+			}
+		else
+			return "specialty_rof";
+	}
 }
 
 
