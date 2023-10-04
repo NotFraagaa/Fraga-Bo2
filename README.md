@@ -34,13 +34,14 @@ Die Rise
     Bank full for all players
     All perman perks are given on spawn to all players
     AN94 upgraded on the weapon locker for all players
-    Trample steam counter
+    Last Leaper Round counter
     
 Mob of the Dead
 
     Trap timer
     Box set to cafeteria always
     Key always spawns at cafeteria
+    Last Brutus Round counter
     
 Buried
 
@@ -124,6 +125,10 @@ buildables 0 1
 SR
 
     5 30 50 70 100 150 200
+
+FragaDebug
+
+    Gives every player 69420 points and allowes cheats
 
 ## Useful binds
 

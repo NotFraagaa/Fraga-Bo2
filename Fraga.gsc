@@ -26,19 +26,11 @@ init()
 	{
 		setdvar("SR", 0);
 	}
-	/*
-	if(GetDvarInt("debug") == "1")
-	{
-		thread fragaDebug();
-	}
-	*/
     self endon( "disconnect" );
-    self.init = 0;
 	
 	thread onplayerconnect();
 	thread fix_highround();
 	level thread enableGraphicTweaks();
-	enable_cheats();
 }
 
 onplayerconnect()
@@ -514,12 +506,6 @@ game_time_string(duration)
 
 //UTILITY
 
-enable_cheats()
-{
-	setdvar("sv_cheats", 1);
-	setdvar("cg_ufo_scaler", 0.7);
-}
-
 customdvars()
 {
 	self thread timer_x_position();
@@ -853,8 +839,6 @@ setdvars()
 	setdvar("round_timer", 1);
 	if(GetDvar("splits") == "")
 	setdvar("splits", 0);
-	if(GetDvar("debug") == "")
-	setDvar("debug", 0);
 }
 
 SRswitch()
@@ -864,24 +848,31 @@ SRswitch()
 	{
 		case 5:
         	level thread timer( strtok("Round 2|Round 3|Round 4|Round 5", "|"), 50, 0);
+			setdvar("splits", 1);
 		break;
 		case 30:
        		level thread timer( strtok("Round 5|Round 10|Round 15|Round 20|Round 25|Round 30", "|"), 50, 0);
+			setdvar("splits", 1);
 		break;
 		case 50:
         	level thread timer( strtok("Round 10|Round 20|Round 30|Round 40|Round 50", "|"), 50, 0);
+			setdvar("splits", 1);
 		break;
 		case 70:
         	level thread timer( strtok("Round 10|Round 20|Round 30|Round 40|Round 50|Round 60|Round 70", "|"), 50, 0);
+			setdvar("splits", 1);
 		break;
 		case 100:
         	level thread timer( strtok("Round 30|Round 50|Round 70|Round 80|Round 90|Round 95|Round 100", "|"), 50, 0);
+			setdvar("splits", 1);
 		break;
 		case 150:
         	level thread timer( strtok("Round 50|Round 70|Round 100|Round 125|Round 130|Round 140|Round 150", "|"), 50, 0);
+			setdvar("splits", 1);
 		break;
 		case 200:
         	level thread timer( strtok("Round 50|Round 70|Round 100|Round 150|Round 175|Round 200", "|"), 50, 0);
+			setdvar("splits", 1);
 		break;
 		default:
 		break;
