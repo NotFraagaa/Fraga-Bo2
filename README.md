@@ -24,23 +24,31 @@ Tranzit
     Bank full for all players
     All perman perks are given on spawn to all players
     MP5 upgraded on weapon locker for all players
+    Bus location with /bus 1
     
+Survival Maps
+
+    Raygun & Raygun MK2 average trackers
+
 Town
 
-    Box is set to double tap
+    You can chose box location with /fisrtbox
+    1 for doubletap
+    2 for quick revive
     
 Die Rise
 
     Bank full for all players
     All perman perks are given on spawn to all players
     AN94 upgraded on the weapon locker for all players
-    Last Leaper Round counter
+    Leapers tracker
+    Springpads counter
     
 Mob of the Dead
 
     Trap timer
-    Box set to cafeteria always
-    Key always spawns at cafeteria
+    Box can be set with /firstbox (1 for cafeteria / 2 for office)
+    Key always spawns with the box
     Last Brutus Round counter
     
 Buried
@@ -53,9 +61,12 @@ Buried
 
 Origins
 
-    Box set to gen 2
+    Box can be set with /firstbox (1 for gen2 / 2 for gen3)
     Wunderfizz set to gen 4
     Animated pap camo
+    Panzer tracker
+    Templars tracker
+    Tank tracker
 
 ## Splits
 
@@ -84,15 +95,15 @@ character 1 2 3 4 5
     2 = Russman, Dempsei, Finn
     3 = Marlton, Nikolai, Sal
     4 = Stuthlinger, Takeo, Billy
-    5 = Ghost (mob)
+    5 = Ghost (only on mob)
 
 splits 1 0
 
     Shows/hides splits
 
-firstbox 1 0
+firstbox 1 2 0
 
-    Disables RNG from the box until round 10
+    Disables RNG from
 
 sph
 
@@ -102,7 +113,7 @@ timer 1 0
 
      Enables timer, default is enabled
 
-round_timer 1 0
+roundtimer 1 0
 
     Enables round timer, default is enabled
 
@@ -130,9 +141,16 @@ FragaDebug
 
     Gives every player 69420 points and allowes cheats
 
+score
+
+    Changes the amount of points given when debug mode is on
+
+perkRNG
+
+    Vulture will be the last perk awarded by the whitches
+
+
 ## Useful binds
 
-* bind o "toggle buildables 0 1"
-* bind 7 "toggle traptimer 0 1"
-* bind 8 "toggle firstbox 1 0"
+* bind 7 "toggle FragaDebug 1 0"
 * bind N "toggle night_mode 1 0"

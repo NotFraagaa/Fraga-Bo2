@@ -2,10 +2,8 @@
 #include maps\mp\zombies\_zm_utility;
 #include common_scripts\utility;
 #include maps\mp\_utility;
-#include maps\mp\zombies\_zm_weapons;
-#include maps\mp\zombies\_zm_stats;
-#include maps\mp\zombies\_zm_magicbox;
-#include maps\mp\zombies\_zm_ai_leaper;
+#include maps\mp\zombies\_zm;
+#include maps\mp\zombies\_zm_blockers;
 
 init()
 {
@@ -14,35 +12,30 @@ init()
 		setdvar( "score", "69420" );
 		setdvar("FragaDebug", 0);
 	}
-	thread FragaDebug();
-}
-
-FragaDebug()
-{
-	level thread onconnect();
+	if(getDvarInt("FragaDebug"))
+	{
+		level thread onconnect();
+		level thread power_on();
+	}
 }
 
 onconnect()
 {
 	setdvar("sv_cheats", getDvarInt("FragaDebug"));
 	setdvar("cg_ufo_scaler", 1);
-    for (;;)
-    {
-        level waittill( "connected", player );
-        player thread connected();
-    }
+	level waittill( "connected", player );
+	player thread connected();
 }
 
 connected()
 {
     level endon( "game_ended" );
     self endon( "disconnect" );
-
-    for (;;)
-    {
-        self waittill( "spawned_player" );
-        self set_players_score( getdvarint( "score" ) );
-    }
+	if(level.script == "zm_prison")
+	{
+		flag_wait( "afterlife_start_over" );
+	}
+	self set_players_score( getdvarint( "score" ) );
 }
 
 set_players_score( score )
@@ -51,7 +44,7 @@ set_players_score( score )
 
 	if(GetDvarInt("FragaDebug") == 1)
 	{
-		self.score = 69420;
+		self.score = GetDvarInt("score");
 	}
 	else
 	{
@@ -59,3 +52,11 @@ set_players_score( score )
 	}
 }
 
+power_on() 
+{
+	flag_wait( "initial_blackscreen_passed" );
+	level.local_doors_stay_open = 1;
+	level.power_local_doors_globally = 1;
+	flag_set( "power_on" );
+	level setclientfield( "zombie_power_on", 1 );
+}
