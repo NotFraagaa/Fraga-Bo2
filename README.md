@@ -1,5 +1,11 @@
 # Fraga-Bo2
 
+## Downloads
+- [Plutonium r2905](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV12/FragaV12.Pluto.r2905.rar)
+- [Plutonium r2905](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV12/FragaV12.Pluto.r3000+.rar)
+- Redacted comming soon
+- Ancient comming soon
+
 ## Game Changes
 
 - Backspeed fixed
