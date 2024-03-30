@@ -5,6 +5,8 @@
 
 fix_highround()
 {
+	if(level.script == "zm_tomb")
+		return;
 	while(level.round_number > 155)
 	{
 		zombies = getaiarray("axis");
