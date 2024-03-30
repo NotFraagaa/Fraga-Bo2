@@ -92,7 +92,11 @@ perkrng()
     level.perkrng_desabled.aligny = "bottom";
     while(level.round_number < 2)
     {
-        wait 1;
+        if(!getDvarInt("perkRNG"))
+            level.perkrng_desabled.alpha = 1;
+        if(getDvarInt("perkRNG"))
+            level.perkrng_desabled.alpha = 0;
+        wait 0.1;
     }
     level.perkrng_desabled.alpha = 0;
 }
