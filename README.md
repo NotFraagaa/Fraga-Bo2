@@ -100,6 +100,10 @@ character 1 2 3 4 5
 splits 1 0
 
     Shows/hides splits
+    
+fridge mp5 m16
+
+    selects the weapon on tranzit's fridge
 
 firstbox 1 2 0
 
