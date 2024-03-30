@@ -1,10 +1,4 @@
 # Fraga-Bo2
-## Download
-
-- [Download for Pluto r2905](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV12/FragaV12.Plutonium.r2905.rar)
-- [Download for Pluto r3000+](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV12/FragaV12.Plutonium.r3000+.rar)
-- Redacted comming soon
-
 
 ## Game Changes
 

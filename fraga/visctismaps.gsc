@@ -14,18 +14,38 @@ fridge()
 {
 	if(level.round_number >= 15)
 		return;
-    if(isdierise() || isburied())
-    {
-        self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "name", "an94_upgraded_zm+mms");
-        self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "stock", 600);
-        self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "clip", 50);
-    }
-    if(istranzit())
-    {
-        self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "name", "mp5k_upgraded_zm");
-        self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "stock", 200);
-        self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "clip", 40);
-    }
+	if(getDvar("fridge") == "mp5")
+	{
+		if(isdierise() || isburied())
+		{
+			self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "name", "an94_upgraded_zm+mms");
+			self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "stock", 600);
+			self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "clip", 50);
+		}
+		if(istranzit())
+		{
+			self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "name", "mp5k_upgraded_zm");
+			self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "stock", 200);
+			self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "clip", 40);
+		}
+	}
+	if(getDvar("fridge") == "m16")
+	{
+		if(isdierise() || isburied())
+		{
+			self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "name", "an94_upgraded_zm+mms");
+			self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "stock", 600);
+			self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "clip", 50);
+		}
+		if(istranzit())
+		{
+			self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "name", "m16_gl_upgraded_zm");
+			self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "stock", 200);
+			self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "clip", 40);
+			self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "alt_clip", 1);
+			self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "alt_stock", 8);
+		}
+	}
 }
 
 

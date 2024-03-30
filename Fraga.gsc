@@ -3,6 +3,8 @@
 #include common_scripts\utility;
 #include maps\mp\_utility;
 
+#include maps\mp\zombies\_zm_weapons;
+
 #include scripts\zm\fraga\dvars;
 #include scripts\zm\fraga\timers;
 #include scripts\zm\fraga\graphics;
@@ -40,4 +42,14 @@ connected()
 	self thread rotate_skydome();
 	self thread graphic_tweaks();
 	self thread nightmode();
+	self thread print();
+}
+
+print()
+{
+	while(1)
+	{
+		self iprintln(get_upgrade_weapon("m16_zm"));
+		wait 1;
+	}
 }

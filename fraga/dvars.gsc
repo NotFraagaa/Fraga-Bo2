@@ -18,6 +18,8 @@ setDvars()
         setdvar( "SR", 0 );
     if ( getdvar( "bus" ) == "" )
         setdvar( "bus", 0 );
+    if ( getdvar( "fridge" ) == "" )
+        setdvar( "fridge", "m16");
     if ( getdvar( "graphictweaks" ) == "" )
         setdvar( "graphictweaks", 0 );
     if ( getdvar( "color" ) == "" )
