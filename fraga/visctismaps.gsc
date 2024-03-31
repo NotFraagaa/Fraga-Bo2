@@ -40,8 +40,8 @@ fridge()
 		if(istranzit())
 		{
 			self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "name", "m16_gl_upgraded_zm");
-			self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "stock", 200);
-			self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "clip", 40);
+			self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "stock", 270);
+			self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "clip", 30);
 			self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "alt_clip", 1);
 			self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "alt_stock", 8);
 		}

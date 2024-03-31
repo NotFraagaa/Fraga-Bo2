@@ -60,7 +60,10 @@ buildable_hud()
 		self.springpad_hud.label = &"^3TRAMPOLÍNS: ^4";
 	if(getDvar("Language") != "galego" && getDvar("Language") != "spanish")
 		self.springpad_hud.label = &"^3SPRINGPADS: ^4";
-    level.springpad_hud.y = 0;
+    if(level.script == "zm_buried")
+        level.springpad_hud.y = 0;
+    else
+        level.springpad_hud.y = 15;
     level.springpad_hud.x = 2;
     level.springpad_hud.fontscale = 1.1;
     level.springpad_hud.alignx = "left";
