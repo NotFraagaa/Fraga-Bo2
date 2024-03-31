@@ -8,12 +8,15 @@
 #include scripts\zm\fraga\RNGmoddifier;
 #include scripts\zm\fraga\nuketown;
 #include scripts\zm\fraga\character;
+#include scripts\zm\fraga\avgtracker;
 
 init()
 {
     level thread connected();
 	
 	level thread firstbox();
+	level thread avg();
+	level thread total_hits();
 }
 
 connected()
