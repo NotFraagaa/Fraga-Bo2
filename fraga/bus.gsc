@@ -21,11 +21,10 @@ buslocation()
 	self.buslocation.hidewheninmenu = 1;
 	self.buslocation.alpha = 1;
 	self thread watcher();
-
     wait 14;
     while(1)
     {
-		if(getDvar("Language") != "spanish" && getDvar("Language") != "galego")
+		if(getDvar("Language") != "galego")
 		{
 			if(level.the_bus.origin[0] > -6530 && level.the_bus.origin[0] < -6520 && level.the_bus.origin[1] < 4800 && level.the_bus.origin[1] > 4600)	// Depot
 				self.buslocation.label = &"^3Bus: ^4Depot";
@@ -39,28 +38,14 @@ buslocation()
 				self.buslocation.label = &"^3Bus: ^4Town";
 			wait 0.1;
 		}
-		if(getDvar("Language") == "spanish")
-		{
-			if(level.the_bus.origin[0] > -6530 && level.the_bus.origin[0] < -6520 && level.the_bus.origin[1] < 4800 && level.the_bus.origin[1] > 4600)	// Depot
-				self.buslocation.label = &"^3Bus: ^4Estación";
-			if(level.the_bus.origin[0] > -5560 && level.the_bus.origin[0] < -5550  && level.the_bus.origin[1] > -6870 && level.the_bus.origin[1] < -6800)	// Dinner
-				self.buslocation.label = &"^3Bus: ^4Restaurante";
-			if(level.the_bus.origin[0] > 6400 && level.the_bus.origin[1] < 6440 && level.the_bus.origin[1] > -5850 && level.the_bus.origin[1] < -5820)	// Farm
-				self.buslocation.label = &"^3Bus: ^4Granja";
-			if(level.the_bus.origin[0] > 10280 && level.the_bus.origin[0] < 10320 && level.the_bus.origin[1] < 7500 && level.the_bus.origin[1] > 7400)	// Power
-				self.buslocation.label = &"^3Bus: ^4Electicidad";
-			if(level.the_bus.origin[0] > 1460 && level.the_bus.origin[0] < 1490 && level.the_bus.origin[1] < 900 && level.the_bus.origin[1] > 800) 	// Town
-				self.buslocation.label = &"^3Bus: ^4Ciudad";
-			wait 0.1;
-		}
 		if(getDvar("Language") == "galego")
 		{
 			if(level.the_bus.origin[0] > -6530 && level.the_bus.origin[0] < -6520 && level.the_bus.origin[1] < 4800 && level.the_bus.origin[1] > 4600)	// Depot
 				self.buslocation.label = &"^3Bus: ^4Ferrol";
 			if(level.the_bus.origin[0] > -5560 && level.the_bus.origin[0] < -5550  && level.the_bus.origin[1] > -6870 && level.the_bus.origin[1] < -6800)	// Dinner
-				self.buslocation.label = &"^3Bus: ^4Fene";
+				self.buslocation.label = &"^3Bus: ^4Somozas";
 			if(level.the_bus.origin[0] > 6400 && level.the_bus.origin[1] < 6440 && level.the_bus.origin[1] > -5850 && level.the_bus.origin[1] < -5820)	// Farm
-				self.buslocation.label = &"^3Bus: ^4Granxa";
+				self.buslocation.label = &"^3Bus: ^4Sansadurniño";
 			if(level.the_bus.origin[0] > 10280 && level.the_bus.origin[0] < 10320 && level.the_bus.origin[1] < 7500 && level.the_bus.origin[1] > 7400)	// Power
 				self.buslocation.label = &"^3Bus: ^4Caranza";
 			if(level.the_bus.origin[0] > 1460 && level.the_bus.origin[0] < 1490 && level.the_bus.origin[1] < 900 && level.the_bus.origin[1] > 800) 	// Town
@@ -69,6 +54,7 @@ buslocation()
 		}
     }
 }
+
 watcher()
 {
 	while(1)

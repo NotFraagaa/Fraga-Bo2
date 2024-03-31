@@ -12,19 +12,21 @@
 #include scripts\zm\fraga\gamefixes;
 #include scripts\zm\fraga\cheatdetection;
 #include scripts\zm\fraga\trackers;
+
 init()
 {
     self endon( "disconnect" );
 	thread setdvars();
 	thread fix_highround();
-	thread SRswitch();
-	
+
+	if(getDvar("scr_kill_infinite_loops") != "")
+		thread SRswitch();
+
 	level waittill("connecting", player);
 	player thread connected();
 	if(!getDvarInt("FragaDebug"))
 		level thread detect_cheats();
 }
-
 
 connected()
 {
@@ -41,4 +43,5 @@ connected()
 	self thread rotate_skydome();
 	self thread graphic_tweaks();
 	self thread nightmode();
+
 }

@@ -40,7 +40,8 @@ connected()
         player thread fridge();
     	player thread bank();
     	player thread award_permaperks_safe();
-		player thread buslocation();
+		if(getDvar("scr_kill_infinite_loops") != "")
+			player thread buslocation();
 		if(getDvarInt("character") != 0)
 			level.givecustomcharacters = ::set_character_option_transit;
 	}

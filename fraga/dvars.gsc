@@ -8,12 +8,10 @@ setDvars()
     setdvar( "player_strafeSpeedScale", 1 );
     setdvar( "player_backSpeedScale", 1 );
     setdvar( "r_dof_enable", 0 );
-    if(GetDvar("Fragalanguage") == "")
-        setDvar("Fragalanguage", "galego");
 	if(GetDvar("perkRNG") == "")
 		setdvar("perkRNG", 1);
 	if(GetDvar("character") == "")
-		setdvar("character", 1);
+		setdvar("character", 0);
     if ( getdvar( "SR" ) == "" )
         setdvar( "SR", 0 );
     if ( getdvar( "bus" ) == "" )
