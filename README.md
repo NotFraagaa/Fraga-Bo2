@@ -1,10 +1,10 @@
 # Fraga-Bo2
 
 ## Downloads
-- [Plutonium r2905](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV12/FragaV12.Plutonium.r2905.rar)
+- [Plutonium r2905](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV12/FragaV12.r2905.rar)
   - Round splits dont work
   - Bus tracker doesnt work
-- [Plutonium r3000+](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV12/FragaV12.Pluto.r3000+.rar)
+- [Plutonium r3000+](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV12/FragaV12.r3000+.rar)
 - Redacted soon
 - Ancient soon
 
