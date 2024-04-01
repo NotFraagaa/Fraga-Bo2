@@ -5,7 +5,7 @@
   - Round splits dont work
   - Bus tracker doesnt work
   - Firstbox doesnt work
-- [Plutonium r3000+](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV12/FragaV12.Pluto.r3000+.rar)
+- [Plutonium r3755+](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV12/FragaV12.Pluto.r3000+.rar)
 - Redacted soon
 - Ancient soon
 
