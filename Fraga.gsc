@@ -12,17 +12,22 @@
 #include scripts\zm\fraga\gamefixes;
 #include scripts\zm\fraga\cheatdetection;
 #include scripts\zm\fraga\trackers;
+#include scripts\zm\fraga\character;
+#include scripts\zm\fraga\box;
 
 init()
 {
     self endon( "disconnect" );
 	thread setdvars();
 	thread fix_highround();
+    if(!isDefined(level.total_chest_accessed))
+        level.total_chest_accessed = 0;
 
 	if(getDvar("scr_kill_infinite_loops") != "")
 		thread SRswitch();
 
 	level waittill("connecting", player);
+	level thread boxhits();
 	player thread connected();
 	if(!getDvarInt("FragaDebug"))
 		level thread detect_cheats();
@@ -36,12 +41,10 @@ connected()
 
 	self thread timer_fraga();
 	self thread color_hud_watcher();
-	self thread timer_x_position();
-	self thread timer_y_position();
+	self thread timerlocation();
 	self useservervisionset(1);
 	self setvisionsetforplayer(GetDvar( "mapname" ), 1.0 );
 	self thread rotate_skydome();
 	self thread graphic_tweaks();
 	self thread nightmode();
-
 }
