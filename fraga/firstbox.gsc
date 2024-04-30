@@ -71,32 +71,128 @@ firstbox()
 		switch(level.script)
 		{
 			case "zm_transit":
-				forced_box_guns = array("raygun_mark2_zm", "cymbal_monkey_zm", "emp_grenade_zm");
+				switch(level.players)
+				{
+					case 1: 
+					forced_box_guns = array("raygun_mark2_zm", "cymbal_monkey_zm", "emp_grenade_zm");
+					break;
+					case 2:
+					forced_box_guns = array("raygun_mark2_zm", "ray_gun_zm", "cymbal_monkey_zm", "emp_grenade_zm");
+					break;
+					case 3:
+					forced_box_guns = array("raygun_mark2_zm", "ray_gun_zm", "ray_gun_zm", "cymbal_monkey_zm", "emp_grenade_zm", "cymbal_monkey_zm");
+					break;
+					case 4:
+					forced_box_guns = array("raygun_mark2_zm", "ray_gun_zm", "ray_gun_zm", "ray_gun_zm", "cymbal_monkey_zm", "emp_grenade_zm", "cymbal_monkey_zm", "cymbal_monkey_zm");
+					break;
+				}
 				break;
 			
 			case "zm_nuked":
-				forced_box_guns = array("raygun_mark2_zm", "cymbal_monkey_zm");
+				switch(level.players)
+				{
+					case 1: 
+					forced_box_guns = array("raygun_mark2_zm", "cymbal_monkey_zm");
+					break;
+					case 2:
+					forced_box_guns = array("raygun_mark2_zm", "ray_gun_zm", "cymbal_monkey_zm", "cymbal_monkey_zm");
+					break;
+					case 3:
+					forced_box_guns = array("raygun_mark2_zm", "ray_gun_zm", "ray_gun_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm");
+					break;
+					case 4:
+					forced_box_guns = array("raygun_mark2_zm", "ray_gun_zm", "ray_gun_zm", "ray_gun_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm");
+					break;
+				}
 				break;
 
 			case "zm_highrise":
-				forced_box_guns = array("cymbal_monkey_zm");
+				switch(level.players)
+				{
+					case 1: 
+					forced_box_guns = array("cymbal_monkey_zm");
+					break;
+					case 2:
+					forced_box_guns = array("cymbal_monkey_zm", "cymbal_monkey_zm");
+					break;
+					case 3:
+					forced_box_guns = array("cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm");
+					break;
+					case 4:
+					forced_box_guns = array("cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm");
+					break;
+				}
 				break;
 
 			case "zm_prison":
-				forced_box_guns = array("raygun_mark2_zm", "blundergat_zm");
+				switch(level.players)
+				{
+					case 1: 
+					forced_box_guns = array("raygun_mark2_zm", "blundergat_zm");
+					break;
+					case 2:
+					forced_box_guns = array("raygun_mark2_zm", "ray_gun_zm", "blundergat_zm");
+					break;
+					case 3:
+					forced_box_guns = array("raygun_mark2_zm", "ray_gun_zm", "ray_gun_zm", "blundergat_zm");
+					break;
+					case 4:
+					forced_box_guns = array("raygun_mark2_zm", "ray_gun_zm", "ray_gun_zm", "ray_gun_zm", "blundergat_zm");
+					break;
+				}
 				break;
-
 			case "zm_buried":
-				forced_box_guns = array("raygun_mark2_zm", "cymbal_monkey_zm", "slowgun_zm");
+				switch(level.players)
+				{
+					case 1: 
+					forced_box_guns = array("raygun_mark2_zm", "cymbal_monkey_zm", "slowgun_zm");
+					break;
+					case 2:
+					forced_box_guns = array("raygun_mark2_zm", "ray_gun_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "slowgun_zm");
+					break;
+					case 3:
+					forced_box_guns = array("raygun_mark2_zm", "ray_gun_zm", "ray_gun_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "slowgun_zm");
+					break;
+					case 4:
+					forced_box_guns = array("raygun_mark2_zm", "ray_gun_zm", "ray_gun_zm", "ray_gun_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "slowgun_zm");
+					break;
+				}
 				break;
 
 			case "zm_tomb":
 				if(getDvar("SR") == 30)
-					forced_box_guns = array("scar_zm", "raygun_mark2_zm", "cymbal_monkey_zm");
+					switch(level.players)
+					{
+						case 1: 
+						forced_box_guns = array("scar_zm", "raygun_mark2_zm", "cymbal_monkey_zm");
+						break;
+						case 2:
+						forced_box_guns = array("scar_zm", "scar_zm", "raygun_mark2_zm", "ray_gun_zm", "cymbal_monkey_zm", "cymbal_monkey_zm");
+						break;
+						case 3:
+						forced_box_guns = array("scar_zm", "scar_zm", "scar_zm", "raygun_mark2_zm", "ray_gun_zm", "ray_gun_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm");
+						break;
+						case 4:
+						forced_box_guns = array("scar_zm", "scar_zm", "scar_zm", "scar_zm", "raygun_mark2_zm", "ray_gun_zm", "ray_gun_zm", "ray_gun_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm");
+						break;
+					}
 				else
-					forced_box_guns = array("raygun_mark2_zm", "cymbal_monkey_zm", "m32_zm");
+					switch(level.players)
+					{
+						case 1: 
+						forced_box_guns = array("scar_zm", "raygun_mark2_zm", "m32_zm");
+						break;
+						case 2:
+						forced_box_guns = array("scar_zm", "scar_zm", "raygun_mark2_zm", "ray_gun_zm", "cymbal_monkey_zm", "cymbal_monkey_zm");
+						break;
+						case 3:
+						forced_box_guns = array("scar_zm", "scar_zm", "scar_zm", "raygun_mark2_zm", "ray_gun_zm", "ray_gun_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm");
+						break;
+						case 4:
+						forced_box_guns = array("scar_zm", "scar_zm", "scar_zm", "scar_zm", "raygun_mark2_zm", "ray_gun_zm", "ray_gun_zm", "ray_gun_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm");
+						break;
+					}
 				break;
-				
 			default:
 				break;
 		}
@@ -130,6 +226,7 @@ firstbox()
 				break;
 
 			case "zm_nuked":
+				level.special_weapon_magicbox_check = ::general_weapon_magicbox_check;
 			case "zm_prison":
 				level.special_weapon_magicbox_check = ::general_weapon_magicbox_check;
 				break;
