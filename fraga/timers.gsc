@@ -3,6 +3,8 @@
 #include common_scripts\utility;
 #include maps\mp\_utility;
 
+#include scripts\zm\fraga\ismap;
+
 
 color_hud_watcher()
 {
@@ -29,59 +31,17 @@ color_hud_watcher()
 	}
 }
 
-timer_y_position()
-{
-	self endon("disconnect");
-
-	timerypos = GetDvar("timery");
-	prev_timerypos = "250";
-
-	while(1)
-	{
-		while(timerypos == prev_timerypos)
-		{
-			timerypos = GetDvar("timery");
-			wait(0.1);
-		}
-
-		prev_timerypos = timerypos;
-		self.roundtimer_fraga.y = GetDvarInt("timery") + 15;
-		self.timer_fraga.y = GetDvarInt("timery");
-	}
-}
-
-timer_x_position()
-{
-	self endon("disconnect");
-
-	timerxpos = GetDvar("timerx");
-	prev_timerxpos = "4";
-
-	while(1)
-	{
-		while(timerxpos == prev_timerxpos)
-		{
-			timerxpos = GetDvar("timerx");
-			wait(0.1);
-		}
-
-		prev_timerxpos = timerxpos;
-		self.roundtimer_fraga.x = GetDvarInt("timerx");
-		self.timer_fraga.x = GetDvarInt("timerx");
-	}
-}
-
-
 timer_fraga()
 {
 	self endon("disconnect");
 
 	self.timer_fraga = newclienthudelem(self);
+	/*
 	self.timer_fraga.alignx = "left";
 	self.timer_fraga.aligny = "top";
 	self.timer_fraga.horzalign = "user_left";
 	self.timer_fraga.vertalign = "user_top";
-	self.timer_fraga.x = self.timer_fraga.x + 4;
+	*/
 	self.timer_fraga.alpha = 0;
 	self.timer_fraga.color = (0.505, 0.478, 0.721);
 	self.timer_fraga.hidewheninmenu = 1;
@@ -111,7 +71,6 @@ timer_fraga_watcher()
 		{
 			wait(0.1);
 		}
-		self.timer_fraga.y = getDvarInt("timery");
 		self.timer_fraga.alpha = 1;
 		while(GetDvarInt("timer") >= 1)
 		{
@@ -126,11 +85,12 @@ roundtimer_fraga()
 	self endon("disconnect");
 
 	self.roundtimer_fraga = newclienthudelem(self);
+	/*
 	self.roundtimer_fraga.alignx = "left";
 	self.roundtimer_fraga.aligny = "top";
 	self.roundtimer_fraga.horzalign = "user_left";
 	self.roundtimer_fraga.vertalign = "user_top";
-	self.roundtimer_fraga.x = self.roundtimer_fraga.x + 4;
+	*/
 	self.roundtimer_fraga.alpha = 0;
 	self.roundtimer_fraga.fontscale = 1.7;
 	self.roundtimer_fraga.color = (0.505, 0.478, 0.721);
@@ -247,8 +207,8 @@ trap_timer_fraga()
 	self.trap_timer_fraga.aligny = "top";
 	self.trap_timer_fraga.horzalign = "user_right";
 	self.trap_timer_fraga.vertalign = "user_top";
-	self.trap_timer_fraga.x += -2;
-	self.trap_timer_fraga.y += 20;
+	self.trap_timer_fraga.x = -2;
+	self.trap_timer_fraga.y = 0;
 	self.trap_timer_fraga.fontscale = 1.4;
 	self.trap_timer_fraga.alpha = 0;
 	self.trap_timer_fraga.color = ( 0, 1, 0 );
@@ -279,8 +239,8 @@ trap_timer_cooldown_fraga()
 	self.trap_timer_cooldown_fraga.aligny = "top";
 	self.trap_timer_cooldown_fraga.horzalign = "user_right";
 	self.trap_timer_cooldown_fraga.vertalign = "user_top";
-	self.trap_timer_cooldown_fraga.x += -2;
-	self.trap_timer_cooldown_fraga.y += 20;
+	self.trap_timer_cooldown_fraga.x = -2;
+	self.trap_timer_cooldown_fraga.y = 0;
 	self.trap_timer_cooldown_fraga.fontscale = 1.4;
 	self.trap_timer_cooldown_fraga.alpha = 0;
 	self.trap_timer_cooldown_fraga.color = ( 1, 0, 0 );
@@ -300,5 +260,101 @@ trap_timer_cooldown_fraga()
 			wait 25.5;
 			self.trap_timer_cooldown_fraga.alpha = 0;
 		}
+	}
+}
+
+timerlocation()
+{
+	self endon("disconnect");
+	self.roundtimer_fraga.alignx = "left";
+	self.roundtimer_fraga.aligny = "top";
+	self.roundtimer_fraga.horzalign = "user_left";
+	self.roundtimer_fraga.vertalign = "user_top";
+	self.timer_fraga.alignx = "left";
+	self.timer_fraga.aligny = "top";
+	self.timer_fraga.horzalign = "user_left";
+	self.timer_fraga.vertalign = "user_top";
+	while(true)
+	{
+		switch(getDvarInt("timerlocation"))
+		{
+			case 0:
+				self.timer_fraga.alignx = "left";
+				self.timer_fraga.aligny = "top";
+				self.timer_fraga.horzalign = "user_left";
+				self.timer_fraga.vertalign = "user_top";
+				self.roundtimer_fraga.alignx = "left";
+				self.roundtimer_fraga.aligny = "top";
+				self.roundtimer_fraga.horzalign = "user_left";
+				self.roundtimer_fraga.vertalign = "user_top";
+				self.timer_fraga.x = 1;
+				self.timer_fraga.y = 250;
+				break;
+			case 1:
+				self.roundtimer_fraga.alignx = "left";
+				self.roundtimer_fraga.aligny = "top";
+				self.roundtimer_fraga.horzalign = "user_left";
+				self.roundtimer_fraga.vertalign = "user_top";
+				self.timer_fraga.alignx = "left";
+				self.timer_fraga.aligny = "top";
+				self.timer_fraga.horzalign = "user_left";
+				self.timer_fraga.vertalign = "user_top";
+				self.timer_fraga.x = 1;
+				self.timer_fraga.y = 0;
+				if(isorigins())
+				{
+					self.timer_fraga.x = 1;
+					self.timer_fraga.y = 45;
+				}
+				if(issurvivalmap())
+				{
+					self.timer_fraga.x = 1;
+					self.timer_fraga.y = 40;
+				}
+				break;
+			case 2:
+				self.roundtimer_fraga.alignx = "right";
+				self.roundtimer_fraga.aligny = "top";
+				self.roundtimer_fraga.horzalign = "user_right";
+				self.roundtimer_fraga.vertalign = "user_top";
+				self.timer_fraga.alignx = "right";
+				self.timer_fraga.aligny = "top";
+				self.timer_fraga.horzalign = "user_right";
+				self.timer_fraga.vertalign = "user_top";
+				self.timer_fraga.x = 0;
+				if(getDvar("cg_drawFPS") == "Off")
+					self.timer_fraga.y = 13;
+				else
+					self.timer_fraga.y = 17;
+				if(isorigins())
+				{
+					self.timer_fraga.x = -1;
+					self.timer_fraga.y = 40;
+				}
+				if(ismob())
+				{
+					self.timer_fraga.x = -1;
+					self.timer_fraga.y = 27;
+				}
+				break;
+			case 3:
+				self.roundtimer_fraga.alignx = "right";
+				self.roundtimer_fraga.aligny = "top";
+				self.roundtimer_fraga.horzalign = "user_right";
+				self.roundtimer_fraga.vertalign = "user_top";
+				self.timer_fraga.alignx = "right";
+				self.timer_fraga.aligny = "top";
+				self.timer_fraga.horzalign = "user_right";
+				self.timer_fraga.vertalign = "user_top";
+				self.timer_fraga.x = -170;
+				self.timer_fraga.y = 415;
+				break;
+
+			default: break;
+		}
+		self.roundtimer_fraga.x = self.timer_fraga.x;
+		self.roundtimer_fraga.y = self.timer_fraga.y + 15;
+		
+		wait 0.1;
 	}
 }
