@@ -34,7 +34,8 @@ watch_stat( stat, map_array )
             self.initial_stats[stat] = stat_number;
             level.buildable_stats[stat] = level.buildable_stats[stat] + delta;
             i = 1;
-            while(i != 0)
+            /* Hacemos que desaparezca después de un breve tiempo */
+            while(i != 0 || i > 0)
             {
     
                 level.turbine_hud.alpha = i;
@@ -51,6 +52,8 @@ watch_stat( stat, map_array )
 
 buildable_hud()
 {
+    /* Hacemos la tabla de construibles */
+    /* Cambiamos dependiendo del idioma */
 	level.springpad_hud.hidewheninmenu = 1;
     level.springpad_hud = createserverfontstring( "objective", 1.3 );
     level.springpad_hud.label = &"^3TURBINES: ^4";
@@ -107,6 +110,7 @@ buildable_hud()
     level.subwoofer_hud.alpha = 0;
     level.springpad_hud.alpha = 0;
 
+    /* Borramos los contadoes innecesarios en die rise */
     if ( isdierise() )
     {
         level.subwoofer_hud destroy();
@@ -116,6 +120,7 @@ buildable_hud()
 
 buildable_controller()
 {
+    /* Trackeamos las estadísticas */
     level endon( "end_game" );
 
     buildable_hud();
