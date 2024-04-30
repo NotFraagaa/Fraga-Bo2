@@ -5,39 +5,39 @@
 
 setDvars()
 {
-    setdvar( "player_strafeSpeedScale", 1 );
-    setdvar( "player_backSpeedScale", 1 );
-    setdvar( "r_dof_enable", 0 );
+    setdvar("player_strafeSpeedScale", 1 );
+    setdvar("player_backSpeedScale", 1 );
+    setdvar("r_dof_enable", 0 );
 	if(GetDvar("perkRNG") == "")
 		setdvar("perkRNG", 1);
 	if(GetDvar("character") == "")
 		setdvar("character", 0);
-    if ( getdvar( "SR" ) == "" )
-        setdvar( "SR", 0 );
-    if ( getdvar( "bus" ) == "" )
-        setdvar( "bus", 0 );
-    if ( getdvar( "fridge" ) == "" )
-        setdvar( "fridge", "m16");
-    if ( getdvar( "graphictweaks" ) == "" )
-        setdvar( "graphictweaks", 0 );
-    if ( getdvar( "color" ) == "" )
-        setdvar( "color", "0.505 0.478 0.721" );
-    if ( getdvar( "sph" ) == "" )
-        setdvar( "sph", 30 );
-    if ( getdvar( "timery" ) == "" )
-        setdvar( "timery", 250 );
-    if ( getdvar( "timerx" ) == "" )
-        setdvar( "timerx", 4 );
-    if ( getdvar( "traptimer" ) == "" )
-        setdvar( "traptimer", 0 );
-    if ( getdvar( "timer" ) == "" )
-        setdvar( "timer", 1 );
-    if ( getdvar( "roundtimer" ) == "" )
-        setdvar( "roundtimer", 1 );
-    if ( getdvar( "splits" ) != "" )
-        setdvar( "splits", 0 );
-	if( getDvar( "nightmode") == "" )
-		setDvar( "nightmode", 0 );
+	if(GetDvar("templars") == "")
+		setdvar("templars", 0);
+    if(getdvar("SR") == "")
+        setdvar("SR", 0 );
+    if(getdvar("bus") == "")
+        setdvar("bus", 0 );
+    if(getdvar("fridge") == "")
+        setdvar("fridge", "m16");
+    if(getdvar("graphictweaks") == "")
+        setdvar("graphictweaks", 0 );
+    if(getdvar("color") == "")
+        setdvar("color", "0.505 0.478 0.721");
+    if(getdvar("sph") == "")
+        setdvar("sph", 30 );
+    if(getdvar("traptimer") == "")
+        setdvar("traptimer", 0 );
+    if(getdvar("timerlocation") == "")
+        setdvar("timerlocation", 0 );
+    if(getdvar("timer") == "")
+        setdvar("timer", 1 );
+    if(getdvar("roundtimer") == "")
+        setdvar("roundtimer", 1 );
+    if(getdvar("splits") != "")
+        setdvar("splits", 0 );
+	if( getdvar("nightmode") == "")
+		setdvar("nightmode", 0 );
 	if(getDvarInt("tracker") == "")
 		setDvar("tracker", 1);
     if(GetDvar("pers_perk") == "")
@@ -49,10 +49,8 @@ setDvars()
 	if(GetDvar("firstbox") == "")
 		setdvar("firstbox", 0);
 
-    if(level.script == "zm_tomb")
+    if(ismob())
     {
-        if(GetDvar("Templars") == "")
-            setDvar("Templars", 0);
         if(GetDvar("box") != "")
         {
             if(getDvar("box") == "gen3")
@@ -67,7 +65,7 @@ setDvars()
         if(GetDvar("box") == "")
             setDvar("box", "gen2");
     }
-    if(level.scr_zm_map_start_location == "town")
+    if(istown())
     {
         if(GetDvar("box") != "")
         {
@@ -84,7 +82,7 @@ setDvars()
             setDvar("box", "dt");
     }
 
-    if(level.script == "zm_prison")
+    if(ismob())
     {
         if(GetDvar("box") != "")
         {
