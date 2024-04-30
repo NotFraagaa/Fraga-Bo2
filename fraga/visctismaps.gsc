@@ -4,8 +4,6 @@
 #include maps\mp\_utility;
 #include maps\mp\zombies\_zm_stats;
 #include maps\mp\zombies\_zm_weapons;
-#include maps\mp\zombies\_zm_magicbox;
-#include maps\mp\zombies\_zm_ai_leaper;
 #include maps\mp\zombies\_zm_perks;
 
 #include scripts\zm\fraga\ismap;
@@ -14,36 +12,29 @@ fridge()
 {
 	if(level.round_number >= 15)
 		return;
-	if(getDvar("fridge") == "mp5")
+	
+	if(isdierise() || isburied())
 	{
-		if(isdierise() || isburied())
-		{
-			self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "name", "an94_upgraded_zm+mms");
-			self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "stock", 600);
-			self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "clip", 50);
-		}
-		if(istranzit())
-		{
-			self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "name", "mp5k_upgraded_zm");
-			self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "stock", 200);
-			self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "clip", 40);
-		}
+		self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "name", "an94_upgraded_zm+mms");
+		self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "stock", 600);
+		self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "clip", 50);
 	}
-	if(getDvar("fridge") == "m16")
+	if(istranzit())
 	{
-		if(isdierise() || isburied())
-		{
-			self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "name", "an94_upgraded_zm+mms");
-			self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "stock", 600);
-			self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "clip", 50);
-		}
-		if(istranzit())
+		if(getDvar("fridge") == "m16")
 		{
 			self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "name", "m16_gl_upgraded_zm");
 			self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "stock", 270);
 			self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "clip", 30);
 			self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "alt_clip", 1);
 			self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "alt_stock", 8);
+		}
+		else
+		{
+			if(istranzit())
+			self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "name", "mp5k_upgraded_zm");
+			self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "stock", 200);
+			self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "clip", 40);
 		}
 	}
 }
@@ -90,6 +81,8 @@ award_permaperks_safe()
 
 permaperk_array(code, maps_award, maps_take, to_round)
 {
+	/* Damos todas las ventajas en los mapas correspondientes */
+	/* Estoy bastante seguro de que no hace falta porque no se cargan en el resto de mapas */
 	if (!isDefined(maps_award))
 		maps_award = array("zm_transit", "zm_highrise", "zm_buried");
 	if (!isDefined(maps_take))
@@ -150,11 +143,9 @@ bank()
 {
 	level endon("end_game");
 	self endon("disconnect");
-
 	flag_wait("initial_blackscreen_passed");
 
-    if (level.round_number == 1)
-	{
-    self.account_value = level.bank_account_max;		
-	}
+	if(level.round_number != 1)
+		return;
+	self.account_value = level.bank_account_max;
 }
