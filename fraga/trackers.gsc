@@ -52,20 +52,20 @@ leapertracker()
 	self.lastleaperround.fontscale = 1.1;
 	self.lastleaperround.sort = 1;
 	self.lastleaperround.color = (1, 1 ,1);
-	self.lastleaperround.label = &"^3LAST LEAPER ROUND: ^4";
 	if(getDvar("Language") == "spanish")
-		self.lastleaperround.label = &"^3ÚLTIMOS LEAPERS: ^4";
+		self.lastleaperround.label = &"^3URL: ^4";
 	if(getDvar("Language") == "galego")
-		self.lastleaperround.label = &"^3ÚLTIMOS LEAPERS: ^4";
+		self.lastleaperround.label = &"^3URL: ^4";
 	if(getDvar("Language") != "galego" && getDvar("Language") != "spanish")
-		self.lastleaperround.label = &"^3LAST LEAPER ROUND: ^4";
+		self.lastleaperround.label = &"^3LLR: ^4";
 	self.lastleaperround.hidewheninmenu = 1;
 	self.lastleaperround.alpha = 1;
 	self.lastleaperround setValue(0);
 	self thread trackeralpha();
 	while(1)
 	{
-		level waittill("leaper_round");
+		level waittill("start_of_round");
+		if(flag("leaper_round"))
 		self.lastleaperround setvalue(level.round_number);
 	}
 }
@@ -87,11 +87,11 @@ PanzerTracker()
 	self.lastPanzerRound.sort = 1;
 	self.lastPanzerRound.color = (1, 1 ,1);
 	if(getDvar("Language") == "spanish")
-		self.lastPanzerRound.label = &"^3ÚLTIMO PANZER: ^4";
+		self.lastPanzerRound.label = &"^3URP: ^4";
 	if(getDvar("Language") == "galego")
-		self.lastPanzerRound.label = &"^3ÚLTIMO PANZER: ^4";
+		self.lastPanzerRound.label = &"^3URP: ^4";
 	if(getDvar("Language") != "galego" && getDvar("Language") != "spanish")
-		self.lastPanzerRound.label = &"^3LAST PANZER ROUND: ^4";
+		self.lastPanzerRound.label = &"^3LPR: ^4";
 	self.lastPanzerRound.hidewheninmenu = 1;
 	self.lastPanzerRound.alpha = 1;
 	self.lastPanzerRound setValue(0);
@@ -115,16 +115,16 @@ TemplarTracker()
 	self.lastTemplarRound.vertalign = "user_top";
 	self.lastTemplarRound.aligny = "top";
 	self.lastTemplarRound.x = 0;
-	self.lastTemplarRound.y = 10	;
+	self.lastTemplarRound.y = 30;
 	self.lastTemplarRound.fontscale = 1.1;
 	self.lastTemplarRound.sort = 1;
 	self.lastTemplarRound.color = (1, 1 ,1);
 	if(getDvar("Language") == "spanish")
-		self.lastTemplarRound.label = &"^3ÚLTIMOS TEMPLARIOS: ^4";
+		self.lastTemplarRound.label = &"^3URT: ^4";
 	if(getDvar("Language") == "galego")
-		self.lastTemplarRound.label = &"^3ÚLTIMOS TEMPLARIOS: ^4";
+		self.lastTemplarRound.label = &"^3URT: ^4";
 	if(getDvar("Language") != "galego" && getDvar("Language") != "spanish")
-		self.lastTemplarRound.label = &"^3LAST TEMPLAR ROUND: ^4";
+		self.lastTemplarRound.label = &"^3LTR: ^4";
 	self.lastTemplarRound.hidewheninmenu = 1;
 	self.lastTemplarRound.alpha = 1;
 	self.lastTemplarRound setValue(0);
@@ -148,17 +148,17 @@ BrutusTracker()
 	self.lastBrutusRound.horzalign = "user_right";
 	self.lastBrutusRound.vertalign = "user_top";
 	self.lastBrutusRound.aligny = "top";
-	self.lastBrutusRound.x = -2;
-	self.lastBrutusRound.y = 47;
-	self.lastBrutusRound.fontscale = 1.1;
+	self.lastBrutusRound.x = 0;
+	self.lastBrutusRound.y = 15;
+	self.lastBrutusRound.fontscale = 1.4;
 	self.lastBrutusRound.sort = 1;
 	self.lastBrutusRound.color = (1, 1 ,1);
 	if(getDvar("Language") == "spanish")
-		self.lastBrutusRound.label = &"^3ÚLTIMO BRUTUS: ^4";
+		self.lastBrutusRound.label = &"^3URB: ^4";
 	if(getDvar("Language") == "galego")
-		self.lastBrutusRound.label = &"^3ÚLTIMO BRUTUS: ^4";
+		self.lastBrutusRound.label = &"^3URB: ^4";
 	if(getDvar("Language") != "galego" && getDvar("Language") != "spanish")
-		self.lastBrutusRound.label = &"^3LAST BRUTUS ROUND: ^4";
+		self.lastBrutusRound.label = &"^3LBR: ^4";
 	self.lastBrutusRound.hidewheninmenu = 1;
 	self.lastBrutusRound.alpha = 1;
 	self.lastBrutusRound setValue(0);
