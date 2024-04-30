@@ -12,7 +12,7 @@
 #include scripts\zm\fraga\character;
 #include scripts\zm\fraga\ismap;
 #include scripts\zm\fraga\bus;
-#include scripts\zm\fraga\avgtracker;
+#include scripts\zm\fraga\box;
 
 init()
 {
@@ -20,10 +20,7 @@ init()
 		level thread connected();
 
 	if(!istranzit())
-	{
 		level thread avg();
-    	level thread total_hits();
-	}
 
 
 	if(istown())
@@ -41,7 +38,10 @@ connected()
     	player thread bank();
     	player thread award_permaperks_safe();
 		if(getDvar("scr_kill_infinite_loops") != "")
+		{
+			player thread busMoving();
 			player thread buslocation();
+		}
 		if(getDvarInt("character") != 0)
 			level.givecustomcharacters = ::set_character_option_transit;
 	}
