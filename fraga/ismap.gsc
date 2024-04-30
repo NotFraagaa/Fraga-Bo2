@@ -53,16 +53,12 @@ is_round(round)
 	return round <= level.round_number;
 }
 
-isgreenrun()
+issurvivalmap()
 {
-	return (istranzit() || istown() || isfarm() || isdepot());
+	return (isnuketown() || istown() || isfarm() || isdepot());
 }
 
 whatmap()
 {
-	if(istranzit()) {return "zm_transit";}
-	if(isdierise()) {return "zm_highrise";}
-	if(ismob()) {return "zm_prison";}
-	if(isburied()) {return "zm_buried";}
-	if(isorigins()) {return "zm_tomb";}
+	return level.script;
 }
