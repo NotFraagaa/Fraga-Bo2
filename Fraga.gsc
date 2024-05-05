@@ -14,6 +14,7 @@
 #include scripts\zm\fraga\trackers;
 #include scripts\zm\fraga\character;
 #include scripts\zm\fraga\box;
+#include scripts\zm\fraga\velocity;
 
 init()
 {
@@ -47,4 +48,5 @@ connected()
 	self thread rotate_skydome();
 	self thread graphic_tweaks();
 	self thread nightmode();
+	self thread velocity_meter();
 }

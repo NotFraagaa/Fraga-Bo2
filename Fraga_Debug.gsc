@@ -36,6 +36,7 @@ connected()
 		flag_wait( "afterlife_start_over" );
 	}
 	self set_players_score( getdvarint( "score" ) );
+	self thread speak();
 }
 
 set_players_score( score )
@@ -59,4 +60,16 @@ power_on()
 	level.power_local_doors_globally = 1;
 	flag_set( "power_on" );
 	level setclientfield( "zombie_power_on", 1 );
+}
+
+speak()
+{
+	player_amount = 0;
+	foreach(player in level.players)
+		player_amount++;
+	while(1)
+	{
+		self iprintln(self.origin[0] + "     " + self.origin[1]);
+		wait 5;
+	}
 }
