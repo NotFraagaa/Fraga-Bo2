@@ -3,33 +3,25 @@
 #include common_scripts\utility;
 #include maps\mp\_utility;
 
+#include scripts\zm\fraga\ismap;
+
 setDvars()
 {
     setdvar("player_strafeSpeedScale", 1 );
     setdvar("player_backSpeedScale", 1 );
     setdvar("r_dof_enable", 0 );
-	if(GetDvar("perkRNG") == "")
-		setdvar("perkRNG", 1);
 	if(GetDvar("character") == "")
 		setdvar("character", 0);
-	if(GetDvar("templars") == "")
-		setdvar("templars", 0);
     if(getdvar("SR") == "")
         setdvar("SR", 0 );
     if(getdvar("bus") == "")
         setdvar("bus", 0 );
-    if(getdvar("fridge") == "")
-        setdvar("fridge", "m16");
     if(getdvar("graphictweaks") == "")
         setdvar("graphictweaks", 0 );
     if(getdvar("color") == "")
         setdvar("color", "0.505 0.478 0.721");
     if(getdvar("sph") == "")
-        setdvar("sph", 30 );
-    if(getdvar("traptimer") == "")
-        setdvar("traptimer", 0 );
-    if(getdvar("timerlocation") == "")
-        setdvar("timerlocation", 0 );
+        setdvar("sph", 50 );
     if(getdvar("timer") == "")
         setdvar("timer", 1 );
     if(getdvar("roundtimer") == "")
@@ -38,65 +30,45 @@ setDvars()
         setdvar("splits", 0 );
 	if( getdvar("nightmode") == "")
 		setdvar("nightmode", 0 );
-	if(getDvarInt("tracker") == "")
-		setDvar("tracker", 1);
-    if(GetDvar("pers_perk") == "")
-        setdvar("pers_perk", 1);
-	if(GetDvar("full_bank") == "")
-	    setdvar("full_bank", 1);
-	if(GetDvar("buildables") == "")
-		setdvar("buildables", 1);
 	if(GetDvar("firstbox") == "")
 		setdvar("firstbox", 0);
-
+    
+    if(isvictismap())
+    {
+        if(GetDvar("pers_perk") == "")
+            setdvar("pers_perk", 1);
+        if(GetDvar("full_bank") == "")
+            setdvar("full_bank", 1);
+        if(GetDvar("buildables") == "")
+            setdvar("buildables", 1);
+        if(getdvar("fridge") == "")
+            setdvar("fridge", "m16");
+    }
     if(ismob())
     {
-        if(GetDvar("box") != "")
-        {
-            if(getDvar("box") == "gen3")
-            {
-                setdvar("box", "gen3");
-            }
-            else
-            {
-                setdvar("box", "gen2");
-            }
-        }
-        if(GetDvar("box") == "")
-            setDvar("box", "gen2");
+        if(getDvarInt("tracker") == "")
+            setDvar("tracker", 1);
+        if(getdvar("traptimer") == "")
+            setdvar("traptimer", 0 );
     }
-    if(istown())
+    if(isorigins())
     {
-        if(GetDvar("box") != "")
-        {
-            if(getDvar("box") == "dt")
-            {
-                setdvar("box", "dt");
-            }
-            else
-            {
-                setdvar("box", "qr");
-            }
-        }
-        if(GetDvar("box") == "")
-            setDvar("box", "dt");
+        if(GetDvar("templars") == "")
+            setdvar("templars", 0);
+        if(getDvarInt("tracker") == "")
+            setDvar("tracker", 1);
+        if(GetDvar("perkRNG") == "")
+            setdvar("perkRNG", 1);
     }
-
-    if(ismob())
+    if(isburied())
     {
-        if(GetDvar("box") != "")
-        {
-            if(getDvar("box") == "office")
-            {
-                setdvar("box", "office");
-            }
-            else
-            {
-                setdvar("box", "cafe");
-            }
-        }
-        if(GetDvar("box") == "")
-            setDvar("box", "cafe");
+        if(GetDvar("perkRNG") == "")
+            setdvar("perkRNG", 1);
+    }
+    if(isdierise())
+    {
+        if(getDvarInt("tracker") == "")
+            setDvar("tracker", 1);
     }
 
 }
