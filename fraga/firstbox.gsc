@@ -66,12 +66,16 @@ firstbox()
 	self endon("disconnect");
 	flag_wait("initial_blackscreen_passed");
 	
+	player_amount = 0;
+	foreach(player in level.players)
+		player_amount++;
+	
 	if(level.round_number < 50 && getDvarInt("firstbox"))
 	{
 		switch(level.script)
 		{
 			case "zm_transit":
-				switch(level.players)
+				switch(player_amount)
 				{
 					case 1: 
 					forced_box_guns = array("raygun_mark2_zm", "cymbal_monkey_zm", "emp_grenade_zm");
@@ -89,7 +93,7 @@ firstbox()
 				break;
 			
 			case "zm_nuked":
-				switch(level.players)
+				switch(player_amount)
 				{
 					case 1: 
 					forced_box_guns = array("raygun_mark2_zm", "cymbal_monkey_zm");
@@ -107,7 +111,7 @@ firstbox()
 				break;
 
 			case "zm_highrise":
-				switch(level.players)
+				switch(player_amount)
 				{
 					case 1: 
 					forced_box_guns = array("cymbal_monkey_zm");
@@ -125,7 +129,7 @@ firstbox()
 				break;
 
 			case "zm_prison":
-				switch(level.players)
+				switch(player_amount)
 				{
 					case 1: 
 					forced_box_guns = array("raygun_mark2_zm", "blundergat_zm");
@@ -142,7 +146,7 @@ firstbox()
 				}
 				break;
 			case "zm_buried":
-				switch(level.players)
+				switch(player_amount)
 				{
 					case 1: 
 					forced_box_guns = array("raygun_mark2_zm", "cymbal_monkey_zm", "slowgun_zm");
@@ -158,10 +162,9 @@ firstbox()
 					break;
 				}
 				break;
-
 			case "zm_tomb":
 				if(getDvar("SR") == 30)
-					switch(level.players)
+					switch(player_amount)
 					{
 						case 1: 
 						forced_box_guns = array("scar_zm", "raygun_mark2_zm", "cymbal_monkey_zm");
@@ -177,7 +180,7 @@ firstbox()
 						break;
 					}
 				else
-					switch(level.players)
+					switch(player_amount)
 					{
 						case 1: 
 						forced_box_guns = array("scar_zm", "raygun_mark2_zm", "m32_zm");
