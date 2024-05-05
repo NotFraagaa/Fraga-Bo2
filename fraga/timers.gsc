@@ -36,12 +36,6 @@ timer_fraga()
 	self endon("disconnect");
 
 	self.timer_fraga = newclienthudelem(self);
-	/*
-	self.timer_fraga.alignx = "left";
-	self.timer_fraga.aligny = "top";
-	self.timer_fraga.horzalign = "user_left";
-	self.timer_fraga.vertalign = "user_top";
-	*/
 	self.timer_fraga.alpha = 0;
 	self.timer_fraga.color = (0.505, 0.478, 0.721);
 	self.timer_fraga.hidewheninmenu = 1;
@@ -85,12 +79,6 @@ roundtimer_fraga()
 	self endon("disconnect");
 
 	self.roundtimer_fraga = newclienthudelem(self);
-	/*
-	self.roundtimer_fraga.alignx = "left";
-	self.roundtimer_fraga.aligny = "top";
-	self.roundtimer_fraga.horzalign = "user_left";
-	self.roundtimer_fraga.vertalign = "user_top";
-	*/
 	self.roundtimer_fraga.alpha = 0;
 	self.roundtimer_fraga.fontscale = 1.7;
 	self.roundtimer_fraga.color = (0.505, 0.478, 0.721);
@@ -208,77 +196,48 @@ trap_timer_fraga()
 	self.trap_timer_fraga.horzalign = "user_right";
 	self.trap_timer_fraga.vertalign = "user_top";
 	self.trap_timer_fraga.x = -2;
-	self.trap_timer_fraga.y = 0;
+	self.trap_timer_fraga.y = 14;
 	self.trap_timer_fraga.fontscale = 1.4;
-	self.trap_timer_fraga.alpha = 0;
-	self.trap_timer_fraga.color = ( 0, 1, 0 );
 	self.trap_timer_fraga.hidewheninmenu = 1;
 	self.trap_timer_fraga.hidden = 0;
 	self.trap_timer_fraga.label = &"";
+	self.trap_timer_fragax.alpha = 1;
 
 	while( 1 )
 	{
-		level waittill( "trap_activated" );
-		if( !level.trap_activated )
+		if(getDvarInt("traptimer"))
 		{
-			wait 0.5;
-			self.trap_timer_fraga.alpha = 1 * GetDvarInt("traptimer");
-			self.trap_timer_fraga settimer( 25 );
-			wait 25;
-			self.trap_timer_fraga.alpha = 0;
+			level waittill( "trap_activated" );
+			if( level.trap_activated )
+			{
+				wait 0.1;
+				self.trap_timer_fraga.color = ( 0, 1, 0 );
+				self.trap_timer_fraga.alpha = 1;
+				self.trap_timer_fraga settimer( 25 );
+				wait 25;
+				self.trap_timer_fraga settimer( 25 );
+				self.trap_timer_fraga.color = ( 1, 0, 0 );
+				wait 25;
+				self.trap_timer_fraga.alpha = 0;
+			}
 		}
-	}
-}
-
-trap_timer_cooldown_fraga()
-{
-	self endon( "disconnect" );
-
-	self.trap_timer_cooldown_fraga = newclienthudelem( self );
-	self.trap_timer_cooldown_fraga.alignx = "right";
-	self.trap_timer_cooldown_fraga.aligny = "top";
-	self.trap_timer_cooldown_fraga.horzalign = "user_right";
-	self.trap_timer_cooldown_fraga.vertalign = "user_top";
-	self.trap_timer_cooldown_fraga.x = -2;
-	self.trap_timer_cooldown_fraga.y = 0;
-	self.trap_timer_cooldown_fraga.fontscale = 1.4;
-	self.trap_timer_cooldown_fraga.alpha = 0;
-	self.trap_timer_cooldown_fraga.color = ( 1, 0, 0 );
-	self.trap_timer_cooldown_fraga.hidewheninmenu = 1;
-	self.trap_timer_cooldown_fraga.hidden = 0;
-	self.trap_timer_cooldown_fraga.label = &"";
-
-	while( 1 )
-	{
-		level waittill( "trap_activated" );
-
-		if( !level.trap_activated )
-		{
-			wait 25.5;
-			self.trap_timer_cooldown_fraga.alpha = 1 * GetDvarInt("traptimer");
-			self.trap_timer_cooldown_fraga settimer( 25 );
-			wait 25.5;
-			self.trap_timer_cooldown_fraga.alpha = 0;
-		}
+		wait 0.1;	
 	}
 }
 
 timerlocation()
 {
 	self endon("disconnect");
-	self.roundtimer_fraga.alignx = "left";
-	self.roundtimer_fraga.aligny = "top";
-	self.roundtimer_fraga.horzalign = "user_left";
-	self.roundtimer_fraga.vertalign = "user_top";
-	self.timer_fraga.alignx = "left";
-	self.timer_fraga.aligny = "top";
-	self.timer_fraga.horzalign = "user_left";
-	self.timer_fraga.vertalign = "user_top";
+
 	while(true)
 	{
-		switch(getDvarInt("timerlocation"))
+		switch(getDvarInt("timer"))
 		{
 			case 0:
+				self.timer_fraga.alpha = 0;
+				self.roundtimer_fraga.alpha = 0;
+				break;
+			case 1:
 				self.timer_fraga.alignx = "left";
 				self.timer_fraga.aligny = "top";
 				self.timer_fraga.horzalign = "user_left";
@@ -289,8 +248,10 @@ timerlocation()
 				self.roundtimer_fraga.vertalign = "user_top";
 				self.timer_fraga.x = 1;
 				self.timer_fraga.y = 250;
+				self.timer_fraga.alpha = 1;
+				self.roundtimer_fraga.alpha = 1;
 				break;
-			case 1:
+			case 2:
 				self.roundtimer_fraga.alignx = "left";
 				self.roundtimer_fraga.aligny = "top";
 				self.roundtimer_fraga.horzalign = "user_left";
@@ -301,41 +262,18 @@ timerlocation()
 				self.timer_fraga.vertalign = "user_top";
 				self.timer_fraga.x = 1;
 				self.timer_fraga.y = 0;
+				self.timer_fraga.alpha = 1;
+				self.roundtimer_fraga.alpha = 1;
 				if(isorigins())
-				{
-					self.timer_fraga.x = 1;
 					self.timer_fraga.y = 45;
-				}
 				if(issurvivalmap())
-				{
-					self.timer_fraga.x = 1;
 					self.timer_fraga.y = 40;
-				}
-				break;
-			case 2:
-				self.roundtimer_fraga.alignx = "right";
-				self.roundtimer_fraga.aligny = "top";
-				self.roundtimer_fraga.horzalign = "user_right";
-				self.roundtimer_fraga.vertalign = "user_top";
-				self.timer_fraga.alignx = "right";
-				self.timer_fraga.aligny = "top";
-				self.timer_fraga.horzalign = "user_right";
-				self.timer_fraga.vertalign = "user_top";
-				self.timer_fraga.x = 0;
-				if(getDvar("cg_drawFPS") == "Off")
-					self.timer_fraga.y = 13;
-				else
-					self.timer_fraga.y = 17;
-				if(isorigins())
-				{
-					self.timer_fraga.x = -1;
-					self.timer_fraga.y = 40;
-				}
-				if(ismob())
-				{
-					self.timer_fraga.x = -1;
-					self.timer_fraga.y = 27;
-				}
+				if(isdierise() && level.springpad_hud.alpha != 0)
+					self.timer_fraga.y = 10;
+				if(isburied() && level.springpad_hud.alpha != 0)
+					self.timer_fraga.y = 35;
+				if(istranzit() && getDvarInt("bus"))
+					self.timer_fraga.y = 21;
 				break;
 			case 3:
 				self.roundtimer_fraga.alignx = "right";
@@ -346,8 +284,35 @@ timerlocation()
 				self.timer_fraga.aligny = "top";
 				self.timer_fraga.horzalign = "user_right";
 				self.timer_fraga.vertalign = "user_top";
+				self.timer_fraga.x = -1;
+				self.timer_fraga.y = 13;
+				self.timer_fraga.alpha = 1;
+				self.roundtimer_fraga.alpha = 1;
+				if(getDvar("cg_drawFPS") != "Off")
+					self.timer_fraga.y += 4;
+				if(isorigins())
+					self.timer_fraga.y = 40;
+				if(ismob())
+				{
+					self.timer_fraga.y = 40;
+					self.trap_timer_fraga.y = 19;
+				}
+				if(isdierise())
+					self.timer_fraga.y = 30;
+				break;
+			case 4:
+				self.roundtimer_fraga.alignx = "right";
+				self.roundtimer_fraga.aligny = "top";
+				self.roundtimer_fraga.horzalign = "user_right";
+				self.roundtimer_fraga.vertalign = "user_top";
+				self.timer_fraga.alignx = "right";
+				self.timer_fraga.aligny = "top";
+				self.timer_fraga.horzalign = "user_right";
+				self.timer_fraga.vertalign = "user_top";
 				self.timer_fraga.x = -170;
 				self.timer_fraga.y = 415;
+				self.timer_fraga.alpha = 1;
+				self.roundtimer_fraga.alpha = 1;
 				break;
 
 			default: break;

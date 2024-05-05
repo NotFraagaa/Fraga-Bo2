@@ -31,7 +31,6 @@ fridge()
 		}
 		else
 		{
-			if(istranzit())
 			self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "name", "mp5k_upgraded_zm");
 			self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "stock", 200);
 			self setdstat("PlayerStatsByMap", "zm_transit", "weaponLocker", "clip", 40);
@@ -65,17 +64,12 @@ award_permaperks_safe()
 	perks_to_process[perks_to_process.size] = permaperk_array("pistol_points");
 	perks_to_process[perks_to_process.size] = permaperk_array("double_points");
 
-	self.awarding_permaperks_now = true;
-
 	foreach (perk in perks_to_process)
 	{
 		self resolve_permaperk(perk);
 		wait 0.05;
 	}
-
 	wait 0.5;
-	perks_to_process = undefined;
-	self.awarding_permaperks_now = undefined;
 	self maps\mp\zombies\_zm_stats::uploadstatssoon();
 }
 
