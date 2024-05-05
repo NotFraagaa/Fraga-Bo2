@@ -58,7 +58,7 @@ issurvivalmap()
 	return (isnuketown() || istown() || isfarm() || isdepot());
 }
 
-whatmap()
+isvictismap()
 {
-	return level.script;
+	return (istranzit() || isburied() || isdierise());
 }
