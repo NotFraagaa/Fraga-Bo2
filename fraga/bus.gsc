@@ -96,7 +96,7 @@ busMoving()
 	self.busmoving.aligny = "top";
 	self.busmoving.label = &"^3Mooving";
 	self.busmoving.x = 2;
-	self.busmoving.y = 20;
+	self.busmoving.y = 10;
 	self.busmoving.fontscale = 1.3;
 	self.busmoving.sort = 1;
 	self.busmoving.hidewheninmenu = 1;
