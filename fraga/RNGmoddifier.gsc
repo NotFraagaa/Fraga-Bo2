@@ -6,6 +6,8 @@
 #include maps\mp\zombies\_zm_perk_random;
 #include maps\mp\zombies\_zm_perks;
 
+#include scripts\zm\fraga\ismap;
+
 Templars( s_last_recapture_zone )
 {
 	a_s_player_zones = [];
@@ -60,89 +62,33 @@ TemplarsManipulated()
 		self iprintln("^6Templars ^1Manipulated");
 	}
 }
-
 /*
 perkRNG()
 {
-	switch(GetDvarInt("perkRNG"))
-	{
-	case 0:
+	if(isburied() || isorigins() &&GetDvarInt("perkRNG") == 0)
 		replaceFunc(maps\mp\zombies\_zm_perk_random::get_weighted_random_perk, ::getWeightedRandomPerk);
-		break;
-	case 2:
-		replaceFunc(maps\mp\zombies\_zm_perk_random::get_weighted_random_perk, ::getWeightedRandomPerk2);
-		break;
-	case 3:
-		replaceFunc(maps\mp\zombies\_zm_perk_random::get_weighted_random_perk, ::getWeightedRandomPerk3);
-		break;
-	case 4:
-		replaceFunc(maps\mp\zombies\_zm_perk_random::get_weighted_random_perk, ::getWeightedRandomPerk4);
-		break;
-	}
 }
-
+*/
 getWeightedRandomPerk( player )
 {
 	if(!player hasperk("specialty_armorvest"))
-c		return("specialty_armorvest");
-	}
-	else
-	{
-		if(!player hasperk("specialty_rof"))
-		{	
-			return("specialty_rof");
-		}
-		else
-		{
-			if(!player hasperk("specialty_flakjacket"))
-			{	
-				return("specialty_flakjacket");
-			}
-			else
-			{
-				if(!player hasperk("specialty_fastreload"))
-				{	
-					return("specialty_fastreload");
-				}
-				else
-				{
-					if(!player hasperk("specialty_longersprint"))
-					{	
-						return("specialty_longersprint");
-					}
-					else
-					{
-						if(!player hasperk("specialty_additionalprimaryweapon"))
-						{	
-							return("specialty_additionalprimaryweapon");
-						}
-						else
-						{
-							if(!player hasperk("specialty_quickrevive"))
-							{	
-								return("specialty_quickrevive");
-							}
-							else
-							{
-								if(!player hasperk("specialty_grenadepulldeath"))
-								{	
-									return("specialty_grenadepulldeath");
-								}
-								else
-								{
-									return("specialty_deadshot");
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
+		return("specialty_armorvest");
+	if(!player hasperk("specialty_rof"))
+		return("specialty_rof");
+	if(!player hasperk("specialty_fastreload"))
+		return("specialty_fastreload");
+	if(!player hasperk("specialty_additionalprimaryweapon"))
+		return("specialty_additionalprimaryweapon");
+	if(!player hasperk("specialty_longersprint"))
+		return("specialty_longersprint");
+	if(!player hasperk("specialty_quickrevive"))
+		return("specialty_quickrevive");
+	if(!player hasperk("specialty_grenadepulldeath"))
+		return("specialty_grenadepulldeath");
+	if(!player hasperk("specialty_flakjacket"))
+		return("specialty_flakjacket");
+	return("specialty_deadshot");
 }
-*/
-
-
 perfectperks()
 {
 	if(GetDvarInt("perkrng") == 0)
@@ -180,12 +126,15 @@ giverandomperk()
 	{
 		perks = array_randomize( perks );
 		random_perk = perks[ 0 ];
-		while ( random_perk == "specialty_nomotionsensor" && perks.size > 1 )
+		if(isburied())
 		{
-			perks = array_randomize( perks );
-			random_perk = perks[ 0 ];
+			while ( random_perk == "specialty_nomotionsensor" && perks.size > 1 )
+			{
+				perks = array_randomize( perks );
+				random_perk = perks[ 0 ];
+			}
+			self give_perk( random_perk );
 		}
-		self give_perk( random_perk );
 	}
 	else
 	{
