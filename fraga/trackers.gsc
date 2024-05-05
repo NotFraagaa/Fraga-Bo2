@@ -43,12 +43,12 @@ leapertracker()
 		level.trackingLeapers = true;
 
 	self.lastleaperround = newclienthudelem(self);
-	self.lastleaperround.alignx = "left";
-	self.lastleaperround.horzalign = "user_left";
+	self.lastleaperround.alignx = "right";
+	self.lastleaperround.horzalign = "user_right";
 	self.lastleaperround.vertalign = "user_top";
 	self.lastleaperround.aligny = "top";
-	self.lastleaperround.x = 2;
-	self.lastleaperround.y = 0;
+	self.lastleaperround.x = 0;
+	self.lastleaperround.y = 20;
 	self.lastleaperround.fontscale = 1.1;
 	self.lastleaperround.sort = 1;
 	self.lastleaperround.color = (1, 1 ,1);
@@ -149,7 +149,8 @@ BrutusTracker()
 	self.lastBrutusRound.vertalign = "user_top";
 	self.lastBrutusRound.aligny = "top";
 	self.lastBrutusRound.x = 0;
-	self.lastBrutusRound.y = 15;
+	if(getDvar("cg_drawfps" != "Off"))
+		self.lastBrutusRound.y = 30;
 	self.lastBrutusRound.fontscale = 1.4;
 	self.lastBrutusRound.sort = 1;
 	self.lastBrutusRound.color = (1, 1 ,1);
@@ -163,10 +164,23 @@ BrutusTracker()
 	self.lastBrutusRound.alpha = 1;
 	self.lastBrutusRound setValue(0);
 	self thread trackeralpha();
+	thread position();
 	while(1)
 	{
 		level waittill( "brutus_spawned");
 		self.lastBrutusRound setvalue(level.round_number);
+	}
+}
+
+position()
+{
+	while(1)
+	{
+		if(getDvar("cg_drawfps" != "Off"))
+			self.lastBrutusRound.y = 30;
+		else
+			self.lastBrutusRound.y = 25;
+		wait 0.1;
 	}
 }
 
@@ -180,11 +194,11 @@ tankTracker()
 			if(tank_last_check_church)
 			{
 				tank_moves += 1;
-                if(tank_moves != 0 && GetDvarInt("tracker") != 0 && getDvar("Language" == "spanish"))
+                if(tank_moves != 0 && GetDvarInt("tracker") != 0 && getDvar("language" == "spanish"))
 					self iprintln("El tanque se ha movido " + tank_moves + " veces.");
-                if(tank_moves != 0 && GetDvarInt("tracker") != 0 && getDvar("Language" == "galego"))
+                if(tank_moves != 0 && GetDvarInt("tracker") != 0 && getDvar("language" == "galego"))
 					self iprintln("O tanque moveuse " + tank_moves + " veces.");
-                if(tank_moves != 0 && GetDvarInt("tracker") != 0 && getDvar("Language" != "galego") && getDvar("Language" != "spanish"))
+                if(tank_moves != 0 && GetDvarInt("tracker") != 0 && getDvar("language" != "galego") && getDvar("language" != "spanish"))
 					self iprintln("The tank has been moved " + tank_moves + " times.");
 			}
 			tank_last_check_gen2 = 1;
@@ -195,11 +209,11 @@ tankTracker()
 			if(tank_last_check_gen2)
 			{
 				tank_moves += 1;
-                if(tank_moves != 0 && GetDvarInt("tracker") != 0 && getDvar("Language" == "spanish"))
+                if(tank_moves != 0 && GetDvarInt("tracker") != 0 && getDvar("language" == "spanish"))
 					self iprintln("El tanque se ha movido " + tank_moves + " veces.");
-                if(tank_moves != 0 && GetDvarInt("tracker") != 0 && getDvar("Language" == "galego"))
+                if(tank_moves != 0 && GetDvarInt("tracker") != 0 && getDvar("language" == "galego"))
 					self iprintln("O tanque moveuse " + tank_moves + " veces.");
-                if(tank_moves != 0 && GetDvarInt("tracker") != 0 && getDvar("Language" != "galego") && getDvar("Language" != "spanish"))
+                if(tank_moves != 0 && GetDvarInt("tracker") != 0 && getDvar("language" != "galego") && getDvar("language" != "spanish"))
 					self iprintln("The tank has been moved " + tank_moves + " times.");
 			}
 			tank_last_check_church = 1;
