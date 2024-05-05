@@ -3,6 +3,8 @@
 #include common_scripts\utility;
 #include maps\mp\_utility;
 
+#include scripts\zm\fraga\ismap;
+
 detect_cheats()
 {
     level thread cheatsActivated();
@@ -90,13 +92,16 @@ perkrng()
     level.perkrng_desabled.horzalign = "user_center";
     level.perkrng_desabled.vertalign = "user_bottom";
     level.perkrng_desabled.aligny = "bottom";
-    while(level.round_number < 2)
+    if(isburied())
     {
-        if(!getDvarInt("perkRNG"))
-            level.perkrng_desabled.alpha = 1;
-        if(getDvarInt("perkRNG"))
-            level.perkrng_desabled.alpha = 0;
-        wait 0.1;
+        while(level.round_number < 2)
+        {
+            if(!getDvarInt("perkRNG"))
+                level.perkrng_desabled.alpha = 1;
+            if(getDvarInt("perkRNG"))
+                level.perkrng_desabled.alpha = 0;
+            wait 0.1;
+        }
     }
     level.perkrng_desabled.alpha = 0;
 }
