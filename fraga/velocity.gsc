@@ -43,13 +43,13 @@ velocity_visible()
         zone = self get_current_zone();
         if(istranzit() && zone != "zone_pri")
 	        level.exited_spawn_room = true;
-        if(isnuketown() && (zone != "culdesac_yellow_zone" && zone != "culdesac_green_zone" && zone != "truck_zone"))
+        if(isnuketown() && playerexitnuketownfr(zone))
 	        level.exited_spawn_room = true;
         if(isdierise() && zone != "zone_green_start")
 	        level.exited_spawn_room = true;
         if(ismob() && playerexitedmobfr())
 	        level.exited_spawn_room = true;
-        if(isburied() && zone != "zone_start")
+        if(isburied() && playerexitburiedfr())
 	        level.exited_spawn_room = true;
         if(isorigins() && zone != "zone_start" && zone != "zone_start_a" && zone != "zone_start_b")
 	        level.exited_spawn_room = true;
@@ -108,6 +108,20 @@ velocity_meter_scale(vel)
 playerexitedmobfr()
 {
 	if(self.origin[1] < 10700 && self.origin[1] > 10300 && self.origin[0] > 300 && self.origin[0] < 2130)
+		return true;
+	return false;
+}
+
+playerexitburiedfr()
+{
+	if(self.origin [0] < -2200 && self.origin[0] > -3200 && self.origin[1] > -850 && self.origin[1] < 150)
 		return false;
 	return true;
+}
+
+playerexitnuketownfr(zone)
+{
+	if(zone == "openhouse1_backyard_zone" || zone == "openhouse2_backyard_zone" || zone == "openhouse2_f2_zone" || zone == "openhouse1_f2_zone")
+		return true;
+	return false;
 }
