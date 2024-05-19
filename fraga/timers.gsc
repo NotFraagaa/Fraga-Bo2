@@ -28,6 +28,7 @@ color_hud_watcher()
 		prev_color = color;
 		self.timer_fraga.color = (string_to_float(colors[0]), string_to_float(colors[1]), string_to_float(colors[2]));
 		self.roundtimer_fraga.color = (string_to_float(colors[0]), string_to_float(colors[1]), string_to_float(colors[2]));
+		wait 0.1;
 	}
 }
 
