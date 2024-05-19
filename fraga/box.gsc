@@ -46,6 +46,8 @@ displayBoxHits()
     lol = 0;
     while(1)
     {
+        while(!isdefined(level.chest_accessed))
+            wait 0.1;
         if(lol != level.chest_accessed)
         {
             level.total_chest_accessed++;
