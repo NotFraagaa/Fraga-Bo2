@@ -70,5 +70,9 @@ setDvars()
         if(getDvarInt("tracker") == "")
             setDvar("tracker", 1);
     }
-
+    if(isnuketown())
+    {
+        if(getDvar("perkRNG") == "")
+            setDvar("perkRNG", 1);
+    }
 }
