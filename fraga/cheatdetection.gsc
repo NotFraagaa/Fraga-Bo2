@@ -92,7 +92,7 @@ perkrng()
     level.perkrng_desabled.horzalign = "user_center";
     level.perkrng_desabled.vertalign = "user_bottom";
     level.perkrng_desabled.aligny = "bottom";
-    if(isburied())
+    if(isburied() || isorigins() || isnuketown())
     {
         while(level.round_number < 2)
         {
