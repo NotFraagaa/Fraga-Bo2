@@ -38,7 +38,7 @@ connected()
 {
 	self endon("disconnect");
 	self waittill("spawned_player");
-	self thread wellcome(GetDvar("language"));
+	//self thread wellcome(GetDvar("language"));
 
 	self thread timer_fraga();
 	self thread color_hud_watcher();

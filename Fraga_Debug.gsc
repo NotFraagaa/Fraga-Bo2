@@ -15,7 +15,7 @@ init()
 	if(getDvarInt("FragaDebug"))
 	{
 		level thread onconnect();
-		level thread power_on();
+		level.player_out_of_playable_area_monitor = 0;
 	}
 }
 
@@ -53,23 +53,14 @@ set_players_score( score )
 	}
 }
 
-power_on() 
-{
-	flag_wait( "initial_blackscreen_passed" );
-	level.local_doors_stay_open = 1;
-	level.power_local_doors_globally = 1;
-	flag_set( "power_on" );
-	level setclientfield( "zombie_power_on", 1 );
-}
 
 speak()
 {
-	player_amount = 0;
-	foreach(player in level.players)
-		player_amount++;
+	/*
 	while(1)
 	{
-		self iprintln(self.origin[0] + "     " + self.origin[1]);
-		wait 5;
+		self iprintln(self.origin);
+		wait 1;
 	}
+	*/
 }
