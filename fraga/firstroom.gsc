@@ -4,6 +4,7 @@
 #include maps\mp\_utility;
 
 #include scripts\zm\fraga\ismap;
+#include scripts\zm\fraga\localizedstrings;
 
 frkills()
 {
@@ -19,6 +20,7 @@ frkills()
             case 3: level thread displaykills1(); level thread displaykills2(); level thread displaykills3(); break;
             case 4: level thread displaykills1(); level thread displaykills2(); level thread displaykills3(); level thread displaykills4(); break;
         }
+        level thread printplayerkills();
     }
 }
 
@@ -33,7 +35,6 @@ displaykills1()
     level.playerkills1.horzalign = "user_center";
     level.playerkills1.vertalign = "user_top";
     level.playerkills1.aligny = "top";
-    level.playerkills1.label = &"^3Kills Player 1: ^4";
     level.playerkills1.alpha = 1;
     level.playerkills1 setvalue(level.players[0].kills);
     wait 11;
@@ -51,7 +52,6 @@ displaykills2()
     level.playerkills2.horzalign = "user_center";
     level.playerkills2.vertalign = "user_top";
     level.playerkills2.aligny = "top";
-    level.playerkills2.label = &"^3Kills Player 2: ^4";
     level.playerkills2.alpha = 1;
     level.playerkills2 setvalue(level.players[1].kills);
     wait 11;
@@ -69,7 +69,6 @@ displaykills3()
     level.playerkills3.horzalign = "user_center";
     level.playerkills3.vertalign = "user_top";
     level.playerkills3.aligny = "top";
-    level.playerkills3.label = &"^3Kills Player 3: ^4";
     level.playerkills3.alpha = 1;
     level.playerkills3 setvalue(level.players[2].kills);
     wait 11;
@@ -87,7 +86,6 @@ displaykills4()
     level.playerkills4.horzalign = "user_center";
     level.playerkills4.vertalign = "user_top";
     level.playerkills4.aligny = "top";
-    level.playerkills4.label = &"^3Kills Player 4: ^4";
     level.playerkills4.alpha = 1;
     level.playerkills4 setvalue(level.players[3].kills);
     wait 11;
