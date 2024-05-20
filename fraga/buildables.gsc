@@ -56,13 +56,6 @@ buildable_hud()
 {
 	level.springpad_hud.hidewheninmenu = 1;
     level.springpad_hud = createserverfontstring( "objective", 1.3 );
-    level.springpad_hud.label = &"^3TURBINES: ^4";
-	if(getDvar("Language") == "spanish")
-		self.springpad_hud.label = &"^3TRAMPOLINES: ^4";
-	if(getDvar("Language") == "galego")
-		self.springpad_hud.label = &"^3TRAMPOLÍNS: ^4";
-	if(getDvar("Language") != "galego" && getDvar("Language") != "spanish")
-		self.springpad_hud.label = &"^3SPRINGPADS: ^4";
     if(level.script == "zm_buried")
         level.springpad_hud.y = 0;
     else
@@ -83,12 +76,6 @@ buildable_hud()
     level.subwoofer_hud.horzalign = "user_left";
     level.subwoofer_hud.vertalign = "user_top";
     level.subwoofer_hud.aligny = "top";
-	if(getDvar("Language") == "spanish")
-		self.subwoofer_hud.label = &"^3RESONADORES: ^4";
-	if(getDvar("Language") == "galego")
-		self.subwoofer_hud.label = &"^3RESOADORES: ^4";
-	if(getDvar("Language") != "galego" && getDvar("Language") != "spanish")
-		self.subwoofer_hud.label = &"^3SUBWOOFERS: ^4";
     level.subwoofer_hud setvalue( 0 );
 	level.turbine_hud.hidewheninmenu = 1;
     level.turbine_hud = createserverfontstring( "objective", 1.3 );
@@ -99,12 +86,6 @@ buildable_hud()
     level.turbine_hud.horzalign = "user_left";
     level.turbine_hud.vertalign = "user_top";
     level.turbine_hud.aligny = "top";
-	if(getDvar("Language") == "spanish")
-		self.turbine_hud.label = &"^3TURBINAS: ^4";
-	if(getDvar("Language") == "galego")
-		self.turbine_hud.label = &"^3TURBINAS: ^4";
-	if(getDvar("Language") != "galego" && getDvar("Language") != "spanish")
-		self.turbine_hud.label = &"^3TURBINES: ^4";
     level.turbine_hud setvalue( 0 );
     level.turbine_hud.alpha = 0;
     level.subwoofer_hud.alpha = 0;
