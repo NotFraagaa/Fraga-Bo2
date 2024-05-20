@@ -11,32 +11,8 @@ detect_cheats()
     level thread firstboxActivated();
     level thread perkrng();
     level thread tempalars();
-    level thread language();
 }
 
-language()
-{
-    switch(getDvar("Language"))
-    {
-        case "spanish":
-		level.cheats.label = &"^1^FCheats activados";
-		level.firstbox_active.label = &"^2^FFirstbox activado";
-		level.perkrng_desabled.label = &"^4^FPerk RNG manipulada";
-		level.templar_modiffied.label = &"^6^FTemplarios manipulados";
-        break;
-        case "galego":
-		level.cheats.label = &"^1^FCheats activados";
-		level.firstbox_active.label = &"^2^FFirstbox activado";
-		level.perkrng_desabled.label = &"^4^FPerk RNG manipulada";
-		level.templar_modiffied.label = &"^6^FTemplarios manipulados";
-        break;default:
-		level.cheats.label = &"^1^FCheats active";
-		level.firstbox_active.label = &"^2^FFirstbox active";
-		level.perkrng_desabled.label = &"^4^FPerk RNG manipulated";
-		level.templar_modiffied.label = &"^6^FTemplars manipulated";
-        break;
-    }
-}
 cheatsActivated()
 {
 	level.cheats.hidewheninmenu = 1;
