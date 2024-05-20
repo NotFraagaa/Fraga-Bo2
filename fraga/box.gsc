@@ -25,7 +25,6 @@ displayBoxHits()
     level.boxhits.horzalign = "user_center";
     level.boxhits.vertalign = "user_top";
     level.boxhits.aligny = "top";
-    level.boxhits.label = &"^3Box hits: ^4";
     level.boxhits.alpha = 0;
     level.boxhits setvalue(0);
     if(issurvivalmap())
