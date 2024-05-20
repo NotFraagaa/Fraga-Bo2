@@ -12,8 +12,7 @@
 #include maps\mp\zombies\_zm_afterlife;
 #include maps\mp\zombies\_zm_magicbox;
 
-
-#include scripts\zm\fraga\firstbox;
+#include scripts\zm\fraga\box;
 #include scripts\zm\fraga\mob;
 #include scripts\zm\fraga\character;
 #include scripts\zm\fraga\timers;
@@ -24,7 +23,7 @@ init()
 	replaceFunc( maps\mp\zm_alcatraz_sq::setup_master_key, ::setup_master_key );
     level thread connected();
 	level thread firstbox();
-	level thread boxlocation_mob();
+	level thread boxlocation();
 }
 
 connected()
@@ -36,6 +35,6 @@ connected()
 		if(getDvarInt("character") != 0)
 			level.givecustomcharacters = ::set_character_option_mob;
 		player thread trap_timer_fraga();
-		player thread trap_timer_cooldown_fraga();
+		player thread givetomahawk();
 	}
 }
