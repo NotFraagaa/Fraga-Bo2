@@ -50,25 +50,28 @@ award_permaperks_safe()
 		wait 0.05;
 
 	wait 0.5;
-
-	perks_to_process = [];
-	perks_to_process[perks_to_process.size] = permaperk_array("revive");
-	perks_to_process[perks_to_process.size] = permaperk_array("multikill_headshots");
-	perks_to_process[perks_to_process.size] = permaperk_array("perk_lose");
-	perks_to_process[perks_to_process.size] = permaperk_array("jugg", undefined, undefined, 15);
-	perks_to_process[perks_to_process.size] = permaperk_array("flopper", array("zm_buried"));
-	perks_to_process[perks_to_process.size] = permaperk_array("box_weapon", array("zm_highrise", "zm_buried"), array("zm_transit"));
-	perks_to_process[perks_to_process.size] = permaperk_array("cash_back");
-	perks_to_process[perks_to_process.size] = permaperk_array("sniper");
-	perks_to_process[perks_to_process.size] = permaperk_array("insta_kill");
-	perks_to_process[perks_to_process.size] = permaperk_array("pistol_points");
-	perks_to_process[perks_to_process.size] = permaperk_array("double_points");
-
+	{
+		perks_to_process = [];
+		perks_to_process[perks_to_process.size] = permaperk_array("revive");
+		perks_to_process[perks_to_process.size] = permaperk_array("multikill_headshots");
+		perks_to_process[perks_to_process.size] = permaperk_array("perk_lose");
+		perks_to_process[perks_to_process.size] = permaperk_array("jugg", undefined, undefined, 15);
+		perks_to_process[perks_to_process.size] = permaperk_array("flopper", array("zm_buried"));
+		perks_to_process[perks_to_process.size] = permaperk_array("box_weapon", array("zm_highrise", "zm_buried"), array("zm_transit"));
+		perks_to_process[perks_to_process.size] = permaperk_array("cash_back");
+		perks_to_process[perks_to_process.size] = permaperk_array("sniper");
+		perks_to_process[perks_to_process.size] = permaperk_array("insta_kill");
+		perks_to_process[perks_to_process.size] = permaperk_array("pistol_points");
+		perks_to_process[perks_to_process.size] = permaperk_array("double_points");
+	}
 	foreach (perk in perks_to_process)
 	{
+		if( !(istranzit() && perk == permaperk_array("box_weapon", array("zm_highrise", "zm_buried"), array("zm_transit"))))
 		self resolve_permaperk(perk);
 		wait 0.05;
 	}
+	if(istranzit())
+		remove_permaperk("box_weapon");
 	wait 0.5;
 	self maps\mp\zombies\_zm_stats::uploadstatssoon();
 }
