@@ -7,7 +7,7 @@
 
 setup_master_key()
 {
-	switch(getDvarInt("firstbox"))
+	switch(getDvarInt("box"))
 	{
 		case 1:
 			level.is_master_key_west = 0;
