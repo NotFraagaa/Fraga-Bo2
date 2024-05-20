@@ -22,9 +22,12 @@
     Game timer
     Round timer
     Trap timer
+    Box hits counter
     SPH meter (default start at 30)
     HUD color and position can be changed
     Round Splits
+    Display kills at the end of the round if the player didnt leave the first room and its round 6+
+    Displays velocity meter if the player didnt leave the first room and its round 6+
 
 ## MAP CHANGES
 
@@ -33,7 +36,7 @@ Tranzit
     Bank full for all players
     All perman perks are given on spawn to all players
     MP5 upgraded on weapon locker for all players
-    Bus location with /bus 1
+    Bus location with /bus 1 (r3705+)
     
 Survival Maps
 
@@ -77,7 +80,7 @@ Origins
     Templars tracker
     Tank tracker
 
-## Splits
+## Splits **(r3705+)**
 
 Round 5: Rounds 1,2,3,4,5
 
@@ -98,49 +101,38 @@ Example: SR 30
 
 ## DVars
 
-character 1 2 3 4 5
+character [0, 5]
 
+    0 = Random
     1 = Misty, Richtophen, Arlington
     2 = Russman, Dempsei, Finn
     3 = Marlton, Nikolai, Sal
     4 = Stuthlinger, Takeo, Billy
     5 = Ghost (only on mob)
 
-splits 1 0
-
-    Shows/hides splits
-
-firstbox 1 2 0
+firstbox [0, 1]
 
     Disables RNG from
 
-sph
+sph [0, 255]
 
      What round sph starts showing, default is 30
     
-timer 1 0
+timer [0, 4]
 
-     Enables timer, default is enabled
+    0 = Off
+    1 = Left side of the screen
+    2 = Top left of the screen
+    3 = Top right of the screen
+    4 = Next to ammo counter
 
-roundtimer 1 0
-
-    Enables round timer, default is enabled
-
-traptimer 1 0
+traptimer [0, 1]
 
     Enables trap timer, default is disabled
     
-timerx and timery
-
-    Changes timer position
-    
-color "x x x"
+color ("x x x")
 
     Changes timer color (RGB format)
-    
-buildables 0 1
-
-    Shows/Hides the buildables menu on Die Rise / Buried
 
 SR
 
@@ -154,12 +146,14 @@ score
 
     Changes the amount of points given when debug mode is on
 
-perkRNG
+perkRNG [0, 1]
 
     Vulture will be the last perk awarded by the whitches
+    Perk order will be QR -> JUG -> PAP -> SPEED -> DT on nuketown
+    Perk order will be JUG -> DT -> SPEED -> MULE -> STAM -> QR -> PHD -> CHERRY
+    Auto restarts on nuketown untill PAP and JUG are on the green house
 
+Templars [0, 1]
 
-## Useful binds
-
-* bind 7 "toggle FragaDebug 1 0"
-* bind N "toggle night_mode 1 0"
+    Templars will always attack gen4
+    Might cause errors if gen4 is not active
