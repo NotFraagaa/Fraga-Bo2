@@ -7,21 +7,24 @@
 
 init()
 {
-	if(GetDvar("FragaDebug") == "")
-	{
-		setdvar( "score", "69420" );
-		setdvar("FragaDebug", 0);
-	}
 	if(getDvarInt("FragaDebug"))
+		level.debug = true;
+	else
+		level.debug = false;
+	
+	if(level.debug)
 	{
+		if(GetDvar("score") == "")
+			setdvar( "score", "69420" );
 		level thread onconnect();
 		level.player_out_of_playable_area_monitor = 0;
+		level thread debugmode();
 	}
+	setdvar("sv_cheats", level.debug);
 }
 
 onconnect()
 {
-	setdvar("sv_cheats", getDvarInt("FragaDebug"));
 	setdvar("cg_ufo_scaler", 1);
 	level waittill( "connected", player );
 	player thread connected();
@@ -31,36 +34,43 @@ connected()
 {
     level endon( "game_ended" );
     self endon( "disconnect" );
+    flag_wait( "start_zombie_round_logic" );
 	if(level.script == "zm_prison")
 	{
 		flag_wait( "afterlife_start_over" );
 	}
-	self set_players_score( getdvarint( "score" ) );
+	self.score = GetDvarInt("score");
 	self thread speak();
 }
-
-set_players_score( score )
-{
-    flag_wait( "start_zombie_round_logic" );
-
-	if(GetDvarInt("FragaDebug") == 1)
-	{
-		self.score = GetDvarInt("score");
-	}
-	else
-	{
-		self.score = 500;
-	}
-}
-
 
 speak()
 {
 	/*
 	while(1)
 	{
-		self iprintln(self.origin);
+		for(i = 0; i < level.chests.size; i++)
+		{
+			self iprintln(level.chests[i].script_noteworthy);
+			wait 1;
+		}
+		self iprintln(self.kills);
+		self iprintln(level.playerkills1.alpha);
 		wait 1;
 	}
 	*/
+}
+
+debugmode()
+{
+	level.debugmode.hidewheninmenu = 1;
+    level.debugmode = createserverfontstring( "objective", 1.3 );
+    level.debugmode.y = 20;
+    level.debugmode.x = 0;
+    level.debugmode.fontscale = 1;
+    level.debugmode.alignx = "center";
+    level.debugmode.horzalign = "user_center";
+    level.debugmode.vertalign = "user_top";
+    level.debugmode.aligny = "top";
+    level.debugmode.alpha = 1;
+    level.debugmode.label = &"DEBUG MODE";
 }
