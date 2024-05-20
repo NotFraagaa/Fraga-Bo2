@@ -7,8 +7,7 @@
 #include maps\mp\zombies\_zm_tombstone;
 
 
-#include scripts\zm\fraga\visctismaps;
-#include scripts\zm\fraga\firstbox;
+#include scripts\zm\fraga\victismaps;
 #include scripts\zm\fraga\character;
 #include scripts\zm\fraga\ismap;
 #include scripts\zm\fraga\bus;
@@ -24,7 +23,7 @@ init()
 
 
 	if(istown())
-		level thread boxlocation_town();
+		level thread boxlocation();
 	
 	level thread firstbox();
 }
