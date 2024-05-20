@@ -7,22 +7,22 @@
 #include scripts\zm\fraga\trackers;
 #include scripts\zm\fraga\papcamo;
 #include scripts\zm\fraga\RNGmoddifier;
-#include scripts\zm\fraga\firstbox;
+#include scripts\zm\fraga\box;
 
 init()
 {
 	level thread fizzStartLocation();
-	//level thread perkRNG();
 	level thread connected();
 
 
 	replacefunc(maps\mp\zombies\_zm_weapons::get_pack_a_punch_weapon_options, ::origins_pap_camo);
+	replaceFunc(maps\mp\zombies\_zm_perk_random::get_weighted_random_perk, ::perkorderorigins);
 	if(GetDvar("Templars" != 0))
 		replaceFunc(maps\mp\zm_tomb_capture_zones::get_recapture_zone, ::Templars);
 	
 
 	level thread firstbox();
-	level thread boxlocation_origins();
+	level thread boxlocation();
 }
 
 
@@ -31,7 +31,6 @@ connected()
 	while(1)
 	{
 		level waittill("connecting", player);
-		player thread TemplarsManipulated();
 		player thread tankTracker();
 		player thread PanzerTracker();
 		player thread TemplarTracker();
@@ -39,7 +38,6 @@ connected()
 			level.givecustomcharacters = ::set_character_option_origins;
 	}
 }
-
 
 fizzStartLocation()
 {
