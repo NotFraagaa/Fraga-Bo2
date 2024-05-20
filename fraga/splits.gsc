@@ -130,6 +130,36 @@ NomeDoSplit( split_name )
             case "Round 200": level.fraga_splits_splits[split_name].label = &"^3Ronda 200 ^7"; break;
         }
     }
+    if(GetDvar("language") == "french")
+    {
+        switch(split_name)
+        {
+            case "Round 2": level.fraga_splits_splits[split_name].label = &"^3Manche 2 ^7"; break;
+            case "Round 3": level.fraga_splits_splits[split_name].label = &"^3Manche 3 ^7"; break;
+            case "Round 4": level.fraga_splits_splits[split_name].label = &"^3Manche 4 ^7"; break;
+            case "Round 5": level.fraga_splits_splits[split_name].label = &"^3Manche 5 ^7"; break;
+            case "Round 5": level.fraga_splits_splits[split_name].label = &"^3Manche 5 ^7"; break;
+            case "Round 10": level.fraga_splits_splits[split_name].label = &"^3Manche 10 ^7"; break;
+            case "Round 15": level.fraga_splits_splits[split_name].label = &"^3Manche 15 ^7"; break;
+            case "Round 20": level.fraga_splits_splits[split_name].label = &"^3Manche 20 ^7"; break;
+            case "Round 25": level.fraga_splits_splits[split_name].label = &"^3Manche 25 ^7"; break;
+            case "Round 30": level.fraga_splits_splits[split_name].label = &"^3Manche 30 ^7"; break;
+            case "Round 40": level.fraga_splits_splits[split_name].label = &"^3Manche 40 ^7"; break;
+            case "Round 50": level.fraga_splits_splits[split_name].label = &"^3Manche 50 ^7"; break;
+            case "Round 60": level.fraga_splits_splits[split_name].label = &"^3Manche 60 ^7"; break;
+            case "Round 70": level.fraga_splits_splits[split_name].label = &"^3Manche 70 ^7"; break;
+            case "Round 80": level.fraga_splits_splits[split_name].label = &"^3Manche 80 ^7"; break;
+            case "Round 90": level.fraga_splits_splits[split_name].label = &"^3Manche 90 ^7"; break;
+            case "Round 95": level.fraga_splits_splits[split_name].label = &"^3Manche 95 ^7"; break;
+            case "Round 100": level.fraga_splits_splits[split_name].label = &"^3Manche 100 ^7"; break;
+            case "Round 125": level.fraga_splits_splits[split_name].label = &"^3Manche 125 ^7"; break;
+            case "Round 130": level.fraga_splits_splits[split_name].label = &"^3Manche 130 ^7"; break;
+            case "Round 140": level.fraga_splits_splits[split_name].label = &"^3Manche 140 ^7"; break;
+            case "Round 150": level.fraga_splits_splits[split_name].label = &"^3Manche 150 ^7"; break;
+            case "Round 175": level.fraga_splits_splits[split_name].label = &"^3Manche 175 ^7"; break;
+            case "Round 200": level.fraga_splits_splits[split_name].label = &"^3Manche 200 ^7"; break;
+        }
+    }
 }
 
 wait_split( split , last_time)
