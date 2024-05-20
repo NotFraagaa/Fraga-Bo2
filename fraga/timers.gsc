@@ -4,6 +4,7 @@
 #include maps\mp\_utility;
 
 #include scripts\zm\fraga\ismap;
+#include scripts\zm\fraga\localizedstrings;
 
 
 color_hud_watcher()
@@ -101,6 +102,7 @@ roundtimer_fraga()
 		time = end_time - start_time;
 		self display_round_time(time, hordes, dog_round, leaper_round);
 		level waittill("start_of_round");
+		self.roundtimer_fraga.label = &"";
 		if(GetDvarInt("roundtimer") >= 1)
 		{
 			self.roundtimer_fraga fadeovertime(level.fade_time);
@@ -115,33 +117,34 @@ display_round_time(time, hordes, dog_round, leaper_round)
 	sph_off = 1;
 
 	if(level.round_number > GetDvarInt("sph") && !dog_round && !leaper_round)
-	{
-		sph_off = 0;	// Do not show sph on dog rounds
-	}
+		sph_off = 0;
 
 	self.roundtimer_fraga fadeovertime(level.fade_time);
 	self.roundtimer_fraga.alpha = 0;
 	wait(level.fade_time * 2);
-	self.roundtimer_fraga.label = &"Round Time: ";
+	self thread printRoundTime();
 	self.roundtimer_fraga fadeovertime(level.fade_time);
 	self.roundtimer_fraga.alpha = 1;
-
-	for(i = 0; i < 100 + 100 * sph_off; i++)
+	if(sph_off)
 	{
-		self.roundtimer_fraga settimer(timer_for_hud);
-		wait(0.05);
+		for(i = 0; i < 225; i++)
+		{
+			self.roundtimer_fraga settimer(timer_for_hud);
+			wait(0.05);
+		}
 	}
-
-	self.roundtimer_fraga fadeovertime(level.fade_time);
-	self.roundtimer_fraga.alpha = 0;
-	wait(level.fade_time * 2);
-
-	if(sph_off == 0)
+	else
 	{
+		for(i = 0; i < 100; i++)
+		{
+			self.roundtimer_fraga settimer(timer_for_hud);
+			wait(0.05);
+		}
+		self.roundtimer_fraga fadeovertime(level.fade_time);
+		self.roundtimer_fraga.alpha = 0;
+		wait(level.fade_time * 2);
 		self display_sph(time, hordes);
 	}
-
-	self.roundtimer_fraga.label = &"";
 }
 
 display_sph(time, hordes)
