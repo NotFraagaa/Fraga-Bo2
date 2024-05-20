@@ -1,11 +1,11 @@
 # Fraga-Bo2
 
 ## Downloads
-- [Plutonium r2905](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV12/FragaV12.Pluto.r2905.rar)
+- [Plutonium r2905](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV13/FragaV13.Plutonium.r2905.rar)
   - Round splits dont work
   - Bus tracker doesnt work
   - Firstbox doesnt work
-- [Plutonium r3755+](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV12/FragaV12.Pluto.r3000+.rar)
+- [Plutonium r3755+](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV13/FragaV13.Plutonium.r3705+.rar)
 - Redacted soon
 - Ancient soon
 
