@@ -51,44 +51,45 @@ Templars( s_last_recapture_zone )
 
 }
 
-
-TemplarsManipulated()
+perkorderorigins( player )
 {
-	self endon( "disconnect" );
-	if(GetDvarInt("Templars") != 0)
+	if(getDvarInt("perkRNG") == 0)
 	{
-		flag_wait("initial_blackscreen_passed");
-		wait(0.2);
-		self iprintln("^6Templars ^1Manipulated");
+		if(!player hasperk("specialty_armorvest"))
+			return("specialty_armorvest");
+		if(!player hasperk("specialty_rof"))
+			return("specialty_rof");
+		if(!player hasperk("specialty_fastreload"))
+			return("specialty_fastreload");
+		if(!player hasperk("specialty_additionalprimaryweapon"))
+			return("specialty_additionalprimaryweapon");
+		if(!player hasperk("specialty_longersprint"))
+			return("specialty_longersprint");
+		if(!player hasperk("specialty_quickrevive"))
+			return("specialty_quickrevive");
+		if(!player hasperk("specialty_grenadepulldeath"))
+			return("specialty_grenadepulldeath");
+		if(!player hasperk("specialty_flakjacket"))
+			return("specialty_flakjacket");
+		return("specialty_deadshot");
+	}
+	else	// Base game code
+	{
+		keys = array_randomize( getarraykeys( level._random_perk_machine_perk_list ) );
+
+		if ( isdefined( level.custom_random_perk_weights ) )
+			keys = player [[ level.custom_random_perk_weights ]]();
+		for ( i = 0; i < keys.size; i++ )
+		{
+			if ( player hasperk( level._random_perk_machine_perk_list[keys[i]] ) )
+				continue;
+			else
+				return level._random_perk_machine_perk_list[keys[i]];
+		}
+		return level._random_perk_machine_perk_list[keys[0]];
 	}
 }
-/*
-perkRNG()
-{
-	if(isburied() || isorigins() &&GetDvarInt("perkRNG") == 0)
-		replaceFunc(maps\mp\zombies\_zm_perk_random::get_weighted_random_perk, ::getWeightedRandomPerk);
-}
-*/
-getWeightedRandomPerk( player )
-{
-	if(!player hasperk("specialty_armorvest"))
-		return("specialty_armorvest");
-	if(!player hasperk("specialty_rof"))
-		return("specialty_rof");
-	if(!player hasperk("specialty_fastreload"))
-		return("specialty_fastreload");
-	if(!player hasperk("specialty_additionalprimaryweapon"))
-		return("specialty_additionalprimaryweapon");
-	if(!player hasperk("specialty_longersprint"))
-		return("specialty_longersprint");
-	if(!player hasperk("specialty_quickrevive"))
-		return("specialty_quickrevive");
-	if(!player hasperk("specialty_grenadepulldeath"))
-		return("specialty_grenadepulldeath");
-	if(!player hasperk("specialty_flakjacket"))
-		return("specialty_flakjacket");
-	return("specialty_deadshot");
-}
+
 perfectperks()
 {
 	if(GetDvarInt("perkrng") == 0)
