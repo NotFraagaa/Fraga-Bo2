@@ -5,6 +5,95 @@
 
 #include scripts\zm\fraga\ismap;
 
+frkills()
+{
+    while(level.round_number != 5)
+        level waittill("end_of_round");
+    while(!level.exited_spawn_room)
+    {
+        level waittill("end_of_round");
+        switch(level.players.size)
+        {
+            case 1: level thread displaykills1(); break;
+            case 2: level thread displaykills1(); level thread displaykills2(); break;
+            case 3: level thread displaykills1(); level thread displaykills2(); level thread displaykills3(); break;
+            case 4: level thread displaykills1(); level thread displaykills2(); level thread displaykills3(); level thread displaykills4(); break;
+        }
+    }
+}
+
+displaykills1()
+{
+	level.playerkills1.hidewheninmenu = 1;
+    level.playerkills1 = createserverfontstring( "objective", 1.3 );
+    level.playerkills1.y = 0;
+    level.playerkills1.x = 0;
+    level.playerkills1.fontscale = 1.4;
+    level.playerkills1.alignx = "center";
+    level.playerkills1.horzalign = "user_center";
+    level.playerkills1.vertalign = "user_top";
+    level.playerkills1.aligny = "top";
+    level.playerkills1.label = &"^3Kills Player 1: ^4";
+    level.playerkills1.alpha = 1;
+    level.playerkills1 setvalue(level.players[0].kills);
+    wait 11;
+    level.playerkills1 destroy();
+}
+
+displaykills2()
+{
+	level.playerkills2.hidewheninmenu = 1;
+    level.playerkills2 = createserverfontstring( "objective", 1.3 );
+    level.playerkills2.y = 12;
+    level.playerkills2.x = 0;
+    level.playerkills2.fontscale = 1.4;
+    level.playerkills2.alignx = "center";
+    level.playerkills2.horzalign = "user_center";
+    level.playerkills2.vertalign = "user_top";
+    level.playerkills2.aligny = "top";
+    level.playerkills2.label = &"^3Kills Player 2: ^4";
+    level.playerkills2.alpha = 1;
+    level.playerkills2 setvalue(level.players[1].kills);
+    wait 11;
+    level.playerkills2 destroy();
+}
+
+displaykills3()
+{
+	level.playerkills3.hidewheninmenu = 1;
+    level.playerkills3 = createserverfontstring( "objective", 1.3 );
+    level.playerkills3.y = 24;
+    level.playerkills3.x = 0;
+    level.playerkills3.fontscale = 1.4;
+    level.playerkills3.alignx = "center";
+    level.playerkills3.horzalign = "user_center";
+    level.playerkills3.vertalign = "user_top";
+    level.playerkills3.aligny = "top";
+    level.playerkills3.label = &"^3Kills Player 3: ^4";
+    level.playerkills3.alpha = 1;
+    level.playerkills3 setvalue(level.players[2].kills);
+    wait 11;
+    level.playerkills3 destroy();
+}
+
+displaykills4()
+{
+	level.playerkills4.hidewheninmenu = 1;
+    level.playerkills4 = createserverfontstring( "objective", 1.3 );
+    level.playerkills4.y = 36;
+    level.playerkills4.x = 0;
+    level.playerkills4.fontscale = 1.4;
+    level.playerkills4.alignx = "center";
+    level.playerkills4.horzalign = "user_center";
+    level.playerkills4.vertalign = "user_top";
+    level.playerkills4.aligny = "top";
+    level.playerkills4.label = &"^3Kills Player 4: ^4";
+    level.playerkills4.alpha = 1;
+    level.playerkills4 setvalue(level.players[3].kills);
+    wait 11;
+    level.playerkills4 destroy();
+}
+
 velocity_meter()
 {
     self endon("disconnect");
@@ -38,6 +127,9 @@ velocity_meter()
 }
 velocity_visible()
 {
+    self.velocity.alpha = 0;
+    while(level.round_number != 5)
+        level waittill("end_of_round");
     while(!level.exited_spawn_room)
     {
         zone = self get_current_zone();
@@ -60,7 +152,7 @@ velocity_visible()
         self.velocity.alpha = 1;
         wait 1;
     }
-    self.velocity.alpha = 0;
+    self.velocity destroy();
 }
 
 velocity_meter_scale(vel)
