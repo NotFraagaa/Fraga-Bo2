@@ -10,6 +10,7 @@ detect_cheats()
     level thread cheatsActivated();
     level thread firstboxActivated();
     level thread perkrng();
+    level thread tempalars();
     level thread language();
 }
 
@@ -21,16 +22,18 @@ language()
 		level.cheats.label = &"^1^FCheats activados";
 		level.firstbox_active.label = &"^2^FFirstbox activado";
 		level.perkrng_desabled.label = &"^4^FPerk RNG manipulada";
+		level.templar_modiffied.label = &"^6^FTemplarios manipulados";
         break;
         case "galego":
 		level.cheats.label = &"^1^FCheats activados";
 		level.firstbox_active.label = &"^2^FFirstbox activado";
 		level.perkrng_desabled.label = &"^4^FPerk RNG manipulada";
-        break;
-        default:
+		level.templar_modiffied.label = &"^6^FTemplarios manipulados";
+        break;default:
 		level.cheats.label = &"^1^FCheats active";
 		level.firstbox_active.label = &"^2^FFirstbox active";
 		level.perkrng_desabled.label = &"^4^FPerk RNG manipulated";
+		level.templar_modiffied.label = &"^6^FTemplars manipulated";
         break;
     }
 }
@@ -69,16 +72,13 @@ firstboxActivated()
     level.firstbox_active.vertalign = "user_bottom";
     level.firstbox_active.aligny = "bottom";
     level.firstbox_active.alpha = 0;
-
+    if(getDvarInt("firstbox"))
     while(level.round_number < 2)
     {
-        if(getDvarInt("firstbox"))
             level.firstbox_active.alpha = 1;
-        if(!getDvarInt("firstbox"))
-            level.firstbox_active.alpha = 0;
-        wait 0.1;
+            wait 0.1;
     }
-    level.firstbox_active.alpha = 0;
+    level.firstbox_active destroy();
 }
 
 perkrng()
@@ -94,14 +94,35 @@ perkrng()
     level.perkrng_desabled.aligny = "bottom";
     if(isburied() || isorigins() || isnuketown())
     {
+        if(!getDvarInt("perkRNG"))
         while(level.round_number < 2)
         {
-            if(!getDvarInt("perkRNG"))
-                level.perkrng_desabled.alpha = 1;
-            if(getDvarInt("perkRNG"))
-                level.perkrng_desabled.alpha = 0;
+            level.perkrng_desabled.alpha = 1;
             wait 0.1;
         }
     }
-    level.perkrng_desabled.alpha = 0;
+    level.perkrng_desabled destroy();
+}
+
+tempalars()
+{
+	level.templar_modiffied.hidewheninmenu = 1;
+    level.templar_modiffied = createserverfontstring( "objective", 1.3 );
+    level.templar_modiffied.y = -40;
+    level.templar_modiffied.x = 0;
+    level.templar_modiffied.fontscale = 1;
+    level.templar_modiffied.alignx = "center";
+    level.templar_modiffied.horzalign = "user_center";
+    level.templar_modiffied.vertalign = "user_bottom";
+    level.templar_modiffied.aligny = "bottom";
+    if(isburied() || isorigins() || isnuketown())
+    {
+        if(getDvarInt("templars"))
+        while(level.round_number < 2)
+        {
+            level.templar_modiffied.alpha = 1;
+            wait 0.1;
+        }
+    }
+    level.templar_modiffied destroy();;
 }
