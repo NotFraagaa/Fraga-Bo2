@@ -22,7 +22,6 @@ init()
 {
 	replaceFunc( maps\mp\zm_alcatraz_sq::setup_master_key, ::setup_master_key );
     level thread connected();
-	level thread firstbox();
 	level thread boxlocation();
 }
 

@@ -11,7 +11,6 @@
 init()
 {
     level thread connected();
-	level thread firstbox();
 	level thread boxlocation();
 	level thread avg();
 	level waittill("connecting", player);

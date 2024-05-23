@@ -17,7 +17,6 @@ init()
 {
     level thread connected();
 	level thread buildable_controller();
-	level thread firstbox();
 }
 
 connected()
