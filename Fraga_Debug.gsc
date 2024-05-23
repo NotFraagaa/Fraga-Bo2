@@ -16,18 +16,16 @@ init()
 	{
 		if(GetDvar("score") == "")
 			setdvar( "score", "69420" );
-		level thread onconnect();
 		level.player_out_of_playable_area_monitor = 0;
 		level thread debugmode();
+		setdvar("sv_cheats", level.debug);
+		setdvar("cg_ufo_scaler", 1);
+		while(true)
+		{
+			level waittill( "connected", player );
+			player thread connected();
+		}
 	}
-	setdvar("sv_cheats", level.debug);
-}
-
-onconnect()
-{
-	setdvar("cg_ufo_scaler", 1);
-	level waittill( "connected", player );
-	player thread connected();
 }
 
 connected()
@@ -40,24 +38,47 @@ connected()
 		flag_wait( "afterlife_start_over" );
 	}
 	self.score = GetDvarInt("score");
-	self thread speak();
+	//self thread speak();
 }
 
 speak()
 {
-	/*
+	wait 5;
 	while(1)
 	{
-		for(i = 0; i < level.chests.size; i++)
+		/*
+		if(!isdefined(level.forced_box_guns))
 		{
-			self iprintln(level.chests[i].script_noteworthy);
+			i = 0;
+			self iprintln("a");
+			foreach(weapon in level.zombie_weapons) 
+			{
+				i++;
+				self iprintln(weapon.is_in_box + "   " + i);
+				wait 1;
+			}
+		}
+		else
+		self iprintln(level.forced_box_guns.size);
+		wait 1;
+		*/
+
+		self iprintln(level.plutoversion);
+		i = 0;
+		foreach(weapon in level.zombie_weapons)
+		{
+			i++;
+			self iprintln(weapon.is_in_box + "   " + i);
 			wait 1;
 		}
-		self iprintln(self.kills);
-		self iprintln(level.playerkills1.alpha);
+		/*
+		if(level.debug)
+			self iprintln("Debug mode is active");
+		else
+			self iprintln("Debug mode is not active");
 		wait 1;
+		*/
 	}
-	*/
 }
 
 debugmode()
