@@ -1,7 +1,7 @@
 # Fraga-Bo2
 
 ## Downloads
-- [Plutonium r2905](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV13/FragaV13.Plutonium.r2905.rar)
+- [Plutonium r2905+](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV13/FragaV13.Plutonium.r2905+.zip)
   - Round splits only work on the newest version on pluto
 - Redacted soon
 - Ancient soon
