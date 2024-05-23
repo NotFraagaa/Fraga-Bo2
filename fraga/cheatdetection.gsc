@@ -47,6 +47,7 @@ firstboxActivated()
     level.firstbox_active.horzalign = "user_center";
     level.firstbox_active.vertalign = "user_bottom";
     level.firstbox_active.aligny = "bottom";
+    level.firstbox_active.label = &"^2^FFirstbox active";
     level.firstbox_active.alpha = 0;
     if(getDvarInt("firstbox"))
     while(level.round_number < 2)
@@ -68,6 +69,7 @@ perkrng()
     level.perkrng_desabled.horzalign = "user_center";
     level.perkrng_desabled.vertalign = "user_bottom";
     level.perkrng_desabled.aligny = "bottom";
+    level.perkrng_desabled.label = &"^4^FPerk RNG manipulated";
     if(isburied() || isorigins() || isnuketown())
     {
         if(!getDvarInt("perkRNG"))
@@ -91,6 +93,7 @@ tempalars()
     level.templar_modiffied.horzalign = "user_center";
     level.templar_modiffied.vertalign = "user_bottom";
     level.templar_modiffied.aligny = "bottom";
+    level.templar_modiffied.label = &"^6^FTemplars manipulated";
     if(isburied() || isorigins() || isnuketown())
     {
         if(getDvarInt("templars"))
