@@ -5,6 +5,8 @@
 
 srswitch()
 {
+    if(level.plutoversion == 2905)
+        return;
     if(getDvarInt("SR") == 0)
         return;
     switch ( getdvarint( "SR" ) )
@@ -39,7 +41,6 @@ SplitTimer(split_list, y_offset)
     for ( i = 0; i < split_list.size; i++ )
     {
         split = split_list[i];
-        unhide( split );
         splitFinish( split, wait_first_split( split ));
     }
 }
@@ -234,14 +235,14 @@ wait_first_split( split )
     level.fraga_splits_time = time;
     return time;
 }
-
+/*
 unhide( split_name )
 {
     level.fraga_splits_splits[split_name].color = ( 1, 0.5, 1 );
     if(getDvarInt("splits") == 1)
     level.fraga_splits_splits[split_name].alpha = 0;
 }
-
+*/
 splitFinish( split_name, time )
 {
     if(isDefined(level.total_split_time))
