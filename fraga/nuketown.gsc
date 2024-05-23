@@ -9,6 +9,8 @@ checkpaplocation()
 	if(getDvarInt("perkrng") == 1)
 		return;
 	wait 1;
+	if(level.players.size > 1)
+	wait 4;
 	pap = getent( "specialty_weapupgrade", "script_noteworthy" );
 	jug = getent( "vending_jugg", "targetname" );
 	if(pap.origin[0] > -1700 || jug.origin[0] > -1700)
