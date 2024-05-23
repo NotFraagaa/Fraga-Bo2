@@ -106,7 +106,7 @@ TemplarTracker()
 	self.lastTemplarRound.vertalign = "user_top";
 	self.lastTemplarRound.aligny = "top";
 	self.lastTemplarRound.x = 7;
-	self.lastTemplarRound.y = 330;
+	self.lastTemplarRound.y = 329;
 	self.lastTemplarRound.fontscale = 1.1;
 	self.lastTemplarRound.sort = 1;
 	self.lastTemplarRound.color = (1, 1 ,1);
@@ -135,7 +135,7 @@ BrutusTracker()
 	self.lastBrutusRound.aligny = "top";
 	self.lastBrutusRound.x = 7;
 	self.lastBrutusRound.y = 365;
-	self.lastBrutusRound.fontscale = 1.4;
+	self.lastBrutusRound.fontscale = 1.1;
 	self.lastBrutusRound.sort = 1;
 	self.lastBrutusRound.color = (1, 1 ,1);
 	self.lastBrutusRound.hidewheninmenu = 1;
