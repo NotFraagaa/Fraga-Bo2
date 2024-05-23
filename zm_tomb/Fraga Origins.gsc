@@ -2,6 +2,7 @@
 #include maps\mp\zombies\_zm_utility;
 #include common_scripts\utility;
 #include maps\mp\_utility;
+#include maps\mp\zombies\_zm_perk_random;
 
 #include scripts\zm\fraga\character;
 #include scripts\zm\fraga\trackers;
@@ -20,8 +21,6 @@ init()
 	if(GetDvar("Templars" != 0))
 		replaceFunc(maps\mp\zm_tomb_capture_zones::get_recapture_zone, ::Templars);
 	
-
-	level thread firstbox();
 	level thread boxlocation();
 }
 
