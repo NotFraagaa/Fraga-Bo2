@@ -24,8 +24,6 @@ init()
 
 	if(istown())
 		level thread boxlocation();
-	
-	level thread firstbox();
 }
 
 connected()
