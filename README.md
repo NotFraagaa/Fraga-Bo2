@@ -2,10 +2,7 @@
 
 ## Downloads
 - [Plutonium r2905](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV13/FragaV13.Plutonium.r2905.rar)
-  - Round splits dont work
-  - Bus tracker doesnt work
-  - Firstbox doesnt work
-- [Plutonium r3755+](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV13/FragaV13.Plutonium.r3705+.rar)
+  - Round splits only work on the newest version on pluto
 - Redacted soon
 - Ancient soon
 
@@ -47,6 +44,13 @@ Town
     You can chose box location with /fisrtbox
     1 for doubletap
     2 for quick revive
+
+Nuketown
+
+    With /perkrng 0 you can automatically restart untill
+    PAP and jug are in the green house
+    and the perk order will be QR -> JUG -> PAP -> SPEED -> DT
+    on solo and JUG -> PAP -> SPEED -> DT -> QR on coop
     
 Die Rise
 
