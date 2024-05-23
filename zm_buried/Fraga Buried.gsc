@@ -19,8 +19,7 @@ init()
 	level thread perfectperks();
     level thread connected();
 	level thread buildable_controller();
-
-	level thread firstbox();
+	
     replacefunc(maps\mp\zombies\_zm_weapons::get_pack_a_punch_weapon_options, ::buried_pap_camo);
 }
 
