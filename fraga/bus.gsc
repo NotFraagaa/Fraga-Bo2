@@ -28,9 +28,9 @@ buslocation()
     while(1)
     {
 		self thread printbuslocation();
-		wait 5;
+		wait 0.5;
     }
-}
+}	//0x00584E3E
 watcher()
 {
 	while(1)
@@ -57,7 +57,7 @@ busMoving()
 	self.busmoving.vertalign = "user_top";
 	self.busmoving.aligny = "top";
 	self.busmoving.x = 2;
-	self.busmoving.y = 11;
+	self.busmoving.y = 13;
 	self.busmoving.fontscale = 1.3;
 	self.busmoving.sort = 1;
 	self.busmoving.hidewheninmenu = 1;
