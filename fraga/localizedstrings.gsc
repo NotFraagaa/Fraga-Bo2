@@ -10,26 +10,26 @@ setFragaLanguage()
     switch(getDvar("language"))
     {
         case "spanish":
+            if(!level.debug)
             self thread spanishWellcome();
-            if(isdefined(level.boxhits))
             level.boxhits.label = &"^3Tiradas de caja: ^4";
             level.cheats.label = &"^1^FCheats activados";
             level.firstbox_active.label = &"^2^FFirstbox activado";
-            if(isorigins() || isburied() || isnuketown())
-            level.perkrng_desabled.label = &"^4^FPerk RNG manipulada";
-            if(isorigins())
-            level.templar_modiffied.label = &"^6^FTemplarios manipulados";
+            if(isorigins() || isburied() || isnuketown() && !level.debug)
+                level.perkrng_desabled.label = &"^4^FPerk RNG manipulada";
+            if(isorigins() && !level.debug)
+                level.templar_modiffied.label = &"^6^FTemplarios manipulados";
             if(isdefined(self.lastBrutusRound))
-		    self.lastBrutusRound.label = &"^3URB: ^4";
+		        self.lastBrutusRound.label = &"^3Última ronda de brutus: ^4";
             if(isdefined(self.lastTemplarRound))
-		    self.lastTemplarRound.label = &"^3URT: ^4";
+		        self.lastTemplarRound.label = &"^3Última ronda de templarios: ^4";
             if(isdefined(self.lastPanzerRound))
-		    self.lastPanzerRound.label = &"^3URP: ^4";
+		        self.lastPanzerRound.label = &"^3Última ronda de panzer: ^4";
             if(isdefined(self.lastleaperround))
-            self.lastleaperround.label = &"^3URL: ^4";
+                self.lastleaperround.label = &"^3Última ronda de novas: ^4";
             flag_wait("initial_blackscreen_passed");
-            if(isdefined(self.springpad_hud))
-            self.springpad_hud.label = &"^3TRAMPOLINES: ^4";
+            if(isdefined(level.springpad_hud))
+                level.springpad_hud.label = &"^3TRAMPOLINES: ^4";
             if(isdefined(level.subwoofer_hud))
             {
                 level.springpad_hud.label = &"^3TRAMPOLINES: ^4";
@@ -37,30 +37,27 @@ setFragaLanguage()
                 level.turbine_hud.label = &"^3TURBINAS: ^4";
             }
             break;
-
-
-
         case "french":
+            if(!level.debug)
             self thread frenchWellcome();
-            if(isdefined(level.boxhits))
             level.boxhits.label = &"^3Box hits: ^4";
             level.cheats.label = &"^1^FCheats actif";
             level.firstbox_active.label = &"^2^FFirstbox actif";
             if(isorigins() || isburied() || isnuketown())
-            level.perkrng_desabled.label = &"^4^FLa RNG des atouts est manipulé";
+                level.perkrng_desabled.label = &"^4^FLa RNG des atouts est manipulé";
             if(isorigins())
-            level.templar_modiffied.label = &"^6^FTemplier est manipulé";
+                level.templar_modiffied.label = &"^6^FTemplier est manipulé";
             if(isdefined(self.lastBrutusRound))
-		    self.lastBrutusRound.label = &"^3DMR: ^4";
+		        self.lastBrutusRound.label = &"^3Dernière manche de brutus: ^4";
             if(isdefined(self.lastTemplarRound))
-		    self.lastTemplarRound.label = &"^3DMT: ^4";
+		        self.lastTemplarRound.label = &"^3Dernière manche des templiers: ^4";
             if(isdefined(self.lastPanzerRound))
-		    self.lastPanzerRound.label = &"^3DMP: ^4";
+		        self.lastPanzerRound.label = &"^3Dernière manche de panzer: ^4";
             if(isdefined(self.lastleaperround))
-            self.lastleaperround.label = &"^3DML: ^4";
+                self.lastleaperround.label = &"^3Dernière manche de leapers: ^4";
             flag_wait("initial_blackscreen_passed");
-            if(isdefined(self.springpad_hud))
-            self.springpad_hud.label = &"^3PROPULSEURS: ^4";
+            if(isdefined(level.springpad_hud))
+                level.springpad_hud.label = &"^3PROPULSEURS: ^4";
             if(isdefined(level.subwoofer_hud))
             {
                 level.springpad_hud.label = &"^3PROPULSEURS: ^4";
@@ -68,30 +65,54 @@ setFragaLanguage()
                 level.turbine_hud.label = &"^3TURBINES: ^4";
             }
             break;
-
-
-
+        case "japanese":
+            self thread japaneseWellcome();
+            level.boxhits.label = &"^3Box hits: ^4";
+            level.cheats.label = &"^1^FCheats アクティブ";
+            level.firstbox_active.label = &"^2^FFirstbox アクティブ";
+            if(isorigins() || isburied() || isnuketown() && !level.debug)
+                level.perkrng_desabled.label = &"^4^F特典 RNG 操作された";
+            if(isorigins() && !level.debug)
+                level.templar_modiffied.label = &"^6^Fテンプラー 操作された";
+            if(isdefined(self.lastBrutusRound))
+		        self.lastBrutusRound.label = &"^3ブルータス最後のラウンド: ^4";
+            if(isdefined(self.lastTemplarRound))
+		        self.lastTemplarRound.label = &"^3テンプル騎士団の最後のラウンド: ^4";
+            if(isdefined(self.lastPanzerRound))
+		        self.lastPanzerRound.label = &"^3最後の装甲ラウンド: ^4";
+            if(isdefined(self.lastleaperround))
+                self.lastleaperround.label = &"^3最後のリーパーラウンド: ^4";
+            flag_wait("initial_blackscreen_passed");
+            if(isdefined(level.springpad_hud))
+                level.springpad_hud.label = &"^3スプリングパッド: ^4";
+            if(isdefined(level.subwoofer_hud))
+            {
+                level.springpad_hud.label = &"^3スプリングパッド: ^4";
+                level.subwoofer_hud.label = &"^3レゾネーター: ^4";
+                level.turbine_hud.label = &"^3タービン: ^4";
+            }
+            break;
         default:
+            if(!level.debug)
             self thread englishWellcome();
-            if(isdefined(level.boxhits))
             level.boxhits.label = &"^3Box hits: ^4";
             level.cheats.label = &"^1^FCheats active";
             level.firstbox_active.label = &"^2^FFirstbox active";
-            if(isorigins() || isburied() || isnuketown())
-            level.perkrng_desabled.label = &"^4^FPerk RNG manipulated";
-            if(isorigins())
-            level.templar_modiffied.label = &"^6^FTemplars manipulated";
+            if(isorigins() || isburied() || isnuketown() && !level.debug)
+                level.perkrng_desabled.label = &"^4^FPerk RNG manipulated";
+            if(isorigins() && !level.debug)
+                level.templar_modiffied.label = &"^6^FTemplars manipulated";
             if(isdefined(self.lastBrutusRound))
-		    self.lastBrutusRound.label = &"^3LBR: ^4";
+		        self.lastBrutusRound.label = &"^3Last brutus round: ^4";
             if(isdefined(self.lastTemplarRound))
-		    self.lastTemplarRound.label = &"^3LTR: ^4";
+		        self.lastTemplarRound.label = &"^3Last templar round: ^4";
             if(isdefined(self.lastPanzerRound))
-		    self.lastPanzerRound.label = &"^3LPR: ^4";
+		        self.lastPanzerRound.label = &"^3Last panzer round: ^4";
             if(isdefined(self.lastleaperround))
-            self.lastleaperround.label = &"^3LLR: ^4";
+                self.lastleaperround.label = &"^3Last leaper round: ^4";
             flag_wait("initial_blackscreen_passed");
-            if(isdefined(self.springpad_hud))
-            self.springpad_hud.label = &"^3SPRINGPADS: ^4";
+            if(isdefined(level.springpad_hud))
+                level.springpad_hud.label = &"^3SPRINGPADS: ^4";
             if(isdefined(level.subwoofer_hud))
             {
                 level.springpad_hud.label = &"^3SPRINGPADS: ^4";
@@ -100,13 +121,20 @@ setFragaLanguage()
             }
             break;
     }
+    if(level.debug)
+    {
+        level.cheats.label = &"";
+        level.firstbox_active.label = &"";
+        level.perkrng_desabled.label = &"";
+        level.templar_modiffied.label = &"";
+    }
 }
 
 spanishWellcome()
 {
     
     flag_wait("initial_blackscreen_passed");
-                                                                            self iprintln("^6Fraga^5V13  ^3Acticado");
+                                                                            self iprintln("^6Fraga^5V13  ^3Activado ^4[r" + level.plutoversion + "]");
     if( isburied() || isdierise() || istranzit() ) {            wait 3;     self iprintln("Todas las perma perks otorgadas");}
     if( isburied() || isdierise() || istranzit() ) {            wait 0.5;   self iprintln("Banco lleno");}
     if(getDvar("scr_kill_infinite_loops") != "")
@@ -126,6 +154,33 @@ spanishWellcome()
     wait 5;                                                                 self iprintln("Usa ^6/nightmode 1^7 para cambiar al modo noche");
     wait 5;                                                                 self iprintln("Usa ^6/timer [0, 4]^7 para cambiar la posición del timer");
     wait 5;                                                                 self iprintln("^3¡Buena suerte!");
+}
+
+
+japaneseWellcome()
+{
+    
+    flag_wait("initial_blackscreen_passed");
+                                                                            self iprintln("^6Fraga^5V13  ^3の上 ^4[r" + level.plutoversion + "]");
+    if( isburied() || isdierise() || istranzit() ) {            wait 3;     self iprintln("すべての永続的特典が付与される");}
+    if( isburied() || isdierise() || istranzit() ) {            wait 0.5;   self iprintln("銀行が満杯");}
+    if(getDvar("scr_kill_infinite_loops") != "")
+    {
+                                                                wait 3;     self iprintln("コマンドを使用する ^6/sr^7 ラウンドスピードランを行ってラウンドを追加する場合");
+                                                                wait 1;     self iprintln("受け入れる 5, 30, 50, 70, 100, 150 y 200");
+    }
+                                                                wait 5;     self iprintln("使用 ^6/firstbox 1^7 箱から運を取り除く");
+    if(ismob() || isorigins() || isdierise() ) {                wait 5;     self iprintln("使用 ^6/tracker 0^7 特殊なラウンドトラッカーを取り外すには");}
+    if( ismob() || istown() || isnuketown() || isorigins() ) {  wait 5;     self iprintln("使用 ^6/box [1, 2]^7 ボックスのスポーンを選択するには");}
+    if( ismob() ) {                                             wait 5;     self iprintln("使用 ^6/traptimer 1^7 トラップタイマーを作動させるには");}
+    if( isburied()) {                                           wait 5;     self iprintln("使用 ^6/perkRNG 0^7 魔女に与えられる最後の利点をハゲワシにしたいなら");}
+    if( isorigins()) {                                          wait 5;     self iprintln("使用 ^6/perkRNG 0^7 wunderfizz から RNG を削除したい場合");}
+    if( isnuketown()) {                                         wait 5;     self iprintln("使用 ^6/perkRNG 0^7 PAPとジャグが温室に入るまで自動的に再起動します。");}
+    if( isorigins()) {                                          wait 1;     self iprintln("使用 ^6/templars 0^7 テンプル騎士団が常にジェネレーター 4 を攻撃するようにする");}
+
+    wait 5;                                                                 self iprintln("使用 ^6/nightmode 1^7 ナイトモードに切り替えるには");
+    wait 5;                                                                 self iprintln("使用 ^6/timer [0, 4]^7 タイマーの位置を変更するには");
+    wait 5;                                                                 self iprintln("^3幸運を!");
 }
 
 englishWellcome()
@@ -157,7 +212,7 @@ frenchWellcome()
 {
     // Credit to QeZiaa & Astrox
     flag_wait("initial_blackscreen_passed");
-                                                                            self iprintln("^6Fraga^5V12  ^3Active");
+                                                                            self iprintln("^6Fraga^5V13  ^3Actif");
     if( isburied() || isdierise() || istranzit() ) {            wait 3;     self iprintln("Tous les atouts permanents sont attribués");}
     if( isburied() || isdierise() || istranzit() ) {            wait 0.5;   self iprintln("La banque est remplie");}
     if(getDvar("scr_kill_infinite_loops") != "")
@@ -188,7 +243,7 @@ printTankLine(tank_moves)
                 self iprintln("El tanque se ha movido " + tank_moves + " vez.");
                 break;
             case "french":
-                self iprintln("Le tank a été deplacé" + tank_moves + " fois.");
+                self iprintln("Le tank a été deplacé " + tank_moves + " fois.");
                 break;
             default:
                 self iprintln("The tank has been moved " + tank_moves + " time.");
