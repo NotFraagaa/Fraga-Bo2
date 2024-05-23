@@ -32,9 +32,8 @@ displayBoxHits()
         level.boxhits.alignx = "left";
         level.boxhits.horzalign = "user_left";
         level.boxhits.x = 2;
-    }
-    if(issurvivalmap())
         level.boxhits.alpha = 1;
+    }
     while(!isDefined(level.total_chest_accessed))
         wait 0.1;
     lol = 0;
@@ -151,7 +150,7 @@ display()
 	level.displayraygunmk2avg.hidewheninmenu = 1;
     level.displayraygunmk2avg = createserverfontstring( "objective", 1.3 );
     level.displayraygunmk2avg.y = 14;
-    level.displayraygunmk2avg.x = 80;
+    level.displayraygunmk2avg.x = 143;
     level.displayraygunmk2avg.fontscale = 1.3;
     level.displayraygunmk2avg.alignx = "left";
     level.displayraygunmk2avg.horzalign = "user_left";
@@ -165,6 +164,8 @@ display()
     level.displayraygunavg = createserverfontstring( "objective", 1.3 );
     level.displayraygunavg.y = 26;
     level.displayraygunavg.x = 60;
+    if(getDvar("language") == "japanese")
+        level.displayraygunavg.x = 103;
     level.displayraygunavg.fontscale = 1.3;
     level.displayraygunavg.alignx = "left";
     level.displayraygunavg.horzalign = "user_left";
