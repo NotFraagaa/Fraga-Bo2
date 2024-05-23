@@ -37,13 +37,13 @@ timer_fraga()
 {
 	self endon("disconnect");
 
+	self thread roundtimer_fraga();
 	self.timer_fraga = newclienthudelem(self);
 	self.timer_fraga.alpha = 0;
 	self.timer_fraga.color = (0.505, 0.478, 0.721);
 	self.timer_fraga.hidewheninmenu = 1;
 	self.timer_fraga.fontscale = 1.7;
 	self thread timer_fraga_watcher();
-	self thread roundtimer_fraga();
 	flag_wait("initial_blackscreen_passed");
 	self.timer_fraga settimerup(0);
 	level waittill("end_game");
@@ -85,6 +85,8 @@ roundtimer_fraga()
 	self.roundtimer_fraga.fontscale = 1.7;
 	self.roundtimer_fraga.color = (0.505, 0.478, 0.721);
 	self.roundtimer_fraga.hidewheninmenu = 1;
+	self.roundtimer_fraga.x = self.timer_fraga.x;
+	self.roundtimer_fraga.y = self.timer_fraga.y + 15;
 	flag_wait("initial_blackscreen_passed");
 	self thread roundtimer_fraga_watcher();
 	level.fade_time = 0.2;
@@ -278,6 +280,8 @@ timerlocation()
 					self.timer_fraga.y = 35;
 				if(istranzit() && getDvarInt("bus"))
 					self.timer_fraga.y = 21;
+				if(istranzit() && getDvarInt("bus") && GetDvar("language") == "japanese")
+					self.timer_fraga.y = 25;
 				break;
 			case 3:
 				self.roundtimer_fraga.alignx = "right";
@@ -294,8 +298,8 @@ timerlocation()
 				self.roundtimer_fraga.alpha = 1;
 				if(getDvar("cg_drawFPS") != "Off")
 					self.timer_fraga.y += 4;
-				if(isorigins())
-					self.timer_fraga.y = 40;
+				if(getDvar("cg_drawFPS") != "Off" && GetDvar("language") == "japanese")
+					self.timer_fraga.y += 10;
 				if(ismob())
 				{
 					self.timer_fraga.y = 40;
@@ -325,5 +329,10 @@ timerlocation()
 		self.roundtimer_fraga.y = self.timer_fraga.y + 15;
 		
 		wait 0.1;
+		if(GetDvar("language") == "japanese")
+		{
+			self.timer_fraga.fontscale = 1.5;
+			self.roundtimer_fraga.fontscale = self.timer_fraga.fontscale;
+		}
 	}
 }
