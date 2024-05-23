@@ -26,21 +26,27 @@ init()
         level.total_chest_accessed = 0;
 
 	if(getDvar("scr_kill_infinite_loops") != "")
-		thread SRswitch();
+        level.plutoVersion = 3755;
+    else
+        level.plutoVersion = 2905;
 
-	level waittill("connecting", player);
+    thread SRswitch();
+    level thread firstbox();
 	level thread boxhits();
-	player thread connected();
 	level thread frkills();
-	if(!level.debug)
-		level thread detect_cheats();
+    if(!level.debug)
+        level thread detect_cheats();
+    while(true)
+    {
+        level waittill("connecting", player);
+        player thread connected();
+    }
 }
 
 connected()
 {
 	self endon("disconnect");
 	self waittill("spawned_player");
-	self thread setFragaLanguage();
 
 	self thread timer_fraga();
 	self thread color_hud_watcher();
@@ -51,6 +57,7 @@ connected()
 	self thread graphic_tweaks();
 	self thread nightmode();
 	self thread velocity_meter();
+    self thread setFragaLanguage();
 }
 
 setDvars()
