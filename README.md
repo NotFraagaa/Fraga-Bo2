@@ -3,8 +3,17 @@
 ## Downloads
 - [Plutonium r2905+](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV13/FragaV13.Plutonium.r2905+.zip)
   - Round splits only work on the newest version on pluto
+- [Ancient (Without special round trackers)](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV13/FragaV13.Ancient.rar)
+  - Doesnt have graphic changes nor night mode
+  - Wunderfizz is not fixed to gen 4
+  - Perk rng can not be manipulated
+  - Templars can not be manipulated
+- [Ancient (With special round trackers)](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV13/FragaV13.Ancient.+.trackers.rar)
+  - Doesnt have graphic changes nor night mode
+  - Wunderfizz is not fixed to gen 4
+  - Perk rng can not be manipulated
+  - Templars can not be manipulated
 - Redacted soon
-- Ancient soon
 
 ## Game Changes
 
