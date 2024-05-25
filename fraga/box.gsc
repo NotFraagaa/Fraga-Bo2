@@ -150,6 +150,8 @@ display()
 	level.displayraygunmk2avg.hidewheninmenu = 1;
     level.displayraygunmk2avg = createserverfontstring( "objective", 1.3 );
     level.displayraygunmk2avg.y = 14;
+    level.displayraygunavg.x = 82;
+    if(getDvar("language") == "japanese")
     level.displayraygunmk2avg.x = 143;
     level.displayraygunmk2avg.fontscale = 1.3;
     level.displayraygunmk2avg.alignx = "left";
@@ -265,7 +267,6 @@ firstbox3755()
         {
             if(weapon.is_in_box)
             {
-                if(level.debug)
                 println("Removing " + weapon.weapon_name + " from the box");
                 weapon.is_in_box = 0;
             }
@@ -273,7 +274,6 @@ firstbox3755()
         
         foreach(weapon in level.forced_box_guns)
         {
-            if(level.debug)
             println("Adding " + level.zombie_weapons[weapon].weapon_name + " to the box");
             level.zombie_weapons[weapon].is_in_box = 1;
         }
