@@ -7,14 +7,12 @@
 ### Alternative versions
 - [Ancient (Without special round trackers)](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV13/FragaV13.Ancient.rar)
 - [Ancient (With special round trackers)](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV13/FragaV13.Ancient.+.trackers.rar)
-- [Redacted (Without special round trackers)](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV13/FragaV13.Redacted.rar)
-- [Redacted (With special round trackers)](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV13/FragaV13.Redacted.+.trackers.rar)
 - These versions have some limitations such as 
   - Doesnt have graphic changes nor night mode
   - Wunderfizz is not fixed to gen 4
   - Perk rng can not be manipulated (except pap and jug location on nuketown)
   - Templars can not be manipulated
-
+- Redacted comming soon, im having issues with the compiler
 ## Game Changes
 
 - Backspeed fixed
