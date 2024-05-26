@@ -50,7 +50,7 @@ Survival Maps
 
 Town
 
-    You can chose box location with /fisrtbox
+    You can chose box location with /box
     1 for doubletap
     2 for quick revive
 
@@ -72,7 +72,7 @@ Die Rise
 Mob of the Dead
 
     Trap timer
-    Box can be set with /firstbox (1 for cafeteria / 2 for office)
+    Box can be set with /box (1 for cafeteria / 2 for office)
     Key always spawns with the box
     Last Brutus Round counter
     
@@ -86,7 +86,7 @@ Buried
 
 Origins
 
-    Box can be set with /firstbox (1 for gen2 / 2 for gen3)
+    Box can be set with /box (1 for gen2 / 2 for gen3)
     Wunderfizz set to gen 4
     Animated pap camo
     Panzer tracker
