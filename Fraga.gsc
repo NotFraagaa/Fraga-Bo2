@@ -20,6 +20,8 @@
 init()
 {
     self endon( "disconnect" );
+	replaceFunc(maps\mp\animscripts\zm_utility::wait_network_frame, ::base_game_network_frame);
+	replaceFunc(maps\mp\zombies\_zm_utility::wait_network_frame, ::base_game_network_frame);
 	thread setdvars();
 	thread fix_highround();
     if(!isDefined(level.total_chest_accessed))
@@ -49,7 +51,6 @@ connected()
 	self waittill("spawned_player");
 
 	self thread timer_fraga();
-	self thread color_hud_watcher();
 	self thread timerlocation();
 	self useservervisionset(1);
 	self setvisionsetforplayer(GetDvar( "mapname" ), 1.0 );
@@ -62,6 +63,7 @@ connected()
 
 setDvars()
 {
+    setdvar("sv_cheats", 0 );
     setdvar("player_strafeSpeedScale", 1 );
     setdvar("player_backSpeedScale", 1 );
     setdvar("r_dof_enable", 0 );
@@ -77,8 +79,6 @@ setDvars()
         setdvar("bus", 0 );
     if(getdvar("graphictweaks") == "")
         setdvar("graphictweaks", 0 );
-    if(getdvar("color") == "")
-        setdvar("color", "0.505 0.478 0.721");
     if(getdvar("sph") == "")
         setdvar("sph", 50 );
     if(getdvar("timer") == "")
@@ -134,4 +134,19 @@ setDvars()
         if(getDvar("perkRNG") == "")
             setDvar("perkRNG", 1);
     }
+}
+
+base_game_network_frame()
+{
+    if (level.players.size == 1)
+        wait 0.1;
+    else if (numremoteclients())
+    {
+        snapshot_ids = getsnapshotindexarray();
+
+        for (acked = undefined; !isdefined(acked); acked = snapshotacknowledged(snapshot_ids))
+            level waittill("snapacknowledged");
+    }
+    else
+        wait 0.1;
 }
