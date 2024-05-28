@@ -30,7 +30,6 @@ connected()
 	while(1)
 	{
 		level waittill("connecting", player);
-		player thread tankTracker();
 		player thread PanzerTracker();
 		player thread TemplarTracker();
 		if(getDvarInt("character") != 0)
