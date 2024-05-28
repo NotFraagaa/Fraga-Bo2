@@ -6,33 +6,6 @@
 #include scripts\zm\fraga\ismap;
 #include scripts\zm\fraga\localizedstrings;
 
-
-color_hud_watcher()
-{
-	self endon("disconnect");
-
-	color = GetDvar("color");
-	prev_color = "0.505 0.478 0.721";
-	while(1)
-	{
-		while(color == prev_color)
-		{
-			color = GetDvar("color");
-			wait(0.1);
-		}
-
-		colors = strtok(color, " ");
-		if(colors.size != 3)
-		{
-			continue;
-		}
-		prev_color = color;
-		self.timer_fraga.color = (string_to_float(colors[0]), string_to_float(colors[1]), string_to_float(colors[2]));
-		self.roundtimer_fraga.color = (string_to_float(colors[0]), string_to_float(colors[1]), string_to_float(colors[2]));
-		wait 0.1;
-	}
-}
-
 timer_fraga()
 {
 	self endon("disconnect");
@@ -40,7 +13,7 @@ timer_fraga()
 	self thread roundtimer_fraga();
 	self.timer_fraga = newclienthudelem(self);
 	self.timer_fraga.alpha = 0;
-	self.timer_fraga.color = (0.505, 0.478, 0.721);
+	self.timer_fraga.color = (1, 1, 1);
 	self.timer_fraga.hidewheninmenu = 1;
 	self.timer_fraga.fontscale = 1.7;
 	self thread timer_fraga_watcher();
@@ -83,7 +56,7 @@ roundtimer_fraga()
 	self.roundtimer_fraga = newclienthudelem(self);
 	self.roundtimer_fraga.alpha = 0;
 	self.roundtimer_fraga.fontscale = 1.7;
-	self.roundtimer_fraga.color = (0.505, 0.478, 0.721);
+	self.roundtimer_fraga.color = (0.8, 0.8, 0.8);
 	self.roundtimer_fraga.hidewheninmenu = 1;
 	self.roundtimer_fraga.x = self.timer_fraga.x;
 	self.roundtimer_fraga.y = self.timer_fraga.y + 15;
@@ -120,16 +93,10 @@ display_round_time(time, hordes, dog_round, leaper_round)
 
 	if(level.round_number > GetDvarInt("sph") && !dog_round && !leaper_round)
 		sph_off = 0;
-
-	self.roundtimer_fraga fadeovertime(level.fade_time);
-	self.roundtimer_fraga.alpha = 0;
-	wait(level.fade_time * 2);
-	self thread printRoundTime();
-	self.roundtimer_fraga fadeovertime(level.fade_time);
 	self.roundtimer_fraga.alpha = 1;
 	if(sph_off)
 	{
-		for(i = 0; i < 225; i++)
+		for(i = 0; i < 228; i++)
 		{
 			self.roundtimer_fraga settimer(timer_for_hud);
 			wait(0.05);
@@ -244,18 +211,29 @@ timerlocation()
 				self.roundtimer_fraga.alpha = 0;
 				break;
 			case 1:
-				self.timer_fraga.alignx = "left";
-				self.timer_fraga.aligny = "top";
-				self.timer_fraga.horzalign = "user_left";
-				self.timer_fraga.vertalign = "user_top";
-				self.roundtimer_fraga.alignx = "left";
+				self.roundtimer_fraga.alignx = "right";
 				self.roundtimer_fraga.aligny = "top";
-				self.roundtimer_fraga.horzalign = "user_left";
+				self.roundtimer_fraga.horzalign = "user_right";
 				self.roundtimer_fraga.vertalign = "user_top";
-				self.timer_fraga.x = 1;
-				self.timer_fraga.y = 250;
+				self.timer_fraga.alignx = "right";
+				self.timer_fraga.aligny = "top";
+				self.timer_fraga.horzalign = "user_right";
+				self.timer_fraga.vertalign = "user_top";
+				self.timer_fraga.x = -1;
+				self.timer_fraga.y = 13;
 				self.timer_fraga.alpha = 1;
 				self.roundtimer_fraga.alpha = 1;
+				if(getDvar("cg_drawFPS") != "Off")
+					self.timer_fraga.y += 4;
+				if(getDvar("cg_drawFPS") != "Off" && GetDvar("language") == "japanese")
+					self.timer_fraga.y += 10;
+				if(ismob())
+				{
+					self.timer_fraga.y = 40;
+					self.trap_timer_fraga.y = 19;
+				}
+				if(isdierise())
+					self.timer_fraga.y = 30;
 				break;
 			case 2:
 				self.roundtimer_fraga.alignx = "left";
@@ -284,29 +262,18 @@ timerlocation()
 					self.timer_fraga.y = 25;
 				break;
 			case 3:
-				self.roundtimer_fraga.alignx = "right";
-				self.roundtimer_fraga.aligny = "top";
-				self.roundtimer_fraga.horzalign = "user_right";
-				self.roundtimer_fraga.vertalign = "user_top";
-				self.timer_fraga.alignx = "right";
+				self.timer_fraga.alignx = "left";
 				self.timer_fraga.aligny = "top";
-				self.timer_fraga.horzalign = "user_right";
+				self.timer_fraga.horzalign = "user_left";
 				self.timer_fraga.vertalign = "user_top";
-				self.timer_fraga.x = -1;
-				self.timer_fraga.y = 13;
+				self.roundtimer_fraga.alignx = "left";
+				self.roundtimer_fraga.aligny = "top";
+				self.roundtimer_fraga.horzalign = "user_left";
+				self.roundtimer_fraga.vertalign = "user_top";
+				self.timer_fraga.x = 1;
+				self.timer_fraga.y = 250;
 				self.timer_fraga.alpha = 1;
 				self.roundtimer_fraga.alpha = 1;
-				if(getDvar("cg_drawFPS") != "Off")
-					self.timer_fraga.y += 4;
-				if(getDvar("cg_drawFPS") != "Off" && GetDvar("language") == "japanese")
-					self.timer_fraga.y += 10;
-				if(ismob())
-				{
-					self.timer_fraga.y = 40;
-					self.trap_timer_fraga.y = 19;
-				}
-				if(isdierise())
-					self.timer_fraga.y = 30;
 				break;
 			case 4:
 				self.roundtimer_fraga.alignx = "right";

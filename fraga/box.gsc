@@ -150,9 +150,9 @@ display()
 	level.displayraygunmk2avg.hidewheninmenu = 1;
     level.displayraygunmk2avg = createserverfontstring( "objective", 1.3 );
     level.displayraygunmk2avg.y = 14;
-    level.displayraygunavg.x = 82;
+    level.displayraygunmk2avg.x = 82;
     if(getDvar("language") == "japanese")
-    level.displayraygunmk2avg.x = 143;
+        level.displayraygunmk2avg.x = 143;
     level.displayraygunmk2avg.fontscale = 1.3;
     level.displayraygunmk2avg.alignx = "left";
     level.displayraygunmk2avg.horzalign = "user_left";
@@ -262,7 +262,7 @@ firstbox3755()
         level thread setUpWeapons();
 
         special_weapon_magicbox_check = level.special_weapon_magicbox_check;
-        level.special_weapon_magicbox_check = undefined;
+        //level.special_weapon_magicbox_check = undefined;
         foreach(weapon in level.zombie_weapons)
         {
             if(weapon.is_in_box)
@@ -417,6 +417,7 @@ setUpWeapons()
             break;
         case "zm_tomb":
             if(getDvar("SR") == 30)
+            {
                 switch(level.players.size)
                 {
                     case 1: 
@@ -432,6 +433,7 @@ setUpWeapons()
                     level.forced_box_guns = array("scar_zm", "scar_zm", "scar_zm", "scar_zm", "raygun_mark2_zm", "ray_gun_zm", "ray_gun_zm", "ray_gun_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm");
                     break;
                 }
+            }
             else
                 switch(level.players.size)
                 {

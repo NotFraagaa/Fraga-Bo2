@@ -148,32 +148,3 @@ BrutusTracker()
 		self.lastBrutusRound setvalue(level.round_number);
 	}
 }
-
-tankTracker()
-{
-	tank_moves = -1;
-	while(1)
-	{
-		if(level.vh_tank.origin[0] < -320 && level.vh_tank.origin[0] > -340)
-		{
-			if(tank_last_check_church)
-			{
-				tank_moves += 1;
-				self thread printTankLine(tank_moves);
-			}
-			tank_last_check_gen2 = 1;
-			tank_last_check_church = 0;
-		}
-		if(level.vh_tank.origin[0] > 430 &&  level.vh_tank.origin[0] < 450)
-		{
-			if(tank_last_check_gen2)
-			{
-				tank_moves += 1;
-				self thread printTankLine(tank_moves);
-			}
-			tank_last_check_church = 1;
-			tank_last_check_gen2 = 0;
-		}
-		wait 1;
-	}
-}

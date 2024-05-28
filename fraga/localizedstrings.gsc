@@ -234,52 +234,6 @@ frenchWellcome()
     wait 5;                                                                 self iprintln("^3Bonne chance!");
 }
 
-printTankLine(tank_moves)
-{
-    if(tank_moves == 1)
-        switch(getDvar("language"))
-        {
-            case "spanish":
-                self iprintln("El tanque se ha movido " + tank_moves + " vez.");
-                break;
-            case "french":
-                self iprintln("Le tank a été deplacé " + tank_moves + " fois.");
-                break;
-            default:
-                self iprintln("The tank has been moved " + tank_moves + " time.");
-                break;
-        }
-    else
-        switch(getDvar("language"))
-        {
-            case "spanish":
-                self iprintln("El tanque se ha movido " + tank_moves + " veces.");
-                break;
-            case "french":
-                self iprintln("Le tank a été deplacé" + tank_moves + " fois.");
-                break;
-            default:
-                self iprintln("The tank has been moved " + tank_moves + " times.");
-                break;
-        }
-}
-
-printRoundTime()
-{
-    switch(getDvar("language"))
-    {
-        case "spanish":
-	        self.roundtimer_fraga.label = &"Tiempo de la ronda: ";
-            break;
-        case "french":
-	        self.roundtimer_fraga.label = &"Round time: ";
-            break;
-        default:
-	        self.roundtimer_fraga.label = &"Round time: ";
-            break;
-    }
-}
-
 printplayerkills()
 {
     
