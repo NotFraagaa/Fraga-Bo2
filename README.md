@@ -345,3 +345,9 @@ Templars [0, 1]
     Los templarios solo atacan el generador 4
     Puede causar errores si el generador 4 no está activado
 </details>
+
+### Recent changes
+ - **Added animated timer with /rainbow 1**
+ - **Moved tomahawk trigger to the oposite corner**
+ - **Fixed game not recognising player outside of mob's firstroom**
+ - **Reverted network frame function to the original one**
