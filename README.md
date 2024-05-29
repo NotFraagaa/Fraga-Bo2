@@ -4,11 +4,11 @@
 
 ## Downloads
 ### New pluto (Recomended version)
-- [Plutonium r2905+](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV13/FragaV13.Plutonium.r2905+.zip)
+- [Plutonium r2905+](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV13/FragaV13.Plutoniumr2905.rar)
   - Round splits only work on the newest version on pluto
 ### Alternative versions
-- [Ancient (Without special round trackers)](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV13/FragaV13.Ancient.rar)
-- [Ancient (With special round trackers)](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV13/FragaV13.Ancient.+.trackers.rar)
+- [Ancient (Without special round trackers)](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV13/FragaV13.Ancient.no.trakcers.rar)
+- [Ancient (With special round trackers)](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV13/FragaV13.Ancient.rar)
 - These versions have some limitations such as 
   - Doesnt have graphic changes nor night mode
   - Wunderfizz is not fixed to gen 4
@@ -178,11 +178,11 @@ Templars [0, 1]
 
 ## Descargas
 ### New pluto (Versión recomendada)
-- [Plutonium r2905+](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV13/FragaV13.Plutonium.r2905+.zip)
+- [Plutonium r2905+](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV13/FragaV13.Plutoniumr2905.rar)
   - Los timer de ronda solo funcionan en new pluto.
 ### Versiones alternativas
 - [Ancient (Con tracker de rondas escpeciales)](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV13/FragaV13.Ancient.rar)
-- [Ancient (Sin trackers)](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV13/FragaV13.Ancient.+.trackers.rar)
+- [Ancient (Sin trackers)](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV13/FragaV13.Ancient.no.trakcers.rar)
 - Estas versiones tienen limitaciones como: 
   - No tiene graficos mejorados ni modo noche
   - El wunderfizz no está fijo en el generador 4
