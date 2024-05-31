@@ -79,7 +79,7 @@ PanzerTracker()
 	self.lastPanzerRound.vertalign = "user_top";
 	self.lastPanzerRound.aligny = "top";
 	self.lastPanzerRound.x = 7;
-	self.lastPanzerRound.y = 340;
+	self.lastPanzerRound.y = 100;
 	self.lastPanzerRound.fontscale = 1.1;
 	self.lastPanzerRound.sort = 1;
 	self.lastPanzerRound.color = (1, 1 ,1);
@@ -106,7 +106,7 @@ TemplarTracker()
 	self.lastTemplarRound.vertalign = "user_top";
 	self.lastTemplarRound.aligny = "top";
 	self.lastTemplarRound.x = 7;
-	self.lastTemplarRound.y = 329;
+	self.lastTemplarRound.y = 100;
 	self.lastTemplarRound.fontscale = 1.1;
 	self.lastTemplarRound.sort = 1;
 	self.lastTemplarRound.color = (1, 1 ,1);

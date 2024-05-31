@@ -134,18 +134,14 @@ sph [0, 255]
 timer [0, 4]
 
     0 = Off
-    1 = Left side of the screen
+    1 = Top right of the screen
     2 = Top left of the screen
-    3 = Top right of the screen
+    3 = Left side of the screen
     4 = Next to ammo counter
 
 traptimer [0, 1]
 
     Enables trap timer, default is disabled
-    
-color ("x x x")
-
-    Changes timer color (RGB format)
 
 SR
 
@@ -308,18 +304,14 @@ sph [0, 255]
 timer [0, 4]
 
     0 = Off
-    1 = En el medio a la izquierda
+    1 = Arriba a la derecha
     2 = Arriba a la izquierda
-    3 = Arriba a la derecha
+    3 = En el medio a la izquierda
     4 = Al lado del contador de munición
 
 traptimer [0, 1]
 
     Activa el timer de trampa, por defecto está desactivado
-    
-color ("x x x")
-
-    Cambia el color del timer (Solo en plutonium nuevo)
 
 SR
 
