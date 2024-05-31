@@ -181,7 +181,7 @@ Templars [0, 1]
 ### Versiones alternativas
 - [Ancient (Sin trackers)](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV13/FragaV13.Ancient.rar)
 - [Redacted (Sin trackers)](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV13/FragaV13.Redacted.rar)
-- [Ancient (Con tracker de rondas escpeciales)](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV13/FragaV13.Ancient.+.Trackers.rar)
+- [Ancient (Con tracker)](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV13/FragaV13.Ancient.+.Trackers.rar)
 - [Redacted (Con trackers)](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV13/FragaV13.Redacted.+.Trackers.rar)
 - Estas versiones tienen limitaciones como: 
   - No tiene graficos mejorados ni modo noche
