@@ -16,7 +16,6 @@
   - Wunderfizz is not fixed to gen 4
   - Perk rng can not be manipulated (except pap and jug location on nuketown)
   - Templars can not be manipulated
-- Redacted comming soon, im having issues with the compiler
 ## Game Changes
 
 - Backspeed fixed
@@ -188,7 +187,6 @@ Templars [0, 1]
   - El wunderfizz no está fijo en el generador 4
   - No se puede manipular el rng de las ventajas (menos el pap y jug en nuketown)
   - Los templarios no se pueden manipular
-- Redacted pronto, tengo problemas con el compilador
 ## Cambios del juego
 
 - Velocidad arreglada
@@ -245,7 +243,7 @@ Die Rise
     
 Mob of the Dead
 
-    Tiemr de trampa
+    Timer de trampa
     Puedes elegir la posición de la caja /box (1 para cafeteria / 2 para la oficina)
     La llave siempre spawnea donde la caja
     Tracker de brutus
