@@ -7,13 +7,16 @@
 - [Plutonium r2905+](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/FragaV14.Plutonium.rar)
   - Round splits only work on the newest version on pluto
 ### Alternative versions
-- [Ancient (Without special round trackers)](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/FragaV14.Ancient.rar)
-
-- [Redacted (Without special round trackers)](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/FragaV14.Redacted.rar)
 
 - [Ancient (With special round trackers)](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/FragaV14.Ancient.+.Trackers.rar)
+  - To play on local you must inject them first try
+
+- [Ancient (Without special round trackers)](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/FragaV14.Ancient.rar)
+  - To play on local you must inject them first try
 
 - [Redacted (With special round trackers)](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/FragaV14.Redacted.+.Trackers.rar)
+
+- [Redacted (Without special round trackers)](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/FragaV14.Redacted.rar)
 
 - These versions have some limitations such as 
   - Doesnt have graphic changes nor night mode
@@ -182,11 +185,14 @@ Templars [0, 1]
 - [Plutonium r2905+](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/FragaV14.Plutonium.rar)
   - Los timer de ronda solo funcionan en new pluto.
 ### Versiones alternativas
-- [Ancient (Sin trackers)](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/FragaV14.Ancient.rar)
-
-- [Redacted (Sin trackers)](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/FragaV14.Redacted.rar)
 
 - [Ancient (Con tracker)](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/FragaV14.Ancient.+.Trackers.rar)
+  - Para jugar en local lo tienes que inyectar a la primera
+
+- [Ancient (Sin trackers)](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/FragaV14.Ancient.rar)
+  - Para jugar en local lo tienes que inyectar a la primera
+
+- [Redacted (Sin trackers)](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/FragaV14.Redacted.rar)
 
 - [Redacted (Con trackers)](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/FragaV14.Redacted.+.Trackers.rar)
 - Estas versiones tienen limitaciones como: 
