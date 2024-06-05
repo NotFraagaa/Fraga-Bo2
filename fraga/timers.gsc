@@ -303,3 +303,100 @@ timerlocation()
 		}
 	}
 }
+
+
+rainbow()
+{
+	if(getDvar("Rainbow") == "")
+		setDvar("Rainbow", 0);
+	if(GetDvar("Rainbow"))
+	{
+		thread random();
+		while(true)
+		{
+			switch(getDvarInt("Rainbow"))
+			{
+				case 1:
+					for(i = 0.7; i > 0.3; i -=0.02)
+					{
+						self.timer_fraga.color = (1, i , 1 - i);
+						self.roundtimer_fraga.color = self.timer_fraga.color;
+						wait 0.1;
+					}
+					for(i = 0.3; i < 0.7; i +=0.02)
+					{
+						self.timer_fraga.color = (1, i ,1 - i);
+						self.roundtimer_fraga.color = self.timer_fraga.color;
+						wait 0.1;
+					}
+					break;
+				case 2:
+					for(i = 0.7; i > 0.3; i -=0.02)
+					{
+						self.timer_fraga.color = (1 - i, i , 1);
+						self.roundtimer_fraga.color = self.timer_fraga.color;
+						wait 0.1;
+					}
+					for(i = 0.3; i < 0.7; i +=0.02)
+					{
+						self.timer_fraga.color = (1 - i, i ,1);
+						self.roundtimer_fraga.color = self.timer_fraga.color;
+						wait 0.1;
+					}
+					break;
+				case 3:
+					for(i = 0.7; i > 0.3; i -=0.02)
+					{
+						self.timer_fraga.color = (1 - i, 1 , i);
+						self.roundtimer_fraga.color = self.timer_fraga.color;
+						wait 0.1;
+					}
+					for(i = 0.3; i < 0.7; i +=0.02)
+					{
+						self.timer_fraga.color = (1 - i, 1 ,i);
+						self.roundtimer_fraga.color = self.timer_fraga.color;
+						wait 0.1;
+					}
+					break;
+				case 4:
+					for(i = 0.7; i > 0.3; i -=0.02)
+					{
+						self.timer_fraga.color = (i, 1 ,1 - i);
+						self.roundtimer_fraga.color = self.timer_fraga.color;
+						wait 0.1;
+					}
+					for(i = 0.3; i < 0.7; i +=0.02)
+					{
+						self.timer_fraga.color = (i, 1 ,1 - i);
+						self.roundtimer_fraga.color = self.timer_fraga.color;
+						wait 0.1;
+					}
+					break;
+				case 5:
+					for(i = 0.7; i > 0.3; i -=0.02)
+					{
+						self.timer_fraga.color = (1, 1 - i, 1);
+						self.roundtimer_fraga.color = self.timer_fraga.color;
+						wait 0.1;
+					}
+					for(i = 0.3; i < 0.7; i +=0.02)
+					{
+						self.timer_fraga.color = (1, 1 - i, 1);
+						self.roundtimer_fraga.color = self.timer_fraga.color;
+						wait 0.1;
+					}
+					break;
+				default: break;
+			}
+			wait 0.1;
+		}
+	}
+}
+random()
+{
+	while(true)
+	{
+		level waittill("start_of_round");
+		setDvar("Rainbow", randomintrange(1, 5));
+	}
+}

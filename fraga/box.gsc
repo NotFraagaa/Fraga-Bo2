@@ -286,7 +286,10 @@ firstbox3755()
         foreach(weapon in getarraykeys(level.zombie_include_weapons))
         {
             if(level.zombie_include_weapons[weapon] == 1)
+            {
+                println("Adding " + level.zombie_weapons[weapon].weapon_name + " to the box");
                 level.zombie_weapons[weapon].is_in_box = 1;
+            }
         }
 	}
 }

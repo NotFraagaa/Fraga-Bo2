@@ -59,6 +59,7 @@ connected()
 	self thread nightmode();
 	self thread velocity_meter();
     self thread setFragaLanguage();
+    self thread rainbow();
 }
 
 setDvars()

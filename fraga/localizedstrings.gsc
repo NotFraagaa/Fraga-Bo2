@@ -10,8 +10,8 @@ setFragaLanguage()
     switch(getDvar("language"))
     {
         case "spanish":
-            if(!level.debug)
-            self thread spanishWellcome();
+            //if(!level.debug)
+            //self thread spanishWellcome();
             level.boxhits.label = &"^3Tiradas de caja: ^4";
             level.cheats.label = &"^1^FCheats activados";
             level.firstbox_active.label = &"^2^FFirstbox activado";
@@ -134,7 +134,7 @@ spanishWellcome()
 {
     
     flag_wait("initial_blackscreen_passed");
-                                                                            self iprintln("^6Fraga^5V13  ^3Activado ^4[r" + level.plutoversion + "]");
+                                                                            self iprintln("^6Fraga^5V14  ^3Activado ^4[r" + level.plutoversion + "]");
     if( isburied() || isdierise() || istranzit() ) {            wait 3;     self iprintln("Todas las perma perks otorgadas");}
     if( isburied() || isdierise() || istranzit() ) {            wait 0.5;   self iprintln("Banco lleno");}
     if(getDvar("scr_kill_infinite_loops") != "")
@@ -161,7 +161,7 @@ japaneseWellcome()
 {
     
     flag_wait("initial_blackscreen_passed");
-                                                                            self iprintln("^6Fraga^5V13  ^3の上 ^4[r" + level.plutoversion + "]");
+                                                                            self iprintln("^6Fraga^5V14  ^3の上 ^4[r" + level.plutoversion + "]");
     if( isburied() || isdierise() || istranzit() ) {            wait 3;     self iprintln("すべての永続的特典が付与される");}
     if( isburied() || isdierise() || istranzit() ) {            wait 0.5;   self iprintln("銀行が満杯");}
     if(getDvar("scr_kill_infinite_loops") != "")
@@ -187,7 +187,7 @@ englishWellcome()
 {
     
     flag_wait("initial_blackscreen_passed");
-                                                                            self iprintln("^6Fraga^5V13  ^3Active");
+                                                                            self iprintln("^6Fraga^5V14  ^3Active");
     if( isburied() || isdierise() || istranzit() ) {            wait 3;     self iprintln("All perma perks awarded");}
     if( isburied() || isdierise() || istranzit() ) {            wait 0.5;   self iprintln("Bank filled");}
     if(getDvar("scr_kill_infinite_loops") != "")
@@ -212,7 +212,7 @@ frenchWellcome()
 {
     // Credit to QeZiaa & Astrox
     flag_wait("initial_blackscreen_passed");
-                                                                            self iprintln("^6Fraga^5V13  ^3Actif");
+                                                                            self iprintln("^6Fraga^5V14  ^3Actif");
     if( isburied() || isdierise() || istranzit() ) {            wait 3;     self iprintln("Tous les atouts permanents sont attribués");}
     if( isburied() || isdierise() || istranzit() ) {            wait 0.5;   self iprintln("La banque est remplie");}
     if(getDvar("scr_kill_infinite_loops") != "")
