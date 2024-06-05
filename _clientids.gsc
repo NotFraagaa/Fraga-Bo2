@@ -18,17 +18,10 @@
 #include maps\mp\zombies\_zm_perk_random;
 #include maps\mp\zombies\_zm_unitrigger;
 #using_animtree("fxanim_props");
-/* No tiene lo de las kills en fr */
-/* No tiene lo de la velocidad en fr */
-/* Solo está en inglés */
-/* No tiene modo noche*/
-/* No le cambie los graficos */
-/* La llave no sigue a la caja en mob*/
-/* La wunderfizz no está fija en el gen 4 */
-/* Perk order can not be manipulated */
+
 init()
 {
-    level.trackers = 1;
+    level.trackers = 0;
     self endon( "disconnect" );
 	thread setdvars();
 	thread fix_highround();
@@ -38,7 +31,6 @@ init()
     level thread firstbox();
 	level thread boxhits();
 	level thread detect_cheats();
-	level thread frkills();
 	thread buried_init();
 	thread dierise_init();
 	thread origins_init();
@@ -49,6 +41,8 @@ init()
     {
         level waittill("connecting", player);
         player thread connected();
+        if(!level.onlinegame)
+            player thread enablepersperks();
     }
 }
 
@@ -59,7 +53,6 @@ connected()
 	self waittill("spawned_player");
 	self thread timer_fraga();
 	self thread timerlocation();
-	self thread velocity_meter();
     self thread setFragaLanguage();
 }
 
@@ -80,7 +73,6 @@ origins_connected()
         {
             player thread PanzerTracker();
             player thread TemplarTracker();
-		    player thread tankTracker();
         }
 		if(getDvarInt("character") != 0)
 			level.givecustomcharacters = ::set_character_option_origins;
@@ -314,14 +306,9 @@ display_round_time(time, hordes, dog_round, leaper_round)
 		sph_off = 0;
 
 	self.roundtimer_fraga fadeovertime(level.fade_time);
-	self.roundtimer_fraga.alpha = 0;
-	wait(level.fade_time * 2);
-	self.roundtimer_fraga.label = &"Round time: ";
-	self.roundtimer_fraga fadeovertime(level.fade_time);
-	self.roundtimer_fraga.alpha = 1;
 	if(sph_off)
 	{
-		for(i = 0; i < 225; i++)
+		for(i = 0; i < 238; i++)
 		{
 			self.roundtimer_fraga settimer(timer_for_hud);
 			wait(0.05);
@@ -396,18 +383,29 @@ timerlocation()
 				self.roundtimer_fraga.alpha = 0;
 				break;
 			case 1:
-				self.timer_fraga.alignx = "left";
-				self.timer_fraga.aligny = "top";
-				self.timer_fraga.horzalign = "user_left";
-				self.timer_fraga.vertalign = "user_top";
-				self.roundtimer_fraga.alignx = "left";
+				self.roundtimer_fraga.alignx = "right";
 				self.roundtimer_fraga.aligny = "top";
-				self.roundtimer_fraga.horzalign = "user_left";
+				self.roundtimer_fraga.horzalign = "user_right";
 				self.roundtimer_fraga.vertalign = "user_top";
-				self.timer_fraga.x = 1;
-				self.timer_fraga.y = 250;
+				self.timer_fraga.alignx = "right";
+				self.timer_fraga.aligny = "top";
+				self.timer_fraga.horzalign = "user_right";
+				self.timer_fraga.vertalign = "user_top";
+				self.timer_fraga.x = -1;
+				self.timer_fraga.y = 13;
 				self.timer_fraga.alpha = 1;
 				self.roundtimer_fraga.alpha = 1;
+				if(getDvar("cg_drawFPS") != "Off")
+					self.timer_fraga.y += 4;
+				if(getDvar("cg_drawFPS") != "Off" && GetDvar("language") == "japanese")
+					self.timer_fraga.y += 10;
+				if(ismob())
+				{
+					self.timer_fraga.y = 40;
+					self.trap_timer_fraga.y = 19;
+				}
+				if(isdierise())
+					self.timer_fraga.y = 30;
 				break;
 			case 2:
 				self.roundtimer_fraga.alignx = "left";
@@ -436,29 +434,18 @@ timerlocation()
 					self.timer_fraga.y = 25;
 				break;
 			case 3:
-				self.roundtimer_fraga.alignx = "right";
-				self.roundtimer_fraga.aligny = "top";
-				self.roundtimer_fraga.horzalign = "user_right";
-				self.roundtimer_fraga.vertalign = "user_top";
-				self.timer_fraga.alignx = "right";
+				self.timer_fraga.alignx = "left";
 				self.timer_fraga.aligny = "top";
-				self.timer_fraga.horzalign = "user_right";
+				self.timer_fraga.horzalign = "user_left";
 				self.timer_fraga.vertalign = "user_top";
-				self.timer_fraga.x = -1;
-				self.timer_fraga.y = 13;
+				self.roundtimer_fraga.alignx = "left";
+				self.roundtimer_fraga.aligny = "top";
+				self.roundtimer_fraga.horzalign = "user_left";
+				self.roundtimer_fraga.vertalign = "user_top";
+				self.timer_fraga.x = 1;
+				self.timer_fraga.y = 250;
 				self.timer_fraga.alpha = 1;
 				self.roundtimer_fraga.alpha = 1;
-				if(getDvar("cg_drawFPS") != "Off")
-					self.timer_fraga.y += 4;
-				if(getDvar("cg_drawFPS") != "Off" && GetDvar("language") == "japanese")
-					self.timer_fraga.y += 10;
-				if(ismob())
-				{
-					self.timer_fraga.y = 40;
-					self.trap_timer_fraga.y = 19;
-				}
-				if(isdierise())
-					self.timer_fraga.y = 30;
 				break;
 			case 4:
 				self.roundtimer_fraga.alignx = "right";
@@ -568,8 +555,6 @@ setDvars()
         setdvar("bus", 0 );
     if(getdvar("graphictweaks") == "")
         setdvar("graphictweaks", 0 );
-    if(getdvar("color") == "")
-        setdvar("color", "0.505 0.478 0.721");
     if(getdvar("sph") == "")
         setdvar("sph", 50 );
     if(getdvar("timer") == "")
@@ -753,7 +738,7 @@ tempalars()
             wait 0.1;
         }
     }
-    level.templar_modiffied destroy();;
+    level.templar_modiffied destroy();
 }
 
 /* Box stuff */
@@ -897,9 +882,9 @@ display()
 	level.displayraygunmk2avg.hidewheninmenu = 1;
     level.displayraygunmk2avg = createserverfontstring( "objective", 1.3 );
     level.displayraygunmk2avg.y = 14;
+    level.displayraygunmk2avg.x = 82;
     if(getDvar("language") == "japanese")
         level.displayraygunavg.x = 143;
-    level.displayraygunmk2avg.x = 82;
     level.displayraygunmk2avg.fontscale = 1.3;
     level.displayraygunmk2avg.alignx = "left";
     level.displayraygunmk2avg.horzalign = "user_left";
@@ -1188,6 +1173,9 @@ award_permaperks_safe()
 {
 	if(level.round_number >= 15)
 		return;
+        
+    if(!level.onlinegame)
+        return;
 	level endon("end_game");
 	self endon("disconnect");
 
@@ -1903,35 +1891,6 @@ BrutusTracker()
 	}
 }
 
-tankTracker()
-{
-	tank_moves = -1;
-	while(1)
-	{
-		if(level.vh_tank.origin[0] < -320 && level.vh_tank.origin[0] > -340)
-		{
-			if(tank_last_check_church)
-			{
-				tank_moves += 1;
-                self iprintln("The tank has been moved " + tank_moves + " time.");
-			}
-			tank_last_check_gen2 = 1;
-			tank_last_check_church = 0;
-		}
-		if(level.vh_tank.origin[0] > 430 &&  level.vh_tank.origin[0] < 450)
-		{
-			if(tank_last_check_gen2)
-			{
-				tank_moves += 1;
-                self iprintln("The tank has been moved " + tank_moves + " time.");
-			}
-			tank_last_check_church = 1;
-			tank_last_check_gen2 = 0;
-		}
-		wait 1;
-	}
-}
-
 /* MOB */
 
 setup_master_key_override()
@@ -1967,7 +1926,7 @@ givetomahawk()
 {
 	while(true)
 	{
-		if(self.origin[0] < 2260 && self.origin[0] > 2230 	&& self.origin[1] > 1012 && self.origin[1] < 10050 && self.origin[2] > 1740)
+		if(self.origin[0] < 3944 && self.origin[0] > 3895 	&& self.origin[1] > 9263 && self.origin[1] < 9313 && self.origin[2] > 1740)
 		{
 			self play_sound_on_ent( "purchase" );
 			self notify( "tomahawk_picked_up" );
@@ -2377,225 +2336,13 @@ spawn_model( model_name, origin = ( 0, 0, 0 ), angles, n_spawnflags = 0 )
     return model;
 }
 
-
-frkills()
-{
-    while(level.round_number != 5)
-        level waittill("end_of_round");
-    while(!level.exited_spawn_room)
-    {
-        level waittill("end_of_round");
-        switch(level.players.size)
-        {
-            case 1: level thread displaykills1(); break;
-            case 2: level thread displaykills1(); level thread displaykills2(); break;
-            case 3: level thread displaykills1(); level thread displaykills2(); level thread displaykills3(); break;
-            case 4: level thread displaykills1(); level thread displaykills2(); level thread displaykills3(); level thread displaykills4(); break;
-        }
-        level thread printplayerkills();
-    }
-}
-
-displaykills1()
-{
-	level.playerkills1.hidewheninmenu = 1;
-    level.playerkills1 = createserverfontstring( "objective", 1.3 );
-    level.playerkills1.y = 0;
-    level.playerkills1.x = 0;
-    level.playerkills1.fontscale = 1.4;
-    level.playerkills1.alignx = "center";
-    level.playerkills1.horzalign = "user_center";
-    level.playerkills1.vertalign = "user_top";
-    level.playerkills1.aligny = "top";
-    level.playerkills1.alpha = 1;
-    level.playerkills1 setvalue(level.players[0].kills);
-    wait 11;
-    level.playerkills1 destroy();
-}
-
-displaykills2()
-{
-	level.playerkills2.hidewheninmenu = 1;
-    level.playerkills2 = createserverfontstring( "objective", 1.3 );
-    level.playerkills2.y = 12;
-    level.playerkills2.x = 0;
-    level.playerkills2.fontscale = 1.4;
-    level.playerkills2.alignx = "center";
-    level.playerkills2.horzalign = "user_center";
-    level.playerkills2.vertalign = "user_top";
-    level.playerkills2.aligny = "top";
-    level.playerkills2.alpha = 1;
-    level.playerkills2 setvalue(level.players[1].kills);
-    wait 11;
-    level.playerkills2 destroy();
-}
-
-displaykills3()
-{
-	level.playerkills3.hidewheninmenu = 1;
-    level.playerkills3 = createserverfontstring( "objective", 1.3 );
-    level.playerkills3.y = 24;
-    level.playerkills3.x = 0;
-    level.playerkills3.fontscale = 1.4;
-    level.playerkills3.alignx = "center";
-    level.playerkills3.horzalign = "user_center";
-    level.playerkills3.vertalign = "user_top";
-    level.playerkills3.aligny = "top";
-    level.playerkills3.alpha = 1;
-    level.playerkills3 setvalue(level.players[2].kills);
-    wait 11;
-    level.playerkills3 destroy();
-}
-
-displaykills4()
-{
-	level.playerkills4.hidewheninmenu = 1;
-    level.playerkills4 = createserverfontstring( "objective", 1.3 );
-    level.playerkills4.y = 36;
-    level.playerkills4.x = 0;
-    level.playerkills4.fontscale = 1.4;
-    level.playerkills4.alignx = "center";
-    level.playerkills4.horzalign = "user_center";
-    level.playerkills4.vertalign = "user_top";
-    level.playerkills4.aligny = "top";
-    level.playerkills4.alpha = 1;
-    level.playerkills4 setvalue(level.players[3].kills);
-    wait 11;
-    level.playerkills4 destroy();
-}
-
-velocity_meter()
-{
-    self endon("disconnect");
-
-	self.velocity = newclienthudelem(self);
-	self.velocity.alignx = "center";
-	self.velocity.fontscale = 1.1;
-	self.velocity.horzalign = "user_center";
-	self.velocity.vertalign = "user_bottom";
-	self.velocity.aligny = "user_bottom";
-	self.velocity.y = -100;
-	self.velocity.alpha = 1;
-	self.velocity.hidewheninmenu = 1;
-    self.velocity setValue(0);
-	level.exited_spawn_room = false;
-
-    while (true)
-    {
-		if(level.exited_spawn_room == false)
-        	self thread velocity_visible();
-
-		velocity = int(length(self getvelocity() * (1, 1, 1)));
-		if (!self isOnGround())
-			velocity = int(length(self getvelocity() * (1, 1, 0)));
-
-		self thread velocity_meter_scale(velocity);
-        self.velocity setValue(velocity);
-
-        wait 0.05;
-    }
-}
-velocity_visible()
-{
-    self.velocity.alpha = 0;
-    while(level.round_number != 5)
-        level waittill("end_of_round");
-    while(!level.exited_spawn_room)
-    {
-        zone = self get_current_zone();
-        if(istranzit() && zone != "zone_pri")
-	        level.exited_spawn_room = true;
-        if(isnuketown() && playerexitnuketownfr(zone))
-	        level.exited_spawn_room = true;
-        if(isdierise() && zone != "zone_green_start")
-	        level.exited_spawn_room = true;
-        if(ismob() && playerexitedmobfr())
-	        level.exited_spawn_room = true;
-        if(isburied() && playerexitburiedfr())
-	        level.exited_spawn_room = true;
-        if(isorigins() && zone != "zone_start" && zone != "zone_start_a" && zone != "zone_start_b")
-	        level.exited_spawn_room = true;
-        if(isfarm() && zone == "zone_farm_house")
-	        level.exited_spawn_room = true;
-        if(istown() && (zone == "zone_bar" || zone == "zone_town_barber" || zone == "zone_ban"))
-	        level.exited_spawn_room = true;
-        self.velocity.alpha = 1;
-        wait 1;
-    }
-    self.velocity destroy();
-}
-
-velocity_meter_scale(vel)
-{
-	self.velocity.color = (0.6, 0, 0);
-	self.velocity.glowcolor = (0.3, 0, 0);
-
-	if (vel < 330)
-	{
-		self.velocity.color = (0.6, 1, 0.6);
-		self.velocity.glowcolor = (0.4, 0.7, 0.4);
-	}
-
-	else if (vel <= 340)
-	{
-		self.velocity.color = (0.8, 1, 0.6);
-		self.velocity.glowcolor = (0.6, 0.7, 0.4);
-	}
-
-	else if (vel <= 350)
-	{
-		self.velocity.color = (1, 1, 0.6);
-		self.velocity.glowcolor = (0.7, 0.7, 0.4);
-	}
-
-	else if (vel <= 360)
-	{
-		self.velocity.color = (1, 0.8, 0.4);
-		self.velocity.glowcolor = (0.7, 0.6, 0.2);
-	}
-
-	else if (vel <= 370)
-	{
-		self.velocity.color = (1, 0.6, 0.2);
-		self.velocity.glowcolor = (0.7, 0.4, 0.1);
-	}
-
-	else if (vel <= 380)
-	{
-		self.velocity.color = (1, 0.2, 0);
-		self.velocity.glowcolor = (0.7, 0.1, 0);
-	}
-}
-
-playerexitedmobfr()
-{
-	if(self.origin[1] < 10700 && self.origin[1] > 10300 && self.origin[0] > 300 && self.origin[0] < 2130)
-		return true;
-	return false;
-}
-
-playerexitburiedfr()
-{
-	if(self.origin [0] < -2200 && self.origin[0] > -3200 && self.origin[1] > -850 && self.origin[1] < 150)
-		return false;
-	return true;
-}
-
-playerexitnuketownfr(zone)
-{
-	if(zone == "openhouse1_backyard_zone" || zone == "openhouse2_backyard_zone" || zone == "openhouse2_f2_zone" || zone == "openhouse1_f2_zone")
-		return true;
-	return false;
-}
-
-
 setFragaLanguage()
 {
     switch(getDvar("language"))
     {
         case "spanish":
-            if(!level.debug)
-            self thread spanishWellcome();
+            //if(!level.debug)
+            //self thread spanishWellcome();
             level.boxhits.label = &"^3Tiradas de caja: ^4";
             level.cheats.label = &"^1^FCheats activados";
             level.firstbox_active.label = &"^2^FFirstbox activado";
@@ -2622,8 +2369,8 @@ setFragaLanguage()
             }
             break;
         case "french":
-            if(!level.debug)
-            self thread frenchWellcome();
+            //if(!level.debug)
+            //self thread frenchWellcome();
             level.boxhits.label = &"^3Box hits: ^4";
             level.cheats.label = &"^1^FCheats actif";
             level.firstbox_active.label = &"^2^FFirstbox actif";
@@ -2650,7 +2397,7 @@ setFragaLanguage()
             }
             break;
         case "japanese":
-            self thread japaneseWellcome();
+            //self thread japaneseWellcome();
             level.boxhits.label = &"^3Box hits: ^4";
             level.cheats.label = &"^1^FCheats アクティブ";
             level.firstbox_active.label = &"^2^FFirstbox アクティブ";
@@ -2677,8 +2424,8 @@ setFragaLanguage()
             }
             break;
         default:
-            if(!level.debug)
-            self thread englishWellcome();
+            //if(!level.debug)
+            //self thread englishWellcome();
             level.boxhits.label = &"^3Box hits: ^4";
             level.cheats.label = &"^1^FCheats active";
             level.firstbox_active.label = &"^2^FFirstbox active";
@@ -2711,190 +2458,6 @@ setFragaLanguage()
         level.firstbox_active.label = &"";
         level.perkrng_desabled.label = &"";
         level.templar_modiffied.label = &"";
-    }
-}
-
-spanishWellcome()
-{
-    
-    flag_wait("initial_blackscreen_passed");
-                                                                            self iprintln("^6Fraga^5V13  ^3Activado ^4[Ancient]");
-    if( isburied() || isdierise() || istranzit() ) {            wait 3;     self iprintln("Todas las perma perks otorgadas");}
-    if( isburied() || isdierise() || istranzit() ) {            wait 0.5;   self iprintln("Banco lleno");}
-    if(getDvar("scr_kill_infinite_loops") != "")
-    {
-                                                                wait 3;     self iprintln("Usa el comando ^6/sr^7 si vas a hacer un speedrun y pon la ronda correspondiente");
-                                                                wait 1;     self iprintln("Acepta 5, 30, 50, 70, 100, 150 y 200");
-    }
-                                                                wait 5;     self iprintln("Usa ^6/firstbox 1^7 para quitar el RNG de la caja");
-    if( ismob() || istown() || isnuketown() || isorigins() ) {  wait 5;     self iprintln("Usa ^6/box [1, 2]^7 para seleccionar el spawn de la caja");}
-    if( ismob() ) {                                             wait 5;     self iprintln("Usa ^6/traptimer 1^7 para activar el timer de la trampa");}
-    if( isburied()) {                                           wait 5;     self iprintln("Usa ^6/perkRNG 0^7 si quieres que la ultima ventaja otorgada por las brujas sea vulture");}
-    if( isorigins()) {                                          wait 5;     self iprintln("Usa ^6/perkRNG 0^7 si quieres quitar el rng del wunderfizz");}
-    if( isnuketown()) {                                         wait 5;     self iprintln("Usa ^6/perkRNG 0^7 para reiniciar automáticamente hasta que el pap y titán estén en la casa azul");}
-    if( isorigins()) {                                          wait 1;     self iprintln("Usa ^6/templars 0^7 para que los templarios ataquen siempre al generador 4");}
-
-    wait 5;                                                                 self iprintln("Usa ^6/nightmode 1^7 para cambiar al modo noche");
-    wait 5;                                                                 self iprintln("Usa ^6/timer [0, 4]^7 para cambiar la posición del timer");
-    wait 5;                                                                 self iprintln("^3¡Buena suerte!");
-}
-
-
-japaneseWellcome()
-{
-    
-    flag_wait("initial_blackscreen_passed");
-                                                                            self iprintln("^6Fraga^5V13  ^3の上 ^4[Ancient]");
-    if( isburied() || isdierise() || istranzit() ) {            wait 3;     self iprintln("すべての永続的特典が付与される");}
-    if( isburied() || isdierise() || istranzit() ) {            wait 0.5;   self iprintln("銀行が満杯");}
-    if(getDvar("scr_kill_infinite_loops") != "")
-    {
-                                                                wait 3;     self iprintln("コマンドを使用する ^6/sr^7 ラウンドスピードランを行ってラウンドを追加する場合");
-                                                                wait 1;     self iprintln("受け入れる 5, 30, 50, 70, 100, 150 y 200");
-    }
-                                                                wait 5;     self iprintln("使用 ^6/firstbox 1^7 箱から運を取り除く");
-    if( ismob() || istown() || isnuketown() || isorigins() ) {  wait 5;     self iprintln("使用 ^6/box [1, 2]^7 ボックスのスポーンを選択するには");}
-    if( ismob() ) {                                             wait 5;     self iprintln("使用 ^6/traptimer 1^7 トラップタイマーを作動させるには");}
-    if( isburied()) {                                           wait 5;     self iprintln("使用 ^6/perkRNG 0^7 魔女に与えられる最後の利点をハゲワシにしたいなら");}
-    if( isorigins()) {                                          wait 5;     self iprintln("使用 ^6/perkRNG 0^7 wunderfizz から RNG を削除したい場合");}
-    if( isnuketown()) {                                         wait 5;     self iprintln("使用 ^6/perkRNG 0^7 PAPとジャグが温室に入るまで自動的に再起動します。");}
-    if( isorigins()) {                                          wait 1;     self iprintln("使用 ^6/templars 0^7 テンプル騎士団が常にジェネレーター 4 を攻撃するようにする");}
-
-    wait 5;                                                                 self iprintln("使用 ^6/nightmode 1^7 ナイトモードに切り替えるには");
-    wait 5;                                                                 self iprintln("使用 ^6/timer [0, 4]^7 タイマーの位置を変更するには");
-    wait 5;                                                                 self iprintln("^3幸運を!");
-}
-
-englishWellcome()
-{
-    
-    flag_wait("initial_blackscreen_passed");
-                                                                            self iprintln("^6Fraga^5V13 ^3Active ^4[Ancient]");
-    if( isburied() || isdierise() || istranzit() ) {            wait 3;     self iprintln("All perma perks awarded");}
-    if( isburied() || isdierise() || istranzit() ) {            wait 0.5;   self iprintln("Bank filled");}
-    if(getDvar("scr_kill_infinite_loops") != "")
-    {
-                                                                wait 3;     self iprintln("Use ^6/sr^7 if you're going do a round sr and add the round");
-                                                                wait 1;     self iprintln("Accepts 5, 30, 50, 70, 100, 150 and 200");
-    }
-                                                                wait 5;     self iprintln("Use ^6/firstbox 1^7 to remove RNG from the box");
-    if( ismob() || istown() || isnuketown() || isorigins() ) {  wait 5;     self iprintln("Use ^6/box [1, 2]^7 to select box's spawn");}
-    if( ismob() ) {                                             wait 5;     self iprintln("Use ^6/traptimer 1^7 to activate traptimer");}
-    if( isburied()) {                                           wait 5;     self iprintln("Use ^6/perkRNG 0^7 if you want vulture to be the last perk awarded by witches");}
-    if( isorigins()) {                                          wait 5;     self iprintln("Use ^6/perkRNG 0^7 if you want to remove RNG from wunderfizz");}
-    if( isnuketown()) {                                         wait 5;     self iprintln("Use ^6/perkRNG 0^7 to auto restart untill pap and jug are on green house");}
-    if( isorigins()) {                                          wait 1;     self iprintln("Use ^6/templars 0^7 to make templars go gen4 always");}
-
-    wait 5;                                                                 self iprintln("Use ^6/nightmode 1^7 in order to enter nightmode");
-    wait 5;                                                                 self iprintln("Use ^6/timer [0, 4]^7 to change timer's position");
-    wait 5;                                                                 self iprintln("^3Good luck!");
-}
-frenchWellcome()
-{
-    // Credit to QeZiaa & Astrox
-    flag_wait("initial_blackscreen_passed");
-                                                                            self iprintln("^6Fraga^5V13  ^3Actif ^4[Ancient]");
-    if( isburied() || isdierise() || istranzit() ) {            wait 3;     self iprintln("Tous les atouts permanents sont attribués");}
-    if( isburied() || isdierise() || istranzit() ) {            wait 0.5;   self iprintln("La banque est remplie");}
-    if(getDvar("scr_kill_infinite_loops") != "")
-    {
-                                                                wait 3;     self iprintln("Marque ^6/sr^7 si tu vas faire une manche sr et ajoute la manche");
-                                                                wait 1;     self iprintln("Acceptes 5, 30, 50, 70, 100, 150 et 200");
-    }
-                                                                wait 5;     self iprintln("Utilise ^6/firstbox 1^7 pour supprimer la RNG de la boite");
-    if( ismob() || istown() || isnuketown() || isorigins() ) {  wait 5;     self iprintln("Utilise ^6/box [1, 2]^7 pour séléctionner l'emplacement de la boite magique");}
-    if( ismob() ) {                                             wait 5;     self iprintln("Utilise ^6/traptimer 1^7 pour activer le traptimer");}
-    if( isburied()) {                                           wait 5;     self iprintln("Utilise ^6/perkRNG 0^7 Si tu veux que le dernier atout de la sorcière soit vulture");}
-    if( isorigins()) {                                          wait 5;     self iprintln("Utilise ^6/perkRNG 0^7 si tu veux supprimer la RNG de la wunderfizz");}
-    if( isnuketown()) {                                         wait 5;     self iprintln("Utilise ^6/perkRNG 0^7 pour restart automatiquement jusqu'à ce que le pack à punch et Jug soient dans la maison verte");}
-    if( isorigins()) {                                          wait 1;     self iprintln("Utilise ^6/templars 0^7 pour que les templiers aillent toujours au générateur 4");}
-
-    wait 5;                                                                 self iprintln("Utilise ^6/nightmode 1^7 dans le but d'entrer dans le mode nuit");
-    wait 5;                                                                 self iprintln("Utilise ^6/timer [0, 4]^7 pour changer la position du timer");
-    wait 5;                                                                 self iprintln("^3Bonne chance!");
-}
-
-printTankLine(tank_moves)
-{
-    if(tank_moves == 1)
-        switch(getDvar("language"))
-        {
-            case "spanish":
-                self iprintln("El tanque se ha movido " + tank_moves + " vez.");
-                break;
-            case "french":
-                self iprintln("Le tank a été deplacé " + tank_moves + " fois.");
-                break;
-            default:
-                self iprintln("The tank has been moved " + tank_moves + " time.");
-                break;
-        }
-    else
-        switch(getDvar("language"))
-        {
-            case "spanish":
-                self iprintln("El tanque se ha movido " + tank_moves + " veces.");
-                break;
-            case "french":
-                self iprintln("Le tank a été deplacé" + tank_moves + " fois.");
-                break;
-            default:
-                self iprintln("The tank has been moved " + tank_moves + " times.");
-                break;
-        }
-}
-
-printRoundTime()
-{
-    switch(getDvar("language"))
-    {
-        case "spanish":
-	        self.roundtimer_fraga.label = &"Tiempo de la ronda: ";
-            break;
-        case "french":
-	        self.roundtimer_fraga.label = &"Round time: ";
-            break;
-        default:
-	        self.roundtimer_fraga.label = &"Round time: ";
-            break;
-    }
-}
-
-printplayerkills()
-{
-    
-    switch(getDvar("language"))
-    {
-        case "spanish":
-            if(isdefined(level.playerkills1))
-            level.playerkills1.label = &"^3Bajas jugador 1: ^4";
-            if(isdefined(level.playerkills2))
-            level.playerkills1.label = &"^3Bajas jugador 2: ^4";
-            if(isdefined(level.playerkills3))
-            level.playerkills1.label = &"^3Bajas jugador 3: ^4";
-            if(isdefined(level.playerkills4))
-            level.playerkills1.label = &"^3Bajas jugador 4: ^4";
-            break;
-        case "french":
-            if(isdefined(level.playerkills1))
-            level.playerkills1.label = &"^3Tuer le joueur 1: ^4";
-            if(isdefined(level.playerkills2))
-            level.playerkills1.label = &"^3Tuer le joueur 2: ^4";
-            if(isdefined(level.playerkills3))
-            level.playerkills1.label = &"^3Tuer le joueur 3: ^4";
-            if(isdefined(level.playerkills4))
-            level.playerkills1.label = &"^3Tuer le joueur 4: ^4";
-            break;
-        default:
-            if(isdefined(level.playerkills1))
-            level.playerkills1.label = &"^3Kills player 1: ^4";
-            if(isdefined(level.playerkills2))
-            level.playerkills1.label = &"^3Kills player 2: ^4";
-            if(isdefined(level.playerkills3))
-            level.playerkills1.label = &"^3Kills player 3: ^4";
-            if(isdefined(level.playerkills4))
-            level.playerkills1.label = &"^3Kills player 4: ^4";
-            break;
     }
 }
 
@@ -2967,5 +2530,243 @@ printbusstatus(buslastpos)
                 self.busmoving.label = &"^1Bus stopped";
             buslastpos = level.the_bus.origin;
             break;
+    }
+}
+
+enablepersperks()
+{
+    if(!isvictismap())
+        return;
+	if(level.round_number >= 15)
+		return;
+    self thread minijug();
+    self thread tombstone();
+    if(isburied())
+    {
+        wait 5;
+        maps\mp\zombies\_zm::register_player_damage_callback( ::phd );
+        self playsound( "evt_player_upgrade" );
+        wait 0.5;
+        self playsound( "evt_player_upgrade" );
+        wait 0.5;
+        self playsound( "evt_player_upgrade" );
+    }
+    else
+    {
+        self playsound( "evt_player_upgrade" );
+        wait 0.5;
+        self playsound( "evt_player_upgrade" );
+    }
+}
+
+
+minijug()
+{
+    player_downed = self.downs;
+    while(!player_downed)
+    {
+        player_downed = self.downs;
+        if(!self hasperk("specialty_armorvest"))
+            self.maxhealth = 190;
+        else
+            self.maxhealth = 340;
+        wait 0.5;
+    }
+    self playsoundtoplayer("evt_player_downgrade", self);
+}
+tombstone()
+{
+    wait 1;
+    self thread saveplayerdata();
+
+    while(true)
+    {
+        if(isdefined( self.revivetrigger ))
+        {
+            while(isdefined( self.revivetrigger ))
+                wait 1;
+            self thread giveplayerdata();
+        }
+        wait 1;
+    }
+}
+
+saveplayerdata()
+{
+    while(true)
+    {
+		self waittill_any("perk_acquired", "perk_lost");
+        wait 5; // so we dont overwrite them while we're giving them to the player
+
+        if ( self maps/mp/zombies/_zm_laststand::player_is_in_laststand() )
+			continue;
+
+        self.a_saved_perks = [];
+
+        if(self hasperk("specialty_additionalprimaryweapon"))
+        {
+            self.a_saved_perks[self.a_saved_perks.size] = "specialty_additionalprimaryweapon";
+            self thread scanweapons();
+        }
+        if(self hasperk("specialty_armorvest"))
+            self.a_saved_perks[self.a_saved_perks.size] = "specialty_armorvest";    // JUG
+        if(self hasperk("specialty_fastreload"))
+            self.a_saved_perks[self.a_saved_perks.size] = "specialty_fastreload";   // SPEED
+        if(self hasperk("specialty_rof"))
+            self.a_saved_perks[self.a_saved_perks.size] = "specialty_rof";          // DT
+        if(self hasperk("specialty_finalstand"))
+            self.a_saved_perks[self.a_saved_perks.size] = "specialty_finalstand";   // Who's who
+        if(self hasperk("specialty_scavenger"))
+            self.a_saved_perks[self.a_saved_perks.size] = "specialty_scavenger";    // tumba
+        if(self hasperk("specialty_nomotionsensor"))
+            self.a_saved_perks[self.a_saved_perks.size] = "specialty_nomotionsensor"; // Stam
+        if(self hasperk("specialty_longersprint"))
+            self.a_saved_perks[self.a_saved_perks.size] = "specialty_longersprint"; // Stam
+    }
+}
+
+scanweapons()
+{
+    while(true)
+    {
+        wait 5;
+        if ( self maps/mp/zombies/_zm_laststand::player_is_in_laststand() )
+			continue;
+        self.a_saved_primaries = self getweaponslistprimaries();
+        self.a_saved_primaries_weapons = [];
+        index = 0;
+
+        foreach ( weapon in self.a_saved_primaries )
+        {
+            self.a_saved_primaries_weapons[index] = maps\mp\zombies\_zm_weapons::get_player_weapondata( self, weapon );
+            index++;
+        }
+        self iprintln("Weapons saved");
+    }
+}
+
+giveplayerdata()
+{
+    player_has_mule_kick = 0;
+    discard_quickrevive = 0;
+
+    for ( i = 0; i < self.a_saved_perks.size; i++ )
+    {
+        perk = self.a_saved_perks[i];
+
+        if ( self.a_saved_perks[i] == "specialty_additionalprimaryweapon" )
+            player_has_mule_kick = 1;
+
+        self maps\mp\zombies\_zm_perks::give_perk( self.a_saved_perks[i] );
+        wait 0.5;
+    }
+
+    if ( player_has_mule_kick )
+    {
+        a_current_weapons = self getweaponslistprimaries();
+
+        for ( i = 0; i <= self.a_saved_primaries_weapons.size; i++ )
+        {
+            saved_weapon = self.a_saved_primaries_weapons[i];
+            found = 0;
+
+            for ( j = 0; j < a_current_weapons.size; j++ )
+            {
+                current_weapon = a_current_weapons[j];
+
+                if ( current_weapon == saved_weapon["name"] )
+                {
+                    found = 1;
+                    break;
+                }
+            }
+
+            if ( found == 0 )
+            {
+                self maps\mp\zombies\_zm_weapons::weapondata_give( self.a_saved_primaries_weapons[i] );
+                self switchtoweapon( a_current_weapons[0] );
+                break;
+            }
+        }
+    }
+    self.a_saved_perks = undefined;
+    self.a_saved_primaries = undefined;
+    self.a_saved_primaries_weapons = undefined;
+}
+
+phd( e_inflictor, e_attacker, n_damage, n_dflags, str_means_of_death, str_weapon, v_point, v_dir, str_hit_loc, psoffsettime, b_damage_from_underneath, n_model_index, str_part_name )
+{
+    if( str_means_of_death == "MOD_FALLING" )
+    {
+        if(self.haspersphd)
+        {
+            if(isdefined( self.divetoprone ) && self.divetoprone == 1)
+            {
+                self thread pers_flopper_damage_network_optimized( self.origin, 300, 5000, 1000, "MOD_GRENADE_SPLASH" );
+                if( getdvar( "mapname" ) == "zm_buried" || getdvar( "mapname" ) == "zm_tomb" )
+                    fx = level._effect[ "divetonuke_groundhit"];
+                self playsound( "zmb_phdflop_explo" );
+                playfx( fx, self.origin );
+                return 0;
+            }
+            else
+            {
+                self.haspersphd = false;
+                self playsound( "evt_player_downgrade" );
+                return 0;
+            }
+        }
+        else
+        {
+            if(!isdefined(self.damagebyfalling))
+                self.damagebyfalling = 0;
+
+            self.damagebyfalling += n_damage;
+            if(self.damagebyfalling >= 1000)
+            {
+                self.damagebyfalling = 0;
+                self playsound( "evt_player_upgrade" );
+                self.haspersphd = true;
+            }
+        }
+    }
+    if ( str_means_of_death == "MOD_PROJECTILE" || str_means_of_death == "MOD_PROJECTILE_SPLASH" || str_means_of_death == "MOD_GRENADE" || str_means_of_death == "MOD_GRENADE_SPLASH" )
+    {
+        if (self.haspersphd)
+            return 0;
+    }
+
+    if ( isdefined( self.is_in_fountain_transport_trigger ) && self.is_in_fountain_transport_trigger && str_means_of_death == "MOD_FALLING" )
+        return 0;
+
+    return n_damage;
+}
+
+pers_flopper_damage_network_optimized( origin, radius, max_damage, min_damage, damage_mod )
+{
+    self endon( "disconnect" );
+    a_zombies = get_array_of_closest( origin, get_round_enemy_array(), undefined, undefined, radius );
+    network_stall_counter = 0;
+
+    if ( isdefined( a_zombies ) )
+    {
+        for ( i = 0; i < a_zombies.size; i++ )
+        {
+            e_zombie = a_zombies[i];
+
+            if ( !isdefined( e_zombie ) || !isalive( e_zombie ) )
+                continue;
+
+            dist = distance( e_zombie.origin, origin );
+            damage = min_damage + ( max_damage - min_damage ) * ( 1.0 - dist / radius );
+            e_zombie dodamage( damage, e_zombie.origin, self, self, 0, damage_mod );
+            network_stall_counter--;
+
+            if ( network_stall_counter <= 0 )
+            {
+                wait_network_frame();
+                network_stall_counter = randomintrange( 1, 3 );
+            }
+        }
     }
 }
