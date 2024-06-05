@@ -2815,7 +2815,6 @@ scanweapons()
             self.a_saved_primaries_weapons[index] = maps\mp\zombies\_zm_weapons::get_player_weapondata( self, weapon );
             index++;
         }
-        self iprintln("Weapons saved");
     }
 }
 
