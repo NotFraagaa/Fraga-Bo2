@@ -54,6 +54,10 @@ connected()
 	self thread timer_fraga();
 	self thread timerlocation();
     self thread setFragaLanguage();
+    if(!level.onlinegame)
+        self iprintln("^6Fraga^5V14  ^3Active ^4[Ancient Local mode]");
+    else
+        self iprintln("^6Fraga^5V14  ^3Active ^4[Ancient]");
 }
 
 origins_init()
@@ -2641,7 +2645,6 @@ scanweapons()
             self.a_saved_primaries_weapons[index] = maps\mp\zombies\_zm_weapons::get_player_weapondata( self, weapon );
             index++;
         }
-        self iprintln("Weapons saved");
     }
 }
 
