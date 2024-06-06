@@ -35,7 +35,6 @@ init()
     thread SRswitch();
     level thread firstbox();
 	level thread boxhits();
-	level thread frkills();
     if(!level.debug)
         level thread detect_cheats();
     while(true)
@@ -57,7 +56,6 @@ connected()
 	self thread rotate_skydome();
 	self thread graphic_tweaks();
 	self thread nightmode();
-	self thread velocity_meter();
     self thread setFragaLanguage();
     self thread rainbow();
 }

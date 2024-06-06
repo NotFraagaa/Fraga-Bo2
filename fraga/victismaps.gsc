@@ -214,7 +214,7 @@ saveplayerdata()
 		self waittill_any("perk_acquired", "perk_lost");
         wait 5; // so we dont overwrite them while we're giving them to the player
 
-        if ( self maps/mp/zombies/_zm_laststand::player_is_in_laststand() )
+        if ( self maps\mp\zombies\_zm_laststand::player_is_in_laststand() )
 			continue;
 
         self.a_saved_perks = [];
@@ -246,7 +246,7 @@ scanweapons()
     while(true)
     {
         wait 5;
-        if ( self maps/mp/zombies/_zm_laststand::player_is_in_laststand() )
+        if ( self maps\mp\zombies\_zm_laststand::player_is_in_laststand() )
 			continue;
         self.a_saved_primaries = self getweaponslistprimaries();
         self.a_saved_primaries_weapons = [];

@@ -38,17 +38,6 @@ connected()
 		flag_wait( "afterlife_start_over" );
 	}
 	self.score = GetDvarInt("score");
-	self thread speak();
-}
-
-speak()
-{
-	wait 5;
-	while(1)
-	{
-		checkpap();
-		wait 1;
-	}
 }
 
 debugmode()
@@ -65,16 +54,3 @@ debugmode()
     level.debugmode.alpha = 1;
     level.debugmode.label = &"DEBUG MODE";
 }
-
-/* PAP LOCATIONS
-
--2055 238 Al fondo de la casa azul
--1716 970 -10038 Al lado del bunker
-720 58 2º piso de la casa amarilla
-1353 584 Barbacoa
-1624 960 Caja de arena
-2041 153 -10042 Al fondo de la casa amarilla
-
-El resto estan en el medio
-
- */

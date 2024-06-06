@@ -262,14 +262,14 @@ firstbox3755()
         level thread setUpWeapons();
 
         special_weapon_magicbox_check = level.special_weapon_magicbox_check;
-        //level.special_weapon_magicbox_check = undefined;
+        level.special_weapon_magicbox_check = undefined;
         foreach(weapon in level.zombie_weapons)
         {
-            if(weapon.is_in_box)
-            {
+            //if(weapon.is_in_box)
+            //{
                 println("Removing " + weapon.weapon_name + " from the box");
                 weapon.is_in_box = 0;
-            }
+            //}
         }
         
         foreach(weapon in level.forced_box_guns)
