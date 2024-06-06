@@ -40,8 +40,6 @@
     SPH meter (default start at 30)
     HUD color and position can be changed
     Round Splits
-    Display kills at the end of the round if the player didnt leave the first room and its round 6+
-    Displays velocity meter if the player didnt leave the first room and its round 6+
 
 ## MAP CHANGES
 
@@ -217,8 +215,6 @@ Templars [0, 1]
     Contador SPH (apartir de la ronda 30 por defecto)
     Puedes cambiar el color del HUD
     Splits de rondas
-    Se muestran las kills de cada jugadar en fr a partir de la ronda 6
-    Se muestra la velocidad del jugador en fr a partir de la ronda 5
 
 ## Cambios en los mapas
 
