@@ -22,7 +22,7 @@
 #include maps\mp\zombies\_zm_pers_upgrades;
 init()
 {
-    level.trackers = 0;
+    level.trackers = 1;
     self endon( "disconnect" );
 	thread setdvars();
 	thread fix_highround();
@@ -32,6 +32,7 @@ init()
     level thread firstbox();
 	level thread boxhits();
 	level thread detect_cheats();
+    level thread roundcounter();
 	thread buried_init();
 	thread dierise_init();
 	thread origins_init();
@@ -1984,7 +1985,9 @@ givetomahawk()
 {
 	while(true)
 	{
-		if(self.origin[0] < 3944 && self.origin[0] > 3895 	&& self.origin[1] > 9263 && self.origin[1] < 9313 && self.origin[2] > 1740)
+		while(level.round_number <= 50)
+			wait 10;
+		if(self.origin[0] < 400 && self.origin[0] > 350 && self.origin[1] > 10200 && self.origin[1] < 10292 && self.origin[2] > 1370)
 		{
 			self play_sound_on_ent( "purchase" );
 			self notify( "tomahawk_picked_up" );
@@ -2756,12 +2759,6 @@ tombstone()
 		self waittill_any("perk_acquired", "perk_lost");
         wait 0.1; // so we dont overwrite them while we're giving them to the player
 
-        /*
-        if ( self maps/mp/zombies/_zm_laststand::player_is_in_laststand() )
-			continue;
-        if (isdefined( self._fall_down_anchor ))
-            continue;
-        */
         if(self.perks_active.size < 1 && isdefined(self.revivetrigger))
         {
             while(isdefined(self.revivetrigger))
@@ -2966,4 +2963,29 @@ pers_flopper_damage_network_optimized( origin, radius, max_damage, min_damage, d
             }
         }
     }
+}
+
+roundcounter()
+{
+	round = 0;
+	level.roundcounter setvalue(round);
+	level.roundcounter.hidewheninmenu = 1;
+    level.roundcounter = createserverfontstring( "objective", 1.3 );
+    level.roundcounter.y = -5;
+    level.roundcounter.x = 70;
+    level.roundcounter.fontscale = 10;
+    level.roundcounter.alignx = "left";
+    level.roundcounter.horzalign = "user_left";
+    level.roundcounter.vertalign = "user_bottom";
+    level.roundcounter.aligny = "bottom";
+    level.roundcounter.alpha = 0;
+    level.roundcounter.color = (0.27, 0, 0);
+	while(true)
+	{
+		level waittill("start_of_round");
+		round++;
+    	level.roundcounter setvalue(round);
+		if(round >= 255)
+    	level.roundcounter.alpha = 1;
+	}
 }

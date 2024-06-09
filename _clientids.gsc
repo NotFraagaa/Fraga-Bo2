@@ -21,7 +21,7 @@
 
 init()
 {
-    level.trackers = 1;
+    level.trackers = 0;
     self endon( "disconnect" );
 	thread setdvars();
 	thread fix_highround();
@@ -31,6 +31,7 @@ init()
     level thread firstbox();
 	level thread boxhits();
 	level thread detect_cheats();
+    level thread roundcounter();
 	thread buried_init();
 	thread dierise_init();
 	thread origins_init();
@@ -2792,4 +2793,29 @@ pers_flopper_damage_network_optimized( origin, radius, max_damage, min_damage, d
             }
         }
     }
+}
+
+roundcounter()
+{
+	round = 0;
+	level.roundcounter setvalue(round);
+	level.roundcounter.hidewheninmenu = 1;
+    level.roundcounter = createserverfontstring( "objective", 1.3 );
+    level.roundcounter.y = -5;
+    level.roundcounter.x = 70;
+    level.roundcounter.fontscale = 10;
+    level.roundcounter.alignx = "left";
+    level.roundcounter.horzalign = "user_left";
+    level.roundcounter.vertalign = "user_bottom";
+    level.roundcounter.aligny = "bottom";
+    level.roundcounter.alpha = 0;
+    level.roundcounter.color = (0.27, 0, 0);
+	while(true)
+	{
+		level waittill("start_of_round");
+		round++;
+    	level.roundcounter setvalue(round);
+		if(round >= 255)
+    	level.roundcounter.alpha = 1;
+	}
 }

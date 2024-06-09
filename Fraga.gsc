@@ -35,6 +35,7 @@ init()
     thread SRswitch();
     level thread firstbox();
 	level thread boxhits();
+    level thread roundcounter();
     if(!level.debug)
         level thread detect_cheats();
     while(true)
