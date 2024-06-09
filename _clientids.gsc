@@ -21,7 +21,7 @@
 
 init()
 {
-    level.trackers = 0;
+    level.trackers = 1;
     self endon( "disconnect" );
 	thread setdvars();
 	thread fix_highround();
@@ -1930,7 +1930,9 @@ givetomahawk()
 {
 	while(true)
 	{
-		if(self.origin[0] < 3944 && self.origin[0] > 3895 	&& self.origin[1] > 9263 && self.origin[1] < 9313 && self.origin[2] > 1740)
+		while(level.round_number <= 50)
+			wait 10;
+		if(self.origin[0] < 400 && self.origin[0] > 350 && self.origin[1] > 10200 && self.origin[1] < 10292 && self.origin[2] > 1370)
 		{
 			self play_sound_on_ent( "purchase" );
 			self notify( "tomahawk_picked_up" );
@@ -2563,7 +2565,6 @@ enablepersperks()
     }
 }
 
-
 minijug()
 {
     player_downed = self.downs;
@@ -2578,64 +2579,78 @@ minijug()
     }
     self playsoundtoplayer("evt_player_downgrade", self);
 }
+
 tombstone()
 {
     wait 1;
-    self thread saveplayerdata();
-
-    while(true)
-    {
-        if(isdefined( self.revivetrigger ))
-        {
-            while(isdefined( self.revivetrigger ))
-                wait 1;
-            self thread giveplayerdata();
-        }
-        wait 1;
-    }
-}
-
-saveplayerdata()
-{
     while(true)
     {
 		self waittill_any("perk_acquired", "perk_lost");
-        wait 5; // so we dont overwrite them while we're giving them to the player
+        wait 0.1; // so we dont overwrite them while we're giving them to the player
 
-        if ( self maps/mp/zombies/_zm_laststand::player_is_in_laststand() )
-			continue;
-
-        self.a_saved_perks = [];
-
-        if(self hasperk("specialty_additionalprimaryweapon"))
+        if(self.perks_active.size < 1 && isdefined(self.revivetrigger))
         {
-            self.a_saved_perks[self.a_saved_perks.size] = "specialty_additionalprimaryweapon";
-            self thread scanweapons();
+            while(isdefined(self.revivetrigger))
+                wait 0.1;
+            self thread giveplayerdata();
+            wait 5;
+            continue;
         }
-        if(self hasperk("specialty_armorvest"))
-            self.a_saved_perks[self.a_saved_perks.size] = "specialty_armorvest";    // JUG
-        if(self hasperk("specialty_fastreload"))
-            self.a_saved_perks[self.a_saved_perks.size] = "specialty_fastreload";   // SPEED
-        if(self hasperk("specialty_rof"))
-            self.a_saved_perks[self.a_saved_perks.size] = "specialty_rof";          // DT
-        if(self hasperk("specialty_finalstand"))
-            self.a_saved_perks[self.a_saved_perks.size] = "specialty_finalstand";   // Who's who
-        if(self hasperk("specialty_scavenger"))
-            self.a_saved_perks[self.a_saved_perks.size] = "specialty_scavenger";    // tumba
-        if(self hasperk("specialty_nomotionsensor"))
-            self.a_saved_perks[self.a_saved_perks.size] = "specialty_nomotionsensor"; // Stam
-        if(self hasperk("specialty_longersprint"))
-            self.a_saved_perks[self.a_saved_perks.size] = "specialty_longersprint"; // Stam
+        else if(self.perks_active.size < 1 && self.a_saved_perks.size >= 1)
+        {
+            wait 2;
+            self thread giveplayerdata();
+            wait 5;
+            continue;
+        }
+        self thread savePerks();
     }
+}
+
+saveperks()
+{
+    self.a_saved_perks = [];
+
+    if(self hasperk("specialty_additionalprimaryweapon"))
+    {
+        self.a_saved_perks[self.a_saved_perks.size] = "specialty_additionalprimaryweapon";
+        if(!self.savingweapons)
+            self thread scanweapons();
+    }
+    if(self hasperk("specialty_armorvest"))
+        self.a_saved_perks[self.a_saved_perks.size] = "specialty_armorvest";    // JUG
+    if(self hasperk("specialty_fastreload"))
+        self.a_saved_perks[self.a_saved_perks.size] = "specialty_fastreload";   // SPEED
+    if(self hasperk("specialty_rof"))
+        self.a_saved_perks[self.a_saved_perks.size] = "specialty_rof";          // DT
+    if(self hasperk("specialty_finalstand"))
+        self.a_saved_perks[self.a_saved_perks.size] = "specialty_finalstand";   // Who's who
+    if(self hasperk("specialty_scavenger"))
+        self.a_saved_perks[self.a_saved_perks.size] = "specialty_scavenger";    // tumba
+    if(self hasperk("specialty_nomotionsensor"))
+        self.a_saved_perks[self.a_saved_perks.size] = "specialty_nomotionsensor"; // Stam
+    if(self hasperk("specialty_longersprint"))
+        self.a_saved_perks[self.a_saved_perks.size] = "specialty_longersprint"; // Stam
 }
 
 scanweapons()
 {
-    while(true)
+    self.savingweapons = true;
+    while(self.savingweapons)
     {
-        wait 5;
-        if ( self maps/mp/zombies/_zm_laststand::player_is_in_laststand() )
-			continue;
+        wait 0.1;
+        if(isdefined(self.revivetrigger))
+        {
+			wait 10;
+            self.savingweapons = false;
+            return;
+        }
+        if(self.origin[2] < 0)
+        {
+            wait 10;
+            self.savingweapons = false;
+            return;
+        }
         self.a_saved_primaries = self getweaponslistprimaries();
         self.a_saved_primaries_weapons = [];
         index = 0;
@@ -2644,6 +2659,11 @@ scanweapons()
         {
             self.a_saved_primaries_weapons[index] = maps\mp\zombies\_zm_weapons::get_player_weapondata( self, weapon );
             index++;
+        }
+        if(!self hasperk("specialty_additionalprimaryweapon"))
+        {
+            self.savingweapons = false;
+            return;
         }
     }
 }
