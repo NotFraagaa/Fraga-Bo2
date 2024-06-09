@@ -350,6 +350,8 @@ Templars [0, 1]
 </details>
 
 ### Recent changes
+ - **Fixed getting tomahawk on mob unintentionally**
+ - **Fixed fridge not working when the player only has one weapon**
  - **Added animated timer with /rainbow 1**
  - **Moved tomahawk trigger to the oposite corner**
  - **Fixed game not recognising player outside of mob's firstroom**
