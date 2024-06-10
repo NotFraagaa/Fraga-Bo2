@@ -4,10 +4,10 @@
 
 ## Downloads
 ### New pluto (Recomended version)
-- [Plutonium r2905+](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/FragaV14.Plutonium.rar)
+[Plutonium r2905+](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/FragaV14.Plutonium.rar)
   - Round splits only work on the newest version on pluto
 ### Alternative versions
-- [Ancient and Redacted](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/FragaV14.Ancient.y.Redacted.rar)
+[Ancient and Redacted](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/FragaV14.Ancient.y.Redacted.rar)
 - These versions have some limitations such as 
   - Doesnt have graphic changes nor night mode
   - Wunderfizz is not fixed to gen 4
@@ -170,7 +170,7 @@ Templars [0, 1]
 
 ## Descargas
 ### New pluto (Versión recomendada)
-- [Plutonium r2905+](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/FragaV14.Plutonium.rar)
+[Plutonium r2905+](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/FragaV14.Plutonium.rar)
   - Los timer de ronda solo funcionan en new pluto.
 ### Versiones alternativas
 [Ancient y Redacted](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/FragaV14.Ancient.y.Redacted.rar)
