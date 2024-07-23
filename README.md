@@ -339,3 +339,5 @@ Templars [0, 1]
  - **Fixed game not recognising player outside of mob's firstroom**
  - **Reverted network frame function to the original one**
  - **Added Redacted version**
+ - **Fixed box HUD on Ancient and Redacted**
+ - **Fixed MOTD crashing on Ancient and Redacted**
