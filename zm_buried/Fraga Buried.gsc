@@ -31,9 +31,10 @@ connected()
 		player thread onconnect();
 		player thread bank();
 		player thread award_permaperks_safe();
-		player thread fridge();
 		if(getDvarInt("character") != 0)
 			level.givecustomcharacters = ::set_character_option_buried;
+        player waittill("spawned_player");
+		player thread fridge();
 	}
 }
 

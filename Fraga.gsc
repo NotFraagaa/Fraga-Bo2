@@ -7,7 +7,6 @@
 #include scripts\zm\fraga\timers;
 #include scripts\zm\fraga\graphics;
 #include scripts\zm\fraga\splits;
-#include scripts\zm\fraga\wellcome;
 #include scripts\zm\fraga\gamefixes;
 #include scripts\zm\fraga\cheatdetection;
 #include scripts\zm\fraga\trackers;
@@ -59,6 +58,7 @@ connected()
 	self thread nightmode();
     self thread setFragaLanguage();
     self thread rainbow();
+    self iprintln("^6Fraga^5V14  ^3Active");
 }
 
 setDvars()
@@ -83,8 +83,6 @@ setDvars()
         setdvar("sph", 50 );
     if(getdvar("timer") == "")
         setdvar("timer", 1 );
-    if(getdvar("roundtimer") == "")
-        setdvar("roundtimer", 1 );
     if(getdvar("splits") != "")
         setdvar("splits", 0 );
 	if( getdvar("nightmode") == "")

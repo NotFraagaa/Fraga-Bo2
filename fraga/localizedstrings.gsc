@@ -38,8 +38,8 @@ setFragaLanguage()
             }
             break;
         case "french":
-            if(!level.debug)
-            self thread frenchWellcome();
+            //if(!level.debug)
+            //self thread frenchWellcome();
             level.boxhits.label = &"^3Box hits: ^4";
             level.cheats.label = &"^1^FCheats actif";
             level.firstbox_active.label = &"^2^FFirstbox actif";
@@ -66,7 +66,7 @@ setFragaLanguage()
             }
             break;
         case "japanese":
-            self thread japaneseWellcome();
+            //self thread japaneseWellcome();
             level.boxhits.label = &"^3Box hits: ^4";
             level.cheats.label = &"^1^FCheats アクティブ";
             level.firstbox_active.label = &"^2^FFirstbox アクティブ";

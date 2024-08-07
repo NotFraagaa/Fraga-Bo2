@@ -16,7 +16,6 @@ timer_fraga()
 	self.timer_fraga.color = (1, 1, 1);
 	self.timer_fraga.hidewheninmenu = 1;
 	self.timer_fraga.fontscale = 1.7;
-	self thread timer_fraga_watcher();
 	flag_wait("initial_blackscreen_passed");
 	self.timer_fraga settimerup(0);
 	level waittill("end_game");
@@ -26,26 +25,6 @@ timer_fraga()
 	{
 		self.timer_fraga settimer(level.total_time);
 		wait(0.1);
-	}
-}
-
-timer_fraga_watcher()
-{
-	self endon("disconnect");
-	level endon("end_game");
-
-	while(1)
-	{
-		while(GetDvarInt("timer") == 0)
-		{
-			wait(0.1);
-		}
-		self.timer_fraga.alpha = 1;
-		while(GetDvarInt("timer") >= 1)
-		{
-			wait(0.1);
-		}
-		self.timer_fraga.alpha = 0;
 	}
 }
 
@@ -61,7 +40,6 @@ roundtimer_fraga()
 	self.roundtimer_fraga.x = self.timer_fraga.x;
 	self.roundtimer_fraga.y = self.timer_fraga.y + 15;
 	flag_wait("initial_blackscreen_passed");
-	self thread roundtimer_fraga_watcher();
 	level.fade_time = 0.2;
 
 	while(1)
@@ -78,11 +56,8 @@ roundtimer_fraga()
 		self display_round_time(time, hordes, dog_round, leaper_round);
 		level waittill("start_of_round");
 		self.roundtimer_fraga.label = &"";
-		if(GetDvarInt("roundtimer") >= 1)
-		{
-			self.roundtimer_fraga fadeovertime(level.fade_time);
-			self.roundtimer_fraga.alpha = 1;
-		}
+		self.roundtimer_fraga fadeovertime(level.fade_time);
+		self.roundtimer_fraga.alpha = 1;
 	}
 }
 
@@ -133,31 +108,6 @@ display_sph(time, hordes)
 	self.roundtimer_fraga.alpha = 0;
 	wait(level.fade_time);
 }
-
-roundtimer_fraga_watcher()
-{
-	self endon("disconnect");
-	level endon("end_game");
-
-	while(1)
-	{
-		while(GetDvarInt("roundtimer") == 0)
-		{
-			wait(0.1);
-		}
-
-		self.roundtimer_fraga.y = GetDvarInt("timery") + 15;
-		self.roundtimer_fraga.alpha = 1;
-
-		while(GetDvarInt("roundtimer") >= 1)
-		{
-			wait(0.1);
-		}
-
-		self.roundtimer_fraga.alpha = 0;
-	}
-}
-
 
 trap_timer_fraga()
 {
@@ -309,94 +259,137 @@ rainbow()
 {
 	if(getDvar("Rainbow") == "")
 		setDvar("Rainbow", 0);
-	if(GetDvar("Rainbow"))
+	if(getDvar("RGB") == "")
+		setDvar("RGB", 0);
+	thread random();
+	while(true)
 	{
-		thread random();
-		while(true)
+		if(GetDvar("RGB"))
 		{
-			switch(getDvarInt("Rainbow"))
+			for(i = 0; i <= 1; i += 0.02)
 			{
-				case 1:
-					for(i = 0.7; i > 0.3; i -=0.02)
-					{
-						self.timer_fraga.color = (1, i , 1 - i);
-						self.roundtimer_fraga.color = self.timer_fraga.color;
-						wait 0.1;
-					}
-					for(i = 0.3; i < 0.7; i +=0.02)
-					{
-						self.timer_fraga.color = (1, i ,1 - i);
-						self.roundtimer_fraga.color = self.timer_fraga.color;
-						wait 0.1;
-					}
-					break;
-				case 2:
-					for(i = 0.7; i > 0.3; i -=0.02)
-					{
-						self.timer_fraga.color = (1 - i, i , 1);
-						self.roundtimer_fraga.color = self.timer_fraga.color;
-						wait 0.1;
-					}
-					for(i = 0.3; i < 0.7; i +=0.02)
-					{
-						self.timer_fraga.color = (1 - i, i ,1);
-						self.roundtimer_fraga.color = self.timer_fraga.color;
-						wait 0.1;
-					}
-					break;
-				case 3:
-					for(i = 0.7; i > 0.3; i -=0.02)
-					{
-						self.timer_fraga.color = (1 - i, 1 , i);
-						self.roundtimer_fraga.color = self.timer_fraga.color;
-						wait 0.1;
-					}
-					for(i = 0.3; i < 0.7; i +=0.02)
-					{
-						self.timer_fraga.color = (1 - i, 1 ,i);
-						self.roundtimer_fraga.color = self.timer_fraga.color;
-						wait 0.1;
-					}
-					break;
-				case 4:
-					for(i = 0.7; i > 0.3; i -=0.02)
-					{
-						self.timer_fraga.color = (i, 1 ,1 - i);
-						self.roundtimer_fraga.color = self.timer_fraga.color;
-						wait 0.1;
-					}
-					for(i = 0.3; i < 0.7; i +=0.02)
-					{
-						self.timer_fraga.color = (i, 1 ,1 - i);
-						self.roundtimer_fraga.color = self.timer_fraga.color;
-						wait 0.1;
-					}
-					break;
-				case 5:
-					for(i = 0.7; i > 0.3; i -=0.02)
-					{
-						self.timer_fraga.color = (1, 1 - i, 1);
-						self.roundtimer_fraga.color = self.timer_fraga.color;
-						wait 0.1;
-					}
-					for(i = 0.3; i < 0.7; i +=0.02)
-					{
-						self.timer_fraga.color = (1, 1 - i, 1);
-						self.roundtimer_fraga.color = self.timer_fraga.color;
-						wait 0.1;
-					}
-					break;
-				default: break;
+				self.timer_fraga.color = (1, i, 0);
+				self.roundtimer_fraga.color = self.timer_fraga.color;
+				wait 0.1;
 			}
-			wait 0.1;
+			for(i = 0; i <= 1; i += 0.02)
+			{
+				self.timer_fraga.color = (1 - i, 1, 0);
+				self.roundtimer_fraga.color = self.timer_fraga.color;
+				wait 0.1;
+			}
+			for(i = 0; i <= 1; i += 0.02)
+			{
+				self.timer_fraga.color = (0, 1, i);
+				self.roundtimer_fraga.color = self.timer_fraga.color;
+				wait 0.1;
+			}
+			for(i = 0; i <= 1; i += 0.02)
+			{
+				self.timer_fraga.color = (0, 1 - i, 1);
+				self.roundtimer_fraga.color = self.timer_fraga.color;
+				wait 0.1;
+			}
+			for(i = 0; i <= 1; i += 0.02)
+			{
+				self.timer_fraga.color = (i, 0, 1);
+				self.roundtimer_fraga.color = self.timer_fraga.color;
+				wait 0.1;
+			}
+			for(i = 0; i <= 1; i += 0.02)
+			{
+				self.timer_fraga.color = (1, 0, 1 - i);
+				self.roundtimer_fraga.color = self.timer_fraga.color;
+				wait 0.1;
+			}
 		}
+		if(getDvarInt("RGB") == 1)
+			continue;
+		switch(getDvarInt("Rainbow"))
+		{
+			case 1:
+				for(i = 0.7; i > 0.3; i -=0.02)
+				{
+					self.timer_fraga.color = (1, i , 1 - i);
+					self.roundtimer_fraga.color = self.timer_fraga.color;
+					wait 0.1;
+				}
+				for(i = 0.3; i < 0.7; i +=0.02)
+				{
+					self.timer_fraga.color = (1, i ,1 - i);
+					self.roundtimer_fraga.color = self.timer_fraga.color;
+					wait 0.1;
+				}
+				break;
+			case 2:
+				for(i = 0.7; i > 0.3; i -=0.02)
+				{
+					self.timer_fraga.color = (1 - i, i , 1);
+					self.roundtimer_fraga.color = self.timer_fraga.color;
+					wait 0.1;
+				}
+				for(i = 0.3; i < 0.7; i +=0.02)
+				{
+					self.timer_fraga.color = (1 - i, i ,1);
+					self.roundtimer_fraga.color = self.timer_fraga.color;
+					wait 0.1;
+				}
+				break;
+			case 3:
+				for(i = 0.7; i > 0.3; i -=0.02)
+				{
+					self.timer_fraga.color = (1 - i, 1 , i);
+					self.roundtimer_fraga.color = self.timer_fraga.color;
+					wait 0.1;
+				}
+				for(i = 0.3; i < 0.7; i +=0.02)
+				{
+					self.timer_fraga.color = (1 - i, 1 ,i);
+					self.roundtimer_fraga.color = self.timer_fraga.color;
+					wait 0.1;
+				}
+				break;
+			case 4:
+				for(i = 0.7; i > 0.3; i -=0.02)
+				{
+					self.timer_fraga.color = (i, 1 ,1 - i);
+					self.roundtimer_fraga.color = self.timer_fraga.color;
+					wait 0.1;
+				}
+				for(i = 0.3; i < 0.7; i +=0.02)
+				{
+					self.timer_fraga.color = (i, 1 ,1 - i);
+					self.roundtimer_fraga.color = self.timer_fraga.color;
+					wait 0.1;
+				}
+				break;
+			case 5:
+				for(i = 0.7; i > 0.3; i -=0.02)
+				{
+					self.timer_fraga.color = (1, 1 - i, 1);
+					self.roundtimer_fraga.color = self.timer_fraga.color;
+					wait 0.1;
+				}
+				for(i = 0.3; i < 0.7; i +=0.02)
+				{
+					self.timer_fraga.color = (1, 1 - i, 1);
+					self.roundtimer_fraga.color = self.timer_fraga.color;
+					wait 0.1;
+				}
+				break;
+			default: break;
+		}
+		wait 0.1;
 	}
 }
 random()
 {
+	if(getDvar("random") == "")
+		setDvar("random", 0);
 	while(true)
 	{
 		level waittill("start_of_round");
-		setDvar("Rainbow", randomintrange(1, 5));
+		if(getDvarInt("random"))
+			setDvar("Rainbow", randomintrange(1, 5));
 	}
 }

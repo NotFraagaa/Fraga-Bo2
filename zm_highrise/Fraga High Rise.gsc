@@ -27,12 +27,13 @@ connected()
 		player thread onconnect();
     	player thread bank();
     	player thread award_permaperks_safe();
-        player thread fridge();
 		player thread leapertracker();
 		self.initial_stats = array();
 		self thread watch_stat("springpad_zm");
 		if(getDvarInt("character") != 0)
 			level.givecustomcharacters = ::set_character_option_dierise;
+        player waittill("spawned_player");
+		player thread fridge();
 	}
 }
 

@@ -2,6 +2,7 @@
 #include maps\mp\zombies\_zm_utility;
 #include common_scripts\utility;
 #include maps\mp\_utility;
+#include maps\mp\animscripts\zm_utility;
 #include maps\mp\zombies\_zm_weapons;
 #include maps\mp\zombies\_zm_magicbox;
 #include maps\mp\zombies\_zm_stats;
@@ -17,11 +18,11 @@
 #include maps\mp\zombies\_zm_weap_tomahawk;
 #include maps\mp\zombies\_zm_perk_random;
 #include maps\mp\zombies\_zm_unitrigger;
-#using_animtree("fxanim_props");
-
+#include maps\mp\zombies\_zm_pers_upgrades_functions;
+#include maps\mp\zombies\_zm_pers_upgrades_system;
+#include maps\mp\zombies\_zm_pers_upgrades;
 init()
 {
-    level.trackers = 0;
     self endon( "disconnect" );
 	thread setdvars();
 	thread fix_highround();
@@ -30,7 +31,6 @@ init()
 
     level thread firstbox();
 	level thread boxhits();
-	level thread detect_cheats();
     level thread roundcounter();
 	thread buried_init();
 	thread dierise_init();
@@ -44,21 +44,31 @@ init()
         player thread connected();
         if(!level.onlinegame)
             player thread enablepersperks();
+        player thread cheatDetectionRedacted();
     }
 }
-
 
 connected()
 {
 	self endon("disconnect");
 	self waittill("spawned_player");
-	self thread timer_fraga();
+	self thread timer();
 	self thread timerlocation();
     self thread setFragaLanguage();
-    if(!level.onlinegame)
-        self iprintln("^6Fraga^5V14  ^3Active ^4[Ancient Local mode]");
+    if(isancient())
+    {
+        if(!level.onlinegame)
+            self iprintln("^6Fraga^5V14  ^3Active ^4[Ancient, Local mode]");
+        else
+            self iprintln("^6Fraga^5V14  ^3Active ^4[Ancient]");
+    }
     else
-        self iprintln("^6Fraga^5V14  ^3Active ^4[Ancient]");
+    {
+        if(!level.onlinegame)
+            self iprintln("^6Fraga^5V14  ^3Active ^4[Redacted, Local mode]");
+        else
+            self iprintln("^6Fraga^5V14  ^3Active ^4[Redacted]");
+    }
 }
 
 origins_init()
@@ -74,11 +84,8 @@ origins_connected()
 	while(1)
 	{
 		level waittill("connecting", player);
-        if(level.trackers)
-        {
-            player thread PanzerTracker();
-            player thread TemplarTracker();
-        }
+        player thread PanzerTracker();
+        player thread TemplarTracker();
 		if(getDvarInt("character") != 0)
 			level.givecustomcharacters = ::set_character_option_origins;
 	}
@@ -102,9 +109,10 @@ connected_buried()
 		player thread onconnect_buried();
 		player thread bank();
 		player thread award_permaperks_safe();
-		player thread fridge();
 		if(getDvarInt("character") != 0)
 			level.givecustomcharacters = ::set_character_option_buried;
+        player waittill("spawned_player");
+		player thread fridge();
 	}
 }
 
@@ -134,13 +142,13 @@ dierise_connected()
 		player thread dierise_onconnect();
     	player thread bank();
     	player thread award_permaperks_safe();
-        player thread fridge();
-        if(level.trackers)
-		    player thread leapertracker();
+        player thread leapertracker();
 		self.initial_stats = array();
 		self thread watch_stat("springpad_zm");
 		if(getDvarInt("character") != 0)
 			level.givecustomcharacters = ::set_character_option_dierise;
+        player waittill("spawned_player");
+		player thread fridge();
 	}
 }
 
@@ -165,12 +173,11 @@ mob_connected()
 	while(1)
 	{
 		level waittill("connecting", player);
-        if(level.trackers)
-		    player thread BrutusTracker();
+        //player thread BrutusTracker();
+		player thread trap_timer();
+		player thread givetomahawk();
 		if(getDvarInt("character") != 0)
 			level.givecustomcharacters = ::set_character_option_mob;
-		player thread trap_timer_fraga();
-		player thread givetomahawk();
 	}
 }
 
@@ -193,11 +200,12 @@ tranzit_connected()
 	while(1)
 	{
 		level waittill("connecting", player);
-        player thread fridge();
     	player thread bank();
     	player thread award_permaperks_safe();
 		if(getDvarInt("character") != 0)
 			level.givecustomcharacters = ::set_character_option_transit;
+        player waittill("spawned_player");
+		player thread fridge();
 	}
 }
 
@@ -206,78 +214,60 @@ nuketown_init()
 {
     if(level.script != "zm_nuked")
         return;
-    level thread connected();
+    level thread nuketown_connected();
 	level thread boxlocation();
 	level thread avg();
-	level waittill("connecting", player);
-	player thread checkpaplocation();
-	//level.nextperkindex = -1;
-	//replacefunc(maps\mp\zm_nuked_perks::bring_random_perk, ::perk_order);
 }
 
 nuketown_connected()
 {
-	if(getDvarInt("character") != 0)
-		level.givecustomcharacters = ::set_character_option_nuketown;
+    while(true)
+    {
+	    level waittill("connecting", player);
+        if(!isancient())
+            player thread checkpap();
+        else
+	        player thread checkpaplocation();
+        if(getDvarInt("character") != 0)
+            level.givecustomcharacters = ::set_character_option_nuketown;
+    }
 }
 
 /* General use */
-timer_fraga()
+timer()
 {
 	self endon("disconnect");
 
-	self thread roundtimer_fraga();
-	self.timer_fraga = newclienthudelem(self);
-	self.timer_fraga.alpha = 0;
-	self.timer_fraga.color = (1, 1, 1);//(0.505, 0.478, 0.721);
-	self.timer_fraga.hidewheninmenu = 1;
-	self.timer_fraga.fontscale = 1.7;
-	self thread timer_fraga_watcher();
+	self thread round_timer();
+	self.timer = newclienthudelem(self);
+	self.timer.alpha = 0;
+	self.timer.color = (1, 1, 1);
+	self.timer.hidewheninmenu = 1;
+	self.timer.fontscale = 1.7;
 	flag_wait("initial_blackscreen_passed");
-	self.timer_fraga settimerup(0);
+	self.timer settimerup(0);
 	level waittill("end_game");
 	level.total_time = level.total_time - 0.1;
 
 	while(1)
 	{
-		self.timer_fraga settimer(level.total_time);
+		self.timer settimer(level.total_time);
 		wait(0.1);
 	}
 }
 
-timer_fraga_watcher()
-{
-	self endon("disconnect");
-	level endon("end_game");
-
-	while(1)
-	{
-		while(GetDvarInt("timer") == 0)
-		{
-			wait(0.1);
-		}
-		self.timer_fraga.alpha = 1;
-		while(GetDvarInt("timer") >= 1)
-		{
-			wait(0.1);
-		}
-		self.timer_fraga.alpha = 0;
-	}
-}
-
-roundtimer_fraga()
+round_timer()
 {
 	self endon("disconnect");
 
-	self.roundtimer_fraga = newclienthudelem(self);
-	self.roundtimer_fraga.alpha = 0;
-	self.roundtimer_fraga.fontscale = 1.7;
-	self.roundtimer_fraga.color = (0.8, 0.8, 0.8);
-	self.roundtimer_fraga.hidewheninmenu = 1;
-	self.roundtimer_fraga.x = self.timer_fraga.x;
-	self.roundtimer_fraga.y = self.timer_fraga.y + 15;
+	self.round_timer = newclienthudelem(self);
+	self.round_timer.alpha = 0;
+	self.round_timer.fontscale = 1.7;
+	self.round_timer.color = (0.8, 0.8, 0.8);
+	self.round_timer.hidewheninmenu = 1;
+	self.round_timer.x = self.timer.x;
+	self.round_timer.y = self.timer.y + 15;
 	flag_wait("initial_blackscreen_passed");
-	self thread roundtimer_fraga_watcher();
 	level.fade_time = 0.2;
 
 	while(1)
@@ -286,19 +276,14 @@ roundtimer_fraga()
 		hordes = zombies_this_round / 24;
 		dog_round = flag("dog_round");
 		leaper_round = flag("leaper_round");
-		self.roundtimer_fraga settimerup(0);
+		self.round_timer settimerup(0);
 		start_time = int(GetTime() / 1000);
 		level waittill("end_of_round");
 		end_time = int(GetTime() / 1000);
 		time = end_time - start_time;
 		self display_round_time(time, hordes, dog_round, leaper_round);
 		level waittill("start_of_round");
-		self.roundtimer_fraga.label = &"";
-		if(GetDvarInt("roundtimer") >= 1)
-		{
-			self.roundtimer_fraga fadeovertime(level.fade_time);
-			self.roundtimer_fraga.alpha = 1;
-		}
+		self.round_timer.label = &"";
 	}
 }
 
@@ -310,12 +295,12 @@ display_round_time(time, hordes, dog_round, leaper_round)
 	if(level.round_number > GetDvarInt("sph") && !dog_round && !leaper_round)
 		sph_off = 0;
 
-	self.roundtimer_fraga fadeovertime(level.fade_time);
+	self.round_timer fadeovertime(level.fade_time);
 	if(sph_off)
 	{
 		for(i = 0; i < 238; i++)
 		{
-			self.roundtimer_fraga settimer(timer_for_hud);
+			self.round_timer settimer(timer_for_hud);
 			wait(0.05);
 		}
 	}
@@ -323,11 +308,11 @@ display_round_time(time, hordes, dog_round, leaper_round)
 	{
 		for(i = 0; i < 100; i++)
 		{
-			self.roundtimer_fraga settimer(timer_for_hud);
+			self.round_timer settimer(timer_for_hud);
 			wait(0.05);
 		}
-		self.roundtimer_fraga fadeovertime(level.fade_time);
-		self.roundtimer_fraga.alpha = 0;
+		self.round_timer fadeovertime(level.fade_time);
+		self.round_timer.alpha = 0;
 		wait(level.fade_time * 2);
 		self display_sph(time, hordes);
 	}
@@ -336,43 +321,19 @@ display_round_time(time, hordes, dog_round, leaper_round)
 display_sph(time, hordes)
 {
 	sph = time / hordes;
-	self.roundtimer_fraga fadeovertime(level.fade_time);
-	self.roundtimer_fraga.alpha = 1;
-	self.roundtimer_fraga.label = &"SPH: ";
-	self.roundtimer_fraga setvalue(sph);
+	self.round_timer fadeovertime(level.fade_time);
+	self.round_timer.alpha = 1;
+	self.round_timer.label = &"SPH: ";
+	self.round_timer setvalue(sph);
 
 	for(i = 0; i < 5; i++)
 	{
 		wait(1);
 	}
 
-	self.roundtimer_fraga fadeovertime(level.fade_time);
-	self.roundtimer_fraga.alpha = 0;
+	self.round_timer fadeovertime(level.fade_time);
+	self.round_timer.alpha = 0;
 	wait(level.fade_time);
-}
-
-roundtimer_fraga_watcher()
-{
-	self endon("disconnect");
-	level endon("end_game");
-
-	while(1)
-	{
-		while(GetDvarInt("roundtimer") == 0)
-		{
-			wait(0.1);
-		}
-
-		self.roundtimer_fraga.y = GetDvarInt("timery") + 15;
-		self.roundtimer_fraga.alpha = 1;
-
-		while(GetDvarInt("roundtimer") >= 1)
-		{
-			wait(0.1);
-		}
-
-		self.roundtimer_fraga.alpha = 0;
-	}
 }
 
 timerlocation()
@@ -384,99 +345,95 @@ timerlocation()
 		switch(getDvarInt("timer"))
 		{
 			case 0:
-				self.timer_fraga.alpha = 0;
-				self.roundtimer_fraga.alpha = 0;
+				self.timer.alpha = 0;
+				self.round_timer.alpha = 0;
 				break;
 			case 1:
-				self.roundtimer_fraga.alignx = "right";
-				self.roundtimer_fraga.aligny = "top";
-				self.roundtimer_fraga.horzalign = "user_right";
-				self.roundtimer_fraga.vertalign = "user_top";
-				self.timer_fraga.alignx = "right";
-				self.timer_fraga.aligny = "top";
-				self.timer_fraga.horzalign = "user_right";
-				self.timer_fraga.vertalign = "user_top";
-				self.timer_fraga.x = -1;
-				self.timer_fraga.y = 13;
-				self.timer_fraga.alpha = 1;
-				self.roundtimer_fraga.alpha = 1;
+				self.round_timer.alignx = "right";
+				self.round_timer.aligny = "top";
+				self.round_timer.horzalign = "user_right";
+				self.round_timer.vertalign = "user_top";
+				self.timer.alignx = "right";
+				self.timer.aligny = "top";
+				self.timer.horzalign = "user_right";
+				self.timer.vertalign = "user_top";
+				self.timer.x = -1;
+				self.timer.y = 13;
+				self.timer.alpha = 1;
+				self.round_timer.alpha = 1;
 				if(getDvar("cg_drawFPS") != "Off")
-					self.timer_fraga.y += 4;
+					self.timer.y += 4;
 				if(getDvar("cg_drawFPS") != "Off" && GetDvar("language") == "japanese")
-					self.timer_fraga.y += 10;
+					self.timer.y += 10;
 				if(ismob())
 				{
-					self.timer_fraga.y = 40;
-					self.trap_timer_fraga.y = 19;
+					self.timer.y = 40;
+					self.trap_timer.y = 19;
 				}
 				if(isdierise())
-					self.timer_fraga.y = 30;
+					self.timer.y = 30;
 				break;
 			case 2:
-				self.roundtimer_fraga.alignx = "left";
-				self.roundtimer_fraga.aligny = "top";
-				self.roundtimer_fraga.horzalign = "user_left";
-				self.roundtimer_fraga.vertalign = "user_top";
-				self.timer_fraga.alignx = "left";
-				self.timer_fraga.aligny = "top";
-				self.timer_fraga.horzalign = "user_left";
-				self.timer_fraga.vertalign = "user_top";
-				self.timer_fraga.x = 1;
-				self.timer_fraga.y = 0;
-				self.timer_fraga.alpha = 1;
-				self.roundtimer_fraga.alpha = 1;
+				self.round_timer.alignx = "left";
+				self.round_timer.aligny = "top";
+				self.round_timer.horzalign = "user_left";
+				self.round_timer.vertalign = "user_top";
+				self.timer.alignx = "left";
+				self.timer.aligny = "top";
+				self.timer.horzalign = "user_left";
+				self.timer.vertalign = "user_top";
+				self.timer.x = 1;
+				self.timer.y = 0;
+				self.timer.alpha = 1;
+				self.round_timer.alpha = 1;
 				if(isorigins())
-					self.timer_fraga.y = 45;
+					self.timer.y = 45;
 				if(issurvivalmap())
-					self.timer_fraga.y = 40;
+					self.timer.y = 40;
 				if(isdierise() && level.springpad_hud.alpha != 0)
-					self.timer_fraga.y = 10;
+					self.timer.y = 10;
 				if(isburied() && level.springpad_hud.alpha != 0)
-					self.timer_fraga.y = 35;
-				if(istranzit() && getDvarInt("bus"))
-					self.timer_fraga.y = 21;
-				if(istranzit() && getDvarInt("bus") && GetDvar("language") == "japanese")
-					self.timer_fraga.y = 25;
+					self.timer.y = 35;
 				break;
 			case 3:
-				self.timer_fraga.alignx = "left";
-				self.timer_fraga.aligny = "top";
-				self.timer_fraga.horzalign = "user_left";
-				self.timer_fraga.vertalign = "user_top";
-				self.roundtimer_fraga.alignx = "left";
-				self.roundtimer_fraga.aligny = "top";
-				self.roundtimer_fraga.horzalign = "user_left";
-				self.roundtimer_fraga.vertalign = "user_top";
-				self.timer_fraga.x = 1;
-				self.timer_fraga.y = 250;
-				self.timer_fraga.alpha = 1;
-				self.roundtimer_fraga.alpha = 1;
+				self.timer.alignx = "left";
+				self.timer.aligny = "top";
+				self.timer.horzalign = "user_left";
+				self.timer.vertalign = "user_top";
+				self.round_timer.alignx = "left";
+				self.round_timer.aligny = "top";
+				self.round_timer.horzalign = "user_left";
+				self.round_timer.vertalign = "user_top";
+				self.timer.x = 1;
+				self.timer.y = 250;
+				self.timer.alpha = 1;
+				self.round_timer.alpha = 1;
 				break;
 			case 4:
-				self.roundtimer_fraga.alignx = "right";
-				self.roundtimer_fraga.aligny = "top";
-				self.roundtimer_fraga.horzalign = "user_right";
-				self.roundtimer_fraga.vertalign = "user_top";
-				self.timer_fraga.alignx = "right";
-				self.timer_fraga.aligny = "top";
-				self.timer_fraga.horzalign = "user_right";
-				self.timer_fraga.vertalign = "user_top";
-				self.timer_fraga.x = -170;
-				self.timer_fraga.y = 415;
-				self.timer_fraga.alpha = 1;
-				self.roundtimer_fraga.alpha = 1;
+				self.round_timer.alignx = "right";
+				self.round_timer.aligny = "top";
+				self.round_timer.horzalign = "user_right";
+				self.round_timer.vertalign = "user_top";
+				self.timer.alignx = "right";
+				self.timer.aligny = "top";
+				self.timer.horzalign = "user_right";
+				self.timer.vertalign = "user_top";
+				self.timer.x = -170;
+				self.timer.y = 415;
+				self.timer.alpha = 1;
+				self.round_timer.alpha = 1;
 				break;
 
 			default: break;
 		}
-		self.roundtimer_fraga.x = self.timer_fraga.x;
-		self.roundtimer_fraga.y = self.timer_fraga.y + 15;
+		self.round_timer.x = self.timer.x;
+		self.round_timer.y = self.timer.y + 15;
 		
 		wait 0.1;
 		if(GetDvar("language") == "japanese")
 		{
-			self.timer_fraga.fontscale = 1.5;
-			self.roundtimer_fraga.fontscale = self.timer_fraga.fontscale;
+			self.timer.fontscale = 1.5;
+			self.round_timer.fontscale = self.timer.fontscale;
 		}
 	}
 }
@@ -484,22 +441,62 @@ timerlocation()
 
 istown()
 {
-	return (level.script == "zm_transit" && level.scr_zm_map_start_location == "town" && level.scr_zm_ui_gametype_group == "zsurvival");
+    if(level.script == "zm_transit")
+    {
+        if(level.scr_zm_map_start_location == "town")
+        {
+            if(level.scr_zm_ui_gametype_group == "zsurvival")
+                return true;
+            return false;
+        }
+        return false;
+    }
+    return false;
 }
 
 isfarm()
 {
-	return (level.script == "zm_transit" && level.scr_zm_map_start_location == "farm" && level.scr_zm_ui_gametype_group == "zsurvival");
+    if(level.script == "zm_transit")
+    {
+        if(level.scr_zm_map_start_location == "farm")
+        {
+            if(level.scr_zm_ui_gametype_group == "zsurvival")
+                return true;
+            return false;
+        }
+        return false;
+    }
+    return false;
 }
 
 isdepot()
 {
-	return (level.script == "zm_transit" && level.scr_zm_map_start_location == "transit" && level.scr_zm_ui_gametype_group == "zsurvival");
+    if(level.script == "zm_transit")
+    {
+        if(level.scr_zm_map_start_location == "transit")
+        {
+            if(level.scr_zm_ui_gametype_group == "zsurvival")
+                return true;
+            return false;
+        }
+        return false;
+    }
+    return false;
 }
 
 istranzit()
 {
-	return (level.script == "zm_transit" && level.scr_zm_map_start_location == "transit" && level.scr_zm_ui_gametype_group == "zclassic");
+    if(level.script == "zm_transit")
+    {
+        if(level.scr_zm_map_start_location == "transit")
+        {
+            if(level.scr_zm_ui_gametype_group == "zclassic")
+                return true;
+            return false;
+        }
+        return false;
+    }
+    return false;
 }
 
 isnuketown()
@@ -534,13 +531,28 @@ is_round(round)
 
 issurvivalmap()
 {
-	return (isnuketown() || istown() || isfarm() || isdepot());
+    if(isnuketown())
+        return true;
+    if(istown())
+        return true;
+    if(isfarm())
+        return true;
+    if(isdepot())
+        return true;
+    return false;
 }
 
 isvictismap()
 {
-	return (istranzit() || isburied() || isdierise());
+    if(isdierise())
+        return true;
+    if(isburied())
+        return true;
+    if(istranzit())
+        return true;
+    return false;
 }
+
 
 setDvars()
 {
@@ -554,49 +566,29 @@ setDvars()
 		setdvar("character", 0);
 	if(GetDvar("FragaDebug") == "")
 		setdvar("FragaDebug", 0);
-    if(getdvar("SR") == "")
-        setdvar("SR", 0 );
-    if(getdvar("bus") == "")
-        setdvar("bus", 0 );
-    if(getdvar("graphictweaks") == "")
-        setdvar("graphictweaks", 0 );
     if(getdvar("sph") == "")
         setdvar("sph", 50 );
     if(getdvar("timer") == "")
         setdvar("timer", 1 );
-    if(getdvar("roundtimer") == "")
-        setdvar("roundtimer", 1 );
-    if(getdvar("splits") != "")
-        setdvar("splits", 0 );
-	if( getdvar("nightmode") == "")
-		setdvar("nightmode", 0 );
 	if(GetDvar("firstbox") == "")
 		setdvar("firstbox", 0);
     
     if(isvictismap())
     {
-        if(GetDvar("pers_perk") == "")
-            setdvar("pers_perk", 1);
-        if(GetDvar("full_bank") == "")
-            setdvar("full_bank", 1);
-        if(GetDvar("buildables") == "")
-            setdvar("buildables", 1);
         if(getdvar("fridge") == "")
             setdvar("fridge", "m16");
     }
     if(ismob())
     {
         if(getDvarInt("tracker") == "")
-            setDvar("tracker", 1);
+            setDvar("tracker", 0);
         if(getdvar("traptimer") == "")
             setdvar("traptimer", 0 );
     }
     if(isorigins())
     {
-        if(GetDvar("templars") == "")
-            setdvar("templars", 0);
         if(getDvarInt("tracker") == "")
-            setDvar("tracker", 1);
+            setDvar("tracker", 0);
         if(GetDvar("perkRNG") == "")
             setdvar("perkRNG", 1);
     }
@@ -608,9 +600,9 @@ setDvars()
     if(isdierise())
     {
         if(getDvarInt("tracker") == "")
-            setDvar("tracker", 1);
+            setDvar("tracker", 0);
     }
-    if(isnuketown())
+    if(isnuketown() && isancient())
     {
         if(getDvar("perkRNG") == "")
             setDvar("perkRNG", 1);
@@ -643,107 +635,6 @@ fix_highround()
 		}
 		wait(0.1);
 	}
-}
-
-detect_cheats()
-{
-    level thread cheatsActivated();
-    level thread firstboxActivated();
-    level thread perkrng();
-    level thread tempalars();
-}
-
-cheatsActivated()
-{
-	level.cheats.hidewheninmenu = 1;
-    level.cheats = createserverfontstring( "objective", 1.3 );
-    level.cheats.y = 20;
-    level.cheats.x = 0;
-    level.cheats.fontscale = 3;
-    level.cheats.alignx = "center";
-    level.cheats.horzalign = "user_center";
-    level.cheats.vertalign = "user_top";
-    level.cheats.aligny = "top";
-    level.cheats.alpha = 0;
-
-    while(1)
-    {
-        if(getDvarInt("sv_cheats"))
-            level.cheats.alpha = 1;
-        if(!getDvarInt("sv_cheats"))
-            level.cheats.alpha = 0;
-        wait 0.1;
-    }
-}
-
-firstboxActivated()
-{
-	level.firstbox_active.hidewheninmenu = 1;
-    level.firstbox_active = createserverfontstring( "objective", 1.3 );
-    level.firstbox_active.y = -20;
-    level.firstbox_active.x = 0;
-    level.firstbox_active.fontscale = 1;
-    level.firstbox_active.alignx = "center";
-    level.firstbox_active.horzalign = "user_center";
-    level.firstbox_active.vertalign = "user_bottom";
-    level.firstbox_active.aligny = "bottom";
-    level.firstbox_active.label = &"^2^FFirstbox active";
-    level.firstbox_active.alpha = 0;
-    if(getDvarInt("firstbox"))
-    while(level.round_number < 2)
-    {
-            level.firstbox_active.alpha = 1;
-            wait 0.1;
-    }
-    level.firstbox_active destroy();
-}
-
-perkrng()
-{
-	level.perkrng_desabled.hidewheninmenu = 1;
-    level.perkrng_desabled = createserverfontstring( "objective", 1.3 );
-    level.perkrng_desabled.y = -30;
-    level.perkrng_desabled.x = 0;
-    level.perkrng_desabled.fontscale = 1;
-    level.perkrng_desabled.alignx = "center";
-    level.perkrng_desabled.horzalign = "user_center";
-    level.perkrng_desabled.vertalign = "user_bottom";
-    level.perkrng_desabled.aligny = "bottom";
-    level.perkrng_desabled.label = &"^4^FPerk RNG manipulated";
-    if(isburied() || isorigins() || isnuketown())
-    {
-        if(!getDvarInt("perkRNG"))
-        while(level.round_number < 2)
-        {
-            level.perkrng_desabled.alpha = 1;
-            wait 0.1;
-        }
-    }
-    level.perkrng_desabled destroy();
-}
-
-tempalars()
-{
-	level.templar_modiffied.hidewheninmenu = 1;
-    level.templar_modiffied = createserverfontstring( "objective", 1.3 );
-    level.templar_modiffied.y = -40;
-    level.templar_modiffied.x = 0;
-    level.templar_modiffied.fontscale = 1;
-    level.templar_modiffied.alignx = "center";
-    level.templar_modiffied.horzalign = "user_center";
-    level.templar_modiffied.vertalign = "user_bottom";
-    level.templar_modiffied.aligny = "bottom";
-    level.templar_modiffied.label = &"^6^FTemplars manipulated";
-    if(isburied() || isorigins() || isnuketown())
-    {
-        if(getDvarInt("templars"))
-        while(level.round_number < 2)
-        {
-            level.templar_modiffied.alpha = 1;
-            wait 0.1;
-        }
-    }
-    level.templar_modiffied destroy();
 }
 
 /* Box stuff */
@@ -889,7 +780,7 @@ display()
     level.displayraygunmk2avg.y = 14;
     level.displayraygunmk2avg.x = 82;
     if(getDvar("language") == "japanese")
-        level.displayraygunavg.x = 143;
+        level.displayraygunmk2avg.x = 143;
     level.displayraygunmk2avg.fontscale = 1.3;
     level.displayraygunmk2avg.alignx = "left";
     level.displayraygunmk2avg.horzalign = "user_left";
@@ -981,29 +872,44 @@ firstbox()
 {
 	self endon("disconnect");
 	flag_wait("initial_blackscreen_passed");
-
-    if(getDvarInt("firstbox"))
+    
+    while(level.round_number <= 1)
     {
-        level thread setUpWeapons();
-
-        special_weapon_magicbox_check = level.special_weapon_magicbox_check;
-        level.special_weapon_magicbox_check = undefined;
-
-        foreach(weapon in getarraykeys(level.zombie_weapons))   // this is the only difference in the code
-            level.zombie_weapons[weapon].is_in_box = 0;
-        
-        foreach(weapon in level.forced_box_guns)
-            level.zombie_weapons[weapon].is_in_box = 1;
-
-        while( (level.total_chest_accessed - level.chest_moves)!= level.forced_box_guns.size && level.round_number < 10)
-            wait 1;
-
-        level.special_weapon_magicbox_check = special_weapon_magicbox_check;
-        foreach(weapon in getarraykeys(level.zombie_include_weapons))
+        if(getDvarInt("firstbox"))
         {
-            if(level.zombie_include_weapons[weapon] == 1)
+            level thread setUpWeapons();
+            special_weapon_magicbox_check = level.special_weapon_magicbox_check;
+            level.special_weapon_magicbox_check = undefined;
+
+            foreach(weapon in getarraykeys(level.zombie_weapons))
+            {
+                level.zombie_weapons[weapon].is_in_box = 0;
+                wait 0.1;
+            }
+            
+            while(!isdefined(level.forced_box_guns))
+                wait 0.1;
+
+            foreach(weapon in level.forced_box_guns)
+            {
                 level.zombie_weapons[weapon].is_in_box = 1;
+                wait 0.1;
+            }
+
+            while( (level.total_chest_accessed - level.chest_moves) != level.forced_box_guns.size && level.round_number < 10)
+                wait 1;
+
+            level.special_weapon_magicbox_check = special_weapon_magicbox_check;
+            foreach(weapon in getarraykeys(level.zombie_include_weapons))
+            {
+                if(level.zombie_include_weapons[weapon] == 1)
+                    level.zombie_weapons[weapon].is_in_box = 1;
+            }
         }
+        if(isancient())
+            return;
+        else
+            wait 0.1;
     }
 }
 
@@ -1011,132 +917,101 @@ setUpWeapons()
 {
     if(isdefined(level.forced_box_guns))
         return;
-    switch(level.script)
+    if(istranzit())
+    switch(level.players.size)
     {
-        case "zm_transit":
-            switch(level.players.size)
-            {
-                case 1: 
-                level.forced_box_guns = array("raygun_mark2_zm", "cymbal_monkey_zm", "emp_grenade_zm");
-                break;
-                case 2:
-                level.forced_box_guns = array("raygun_mark2_zm", "ray_gun_zm", "cymbal_monkey_zm", "emp_grenade_zm");
-                break;
-                case 3:
-                level.forced_box_guns = array("raygun_mark2_zm", "ray_gun_zm", "ray_gun_zm", "cymbal_monkey_zm", "emp_grenade_zm", "cymbal_monkey_zm");
-                break;
-                case 4:
-                level.forced_box_guns = array("raygun_mark2_zm", "ray_gun_zm", "ray_gun_zm", "ray_gun_zm", "cymbal_monkey_zm", "emp_grenade_zm", "cymbal_monkey_zm", "cymbal_monkey_zm");
-                break;
-            }
-            break;
-        
-        case "zm_nuked":
-            switch(level.players.size)
-            {
-                case 1: 
-                level.forced_box_guns = array("raygun_mark2_zm", "cymbal_monkey_zm");
-                break;
-                case 2:
-                level.forced_box_guns = array("raygun_mark2_zm", "ray_gun_zm", "cymbal_monkey_zm", "cymbal_monkey_zm");
-                break;
-                case 3:
-                level.forced_box_guns = array("raygun_mark2_zm", "ray_gun_zm", "ray_gun_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm");
-                break;
-                case 4:
-                level.forced_box_guns = array("raygun_mark2_zm", "ray_gun_zm", "ray_gun_zm", "ray_gun_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm");
-                break;
-            }
-            break;
-
-        case "zm_highrise":
-            switch(level.players.size)
-            {
-                case 1: 
-                level.forced_box_guns = array("cymbal_monkey_zm");
-                break;
-                case 2:
-                level.forced_box_guns = array("cymbal_monkey_zm", "cymbal_monkey_zm");
-                break;
-                case 3:
-                level.forced_box_guns = array("cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm");
-                break;
-                case 4:
-                level.forced_box_guns = array("cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm");
-                break;
-            }
-            break;
-
-        case "zm_prison":
-            switch(level.players.size)
-            {
-                case 1: 
-                level.forced_box_guns = array("raygun_mark2_zm", "blundergat_zm");
-                break;
-                case 2:
-                level.forced_box_guns = array("raygun_mark2_zm", "ray_gun_zm", "blundergat_zm");
-                break;
-                case 3:
-                level.forced_box_guns = array("raygun_mark2_zm", "ray_gun_zm", "ray_gun_zm", "blundergat_zm");
-                break;
-                case 4:
-                level.forced_box_guns = array("raygun_mark2_zm", "ray_gun_zm", "ray_gun_zm", "ray_gun_zm", "blundergat_zm");
-                break;
-            }
-            break;
-        case "zm_buried":
-            switch(level.players.size)
-            {
-                case 1: 
-                level.forced_box_guns = array("raygun_mark2_zm", "cymbal_monkey_zm", "slowgun_zm");
-                break;
-                case 2:
-                level.forced_box_guns = array("raygun_mark2_zm", "raygun_mark2_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "slowgun_zm");
-                break;
-                case 3:
-                level.forced_box_guns = array("raygun_mark2_zm", "raygun_mark2_zm", "raygun_mark2_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "slowgun_zm");
-                break;
-                case 4:
-                level.forced_box_guns = array("raygun_mark2_zm", "raygun_mark2_zm", "raygun_mark2_zm", "raygun_mark2_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "slowgun_zm");
-                break;
-            }
-            break;
-        case "zm_tomb":
-            if(getDvar("SR") == 30)
-                switch(level.players.size)
-                {
-                    case 1: 
-                    level.forced_box_guns = array("scar_zm", "raygun_mark2_zm", "cymbal_monkey_zm");
-                    break;
-                    case 2:
-                    level.forced_box_guns = array("scar_zm", "scar_zm", "raygun_mark2_zm", "ray_gun_zm", "cymbal_monkey_zm", "cymbal_monkey_zm");
-                    break;
-                    case 3:
-                    level.forced_box_guns = array("scar_zm", "scar_zm", "scar_zm", "raygun_mark2_zm", "ray_gun_zm", "ray_gun_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm");
-                    break;
-                    case 4:
-                    level.forced_box_guns = array("scar_zm", "scar_zm", "scar_zm", "scar_zm", "raygun_mark2_zm", "ray_gun_zm", "ray_gun_zm", "ray_gun_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm");
-                    break;
-                }
-            else
-                switch(level.players.size)
-                {
-                    case 1: 
-                    level.forced_box_guns = array("scar_zm", "raygun_mark2_zm", "m32_zm");
-                    break;
-                    case 2:
-                    level.forced_box_guns = array("scar_zm", "scar_zm", "raygun_mark2_zm", "ray_gun_zm", "cymbal_monkey_zm", "cymbal_monkey_zm");
-                    break;
-                    case 3:
-                    level.forced_box_guns = array("scar_zm", "scar_zm", "scar_zm", "raygun_mark2_zm", "ray_gun_zm", "ray_gun_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm");
-                    break;
-                    case 4:
-                    level.forced_box_guns = array("scar_zm", "scar_zm", "scar_zm", "scar_zm", "raygun_mark2_zm", "ray_gun_zm", "ray_gun_zm", "ray_gun_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm");
-                    break;
-                }
-            break;
-        default:
-            break;
+        case 1: 
+        level.forced_box_guns = array("raygun_mark2_zm", "cymbal_monkey_zm", "emp_grenade_zm");
+        break;
+        case 2:
+        level.forced_box_guns = array("raygun_mark2_zm", "ray_gun_zm", "cymbal_monkey_zm", "emp_grenade_zm");
+        break;
+        case 3:
+        level.forced_box_guns = array("raygun_mark2_zm", "ray_gun_zm", "ray_gun_zm", "cymbal_monkey_zm", "emp_grenade_zm", "cymbal_monkey_zm");
+        break;
+        case 4:
+        level.forced_box_guns = array("raygun_mark2_zm", "ray_gun_zm", "ray_gun_zm", "ray_gun_zm", "cymbal_monkey_zm", "emp_grenade_zm", "cymbal_monkey_zm", "cymbal_monkey_zm");
+        break;
+    }
+    if(isnuketown())
+    switch(level.players.size)
+    {
+        case 1: 
+        level.forced_box_guns = array("raygun_mark2_zm", "cymbal_monkey_zm");
+        break;
+        case 2:
+        level.forced_box_guns = array("raygun_mark2_zm", "ray_gun_zm", "cymbal_monkey_zm", "cymbal_monkey_zm");
+        break;
+        case 3:
+        level.forced_box_guns = array("raygun_mark2_zm", "ray_gun_zm", "ray_gun_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm");
+        break;
+        case 4:
+        level.forced_box_guns = array("raygun_mark2_zm", "ray_gun_zm", "ray_gun_zm", "ray_gun_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm");
+        break;
+    }
+    if(isdierise())
+    switch(level.players.size)
+    {
+        case 1: 
+        level.forced_box_guns = array("cymbal_monkey_zm");
+        break;
+        case 2:
+        level.forced_box_guns = array("cymbal_monkey_zm", "cymbal_monkey_zm");
+        break;
+        case 3:
+        level.forced_box_guns = array("cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm");
+        break;
+        case 4:
+        level.forced_box_guns = array("cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm");
+        break;
+    }
+    if(ismob())
+    switch(level.players.size)
+    {
+        case 1: 
+        level.forced_box_guns = array("raygun_mark2_zm", "blundergat_zm");
+        break;
+        case 2:
+        level.forced_box_guns = array("raygun_mark2_zm", "ray_gun_zm", "blundergat_zm");
+        break;
+        case 3:
+        level.forced_box_guns = array("raygun_mark2_zm", "ray_gun_zm", "ray_gun_zm", "blundergat_zm");
+        break;
+        case 4:
+        level.forced_box_guns = array("raygun_mark2_zm", "ray_gun_zm", "ray_gun_zm", "ray_gun_zm", "blundergat_zm");
+        break;
+    }
+    if(isburied())
+    switch(level.players.size)
+    {
+        case 1: 
+        level.forced_box_guns = array("raygun_mark2_zm", "cymbal_monkey_zm", "slowgun_zm");
+        break;
+        case 2:
+        level.forced_box_guns = array("raygun_mark2_zm", "raygun_mark2_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "slowgun_zm");
+        break;
+        case 3:
+        level.forced_box_guns = array("raygun_mark2_zm", "raygun_mark2_zm", "raygun_mark2_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "slowgun_zm");
+        break;
+        case 4:
+        level.forced_box_guns = array("raygun_mark2_zm", "raygun_mark2_zm", "raygun_mark2_zm", "raygun_mark2_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "slowgun_zm");
+        break;
+    }
+    if(isorigins())
+    switch(level.players.size)
+    {
+        case 1: 
+        level.forced_box_guns = array("scar_zm", "raygun_mark2_zm", "m32_zm");
+        break;
+        case 2:
+        level.forced_box_guns = array("scar_zm", "scar_zm", "raygun_mark2_zm", "ray_gun_zm", "cymbal_monkey_zm", "cymbal_monkey_zm");
+        break;
+        case 3:
+        level.forced_box_guns = array("scar_zm", "scar_zm", "scar_zm", "raygun_mark2_zm", "ray_gun_zm", "ray_gun_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm");
+        break;
+        case 4:
+        level.forced_box_guns = array("scar_zm", "scar_zm", "scar_zm", "scar_zm", "raygun_mark2_zm", "ray_gun_zm", "ray_gun_zm", "ray_gun_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm");
+        break;
     }
 }
 
@@ -1176,11 +1051,11 @@ fridge()
 
 award_permaperks_safe()
 {
-	if(level.round_number >= 15)
-		return;
-        
     if(!level.onlinegame)
         return;
+	if(level.round_number >= 15)
+		return;
+
 	level endon("end_game");
 	self endon("disconnect");
 
@@ -1188,20 +1063,20 @@ award_permaperks_safe()
 		wait 0.05;
 
 	wait 0.5;
-	{
-		perks_to_process = [];
-		perks_to_process[perks_to_process.size] = permaperk_array("revive");
-		perks_to_process[perks_to_process.size] = permaperk_array("multikill_headshots");
-		perks_to_process[perks_to_process.size] = permaperk_array("perk_lose");
-		perks_to_process[perks_to_process.size] = permaperk_array("jugg", undefined, undefined, 15);
-		perks_to_process[perks_to_process.size] = permaperk_array("flopper", array("zm_buried"));
-		perks_to_process[perks_to_process.size] = permaperk_array("box_weapon", array("zm_highrise", "zm_buried"), array("zm_transit"));
-		perks_to_process[perks_to_process.size] = permaperk_array("cash_back");
-		perks_to_process[perks_to_process.size] = permaperk_array("sniper");
-		perks_to_process[perks_to_process.size] = permaperk_array("insta_kill");
-		perks_to_process[perks_to_process.size] = permaperk_array("pistol_points");
-		perks_to_process[perks_to_process.size] = permaperk_array("double_points");
-	}
+
+    perks_to_process = [];
+    perks_to_process[perks_to_process.size] = permaperk_array("revive");
+    perks_to_process[perks_to_process.size] = permaperk_array("multikill_headshots");
+    perks_to_process[perks_to_process.size] = permaperk_array("perk_lose");
+    perks_to_process[perks_to_process.size] = permaperk_array("jugg", undefined, undefined, 15);
+    perks_to_process[perks_to_process.size] = permaperk_array("flopper", array("zm_buried"));
+    perks_to_process[perks_to_process.size] = permaperk_array("box_weapon", array("zm_highrise", "zm_buried"), array("zm_transit"));
+    perks_to_process[perks_to_process.size] = permaperk_array("cash_back");
+    perks_to_process[perks_to_process.size] = permaperk_array("sniper");
+    perks_to_process[perks_to_process.size] = permaperk_array("insta_kill");
+    perks_to_process[perks_to_process.size] = permaperk_array("pistol_points");
+    perks_to_process[perks_to_process.size] = permaperk_array("double_points");
+
 	foreach (perk in perks_to_process)
 	{
 		if( !(istranzit() && perk == permaperk_array("box_weapon", array("zm_highrise", "zm_buried"), array("zm_transit"))))
@@ -1733,6 +1608,20 @@ set_exert_id()
 	self maps\mp\zombies\_zm_audio::setexertvoice(self.characterindex);
 }
 
+zmbvoxinitspeaker( speaker, prefix, ent )
+{
+    ent.zmbvoxid = speaker;
+
+    if ( !isdefined( self.speaker[speaker] ) )
+    {
+        self.speaker[speaker] = spawnstruct();
+        self.speaker[speaker].alias = [];
+    }
+
+    self.speaker[speaker].prefix = prefix;
+    self.speaker[speaker].ent = ent;
+}
+
 assign_lowest_unused_character_index()
 {
     charindexarray = [];
@@ -1791,8 +1680,7 @@ assign_lowest_unused_character_index()
 leapertracker()
 {
 	self endon("disconnect");
-	if(!isDefined(level.trackingLeapers))
-		level.trackingLeapers = true;
+    self thread trackerswatcher();
 
 	self.lastleaperround = newclienthudelem(self);
 	self.lastleaperround.alignx = "left";
@@ -1805,7 +1693,6 @@ leapertracker()
 	self.lastleaperround.sort = 1;
 	self.lastleaperround.color = (1, 1 ,1);
 	self.lastleaperround.hidewheninmenu = 1;
-	self.lastleaperround.alpha = 1;
 	self.lastleaperround.label = &"^3Last leaper round: ^4";
 	self.lastleaperround setValue(0);
 	while(1)
@@ -1819,9 +1706,8 @@ leapertracker()
 PanzerTracker()
 {
 	self endon("disconnect");
-	if(!isDefined(level.trackingPanzers))
-		level.trackingPanzers = true;
 
+    self thread trackerswatcher();
 	self.lastPanzerRound = newclienthudelem(self);
 	self.lastPanzerRound.alignx = "left";
 	self.lastPanzerRound.horzalign = "user_left";
@@ -1845,9 +1731,8 @@ PanzerTracker()
 TemplarTracker()
 {
 	self endon("disconnect");
-	if(!isDefined(level.trackingTemplars))
-		level.trackingTemplars = true;
 
+    self thread trackerswatcher();
 	self.lastTemplarRound = newclienthudelem(self);
 	self.lastTemplarRound.alignx = "left";
 	self.lastTemplarRound.horzalign = "user_left";
@@ -1868,12 +1753,11 @@ TemplarTracker()
 	}
 }
 
-
+/*
 BrutusTracker()
 {
 	self endon("disconnect");
-	if(!isDefined(level.trackingBrutus))
-		level.trackingBrutus = true;
+    self thread trackerswatcher();
 
 	self.lastBrutusRound = newclienthudelem(self);
 	self.lastBrutusRound.alignx = "left";
@@ -1886,45 +1770,66 @@ BrutusTracker()
 	self.lastBrutusRound.sort = 1;
 	self.lastBrutusRound.color = (1, 1 ,1);
 	self.lastBrutusRound.hidewheninmenu = 1;
-	self.lastBrutusRound.alpha = 1;
 	self.lastBrutusRound.label = &"^3Last brutus round: ^4";
 	self.lastBrutusRound setValue(0);
 	while(1)
 	{
 		level waittill( "brutus_spawned");
 		self.lastBrutusRound setvalue(level.round_number);
+        wait 1;
 	}
 }
-
+*/
+trackerswatcher()
+{
+    while(true)
+    {
+        if(getDvarInt("tracker"))
+        {
+            //self.lastBrutusRound.alpha = 1;
+	        self.lastTemplarRound.alpha = 1;
+	        self.lastPanzerRound.alpha = 1;
+	        self.lastleaperround.alpha = 1;
+        }
+        else
+        {
+            //self.lastBrutusRound.alpha = 0;
+	        self.lastTemplarRound.alpha = 0;
+	        self.lastPanzerRound.alpha = 0;
+	        self.lastleaperround.alpha = 0;
+        }
+        wait 0.1;
+    }
+}
 /* MOB */
 
 setup_master_key_override()
 {
 	wait 1;
-	switch(getDvarInt("box"))
-	{
-		case 1:
-			level.is_master_key_west = 0;
-        	setclientfield( "fake_master_key", level.is_master_key_west + 1 );
-			exploder( 100 );
-			level thread key_pulley( "east" );
-			array_delete( getentarray( "wires_pulley_west", "script_noteworthy" ) );
-			break;
-		case 2:
-			level.is_master_key_west = 1;
-        	setclientfield( "fake_master_key", level.is_master_key_west + 1 );
-			level thread key_pulley( "west" );
-			exploder( 101 );
-			array_delete( getentarray( "wires_pulley_east", "script_noteworthy" ) );
-			break;
-		default:
-			level.is_master_key_west = 0;
-        	setclientfield( "fake_master_key", level.is_master_key_west + 1 );
-			exploder( 100 );
-			level thread key_pulley( "east" );
-			array_delete( getentarray( "wires_pulley_west", "script_noteworthy" ) );
-			break;
-	}
+    switch(getDvarInt("box"))
+    {
+        case 1:
+            level.is_master_key_west = 0;
+            setclientfield( "fake_master_key", level.is_master_key_west + 1 );
+            exploder( 100 );
+            level thread key_pulley( "east" );
+            array_delete( getentarray( "wires_pulley_west", "script_noteworthy" ) );
+            break;
+        case 2:
+            level.is_master_key_west = 1;
+            setclientfield( "fake_master_key", level.is_master_key_west + 1 );
+            level thread key_pulley( "west" );
+            exploder( 101 );
+            array_delete( getentarray( "wires_pulley_east", "script_noteworthy" ) );
+            break;
+        default:
+            level.is_master_key_west = 0;
+            setclientfield( "fake_master_key", level.is_master_key_west + 1 );
+            exploder( 100 );
+            level thread key_pulley( "east" );
+            array_delete( getentarray( "wires_pulley_west", "script_noteworthy" ) );
+            break;
+    }
 }
 
 givetomahawk()
@@ -2026,22 +1931,22 @@ key_pulley( str_master_key_location )
     }
 }
 
-trap_timer_fraga()
+trap_timer()
 {
 	self endon( "disconnect" );
 
-	self.trap_timer_fraga = newclienthudelem( self );
-	self.trap_timer_fraga.alignx = "right";
-	self.trap_timer_fraga.aligny = "top";
-	self.trap_timer_fraga.horzalign = "user_right";
-	self.trap_timer_fraga.vertalign = "user_top";
-	self.trap_timer_fraga.x = -2;
-	self.trap_timer_fraga.y = 14;
-	self.trap_timer_fraga.fontscale = 1.4;
-	self.trap_timer_fraga.hidewheninmenu = 1;
-	self.trap_timer_fraga.hidden = 0;
-	self.trap_timer_fraga.label = &"";
-	self.trap_timer_fragax.alpha = 1;
+	self.trap_timer = newclienthudelem( self );
+	self.trap_timer.alignx = "right";
+	self.trap_timer.aligny = "top";
+	self.trap_timer.horzalign = "user_right";
+	self.trap_timer.vertalign = "user_top";
+	self.trap_timer.x = -2;
+	self.trap_timer.y = 14;
+	self.trap_timer.fontscale = 1.4;
+	self.trap_timer.hidewheninmenu = 1;
+	self.trap_timer.hidden = 0;
+	self.trap_timer.label = &"";
+	self.trap_timerx.alpha = 1;
 
 	while( 1 )
 	{
@@ -2051,14 +1956,14 @@ trap_timer_fraga()
 			if( level.trap_activated )
 			{
 				wait 0.1;
-				self.trap_timer_fraga.color = ( 0, 1, 0 );
-				self.trap_timer_fraga.alpha = 1;
-				self.trap_timer_fraga settimer( 25 );
+				self.trap_timer.color = ( 0, 1, 0 );
+				self.trap_timer.alpha = 1;
+				self.trap_timer settimer( 25 );
 				wait 25;
-				self.trap_timer_fraga settimer( 25 );
-				self.trap_timer_fraga.color = ( 1, 0, 0 );
+				self.trap_timer settimer( 25 );
+				self.trap_timer.color = ( 1, 0, 0 );
 				wait 25;
-				self.trap_timer_fraga.alpha = 0;
+				self.trap_timer.alpha = 0;
 			}
 		}
 		wait 0.1;	
@@ -2079,6 +1984,83 @@ checkpaplocation()
 	if(pap.origin[0] > -1700 || jug.origin[0] > -1700)
 		level.players[0] notify ("menuresponse", "", "restart_level_zm");
 }
+
+checkpap()
+{
+    wait 3;
+	pap = getent( "specialty_weapupgrade", "script_noteworthy" );
+	switch(getDvar("language"))
+	{
+		case "spanish":
+			if(pap.origin[0] < -2000)
+			{
+				self iprintln("El PAP está al fondo de las casa azul");
+				return;
+			}
+			if(pap.origin[0] < -1600)
+			{
+				self iprintln("El PAP está al lado del bunker");
+				return;
+			}
+			if(pap.origin[0] > 2030)
+			{
+				self iprintln("El PAP está al fondo de las casa amarilla");
+				return;
+			}
+			if(pap.origin[0] > 1600)
+			{
+				self iprintln("El PAP está en la caja de arena");
+				return;
+			}
+			if(pap.origin[0] > 1300)
+			{
+				self iprintln("El PAP está en la barbacoa");
+				return;
+			}
+			if(pap.origin[0] > 700)
+			{
+				self iprintln("El PAP está en el 2º piso de la casa amarilla");
+				return;
+			}
+			self iprintln("El PAP está en el medio");
+		break;
+		default:
+			if(pap.origin[0] < -2000)
+			{
+				self iprintln("PAP is at the end of green house's garden");
+				return;
+			}
+			if(pap.origin[0] < -1600)
+			{
+				self iprintln("PAP is next to the bunker");
+				return;
+			}
+			if(pap.origin[0] > 2030)
+			{
+				self iprintln("PAP is at the end of yellow house's garden");
+				return;
+			}
+			if(pap.origin[0] > 1600)
+			{
+				self iprintln("PAP is at sandbox");
+				return;
+			}
+			if(pap.origin[0] > 1300)
+			{
+				self iprintln("PAP is at barbecue");
+				return;
+			}
+			if(pap.origin[0] > 700)
+			{
+				self iprintln("PAP is at yellow house's seconde floor");
+				return;
+			}
+			self iprintln("PAP is at middle of the map");
+		break;
+	}
+}
+
+/* Mob */
 
 sndhitelectrifiedpulley( str_master_key_location )
 {
@@ -2108,13 +2090,6 @@ afterlife_interact_object_think()
     self setcandamage( 1 );
     self useanimtree( "animtree" );
     self playloopsound( "zmb_afterlife_shockbox_off", 1 );
-
-    if ( !isdefined( level.shockbox_anim ) )
-    {
-        level.shockbox_anim["on"] = %fxanim_zom_al_shock_box_on_anim;
-        level.shockbox_anim["off"] = %fxanim_zom_al_shock_box_off_anim;
-    }
-
     trig_spawn_offset = ( 0, 0, 0 );
 
     if ( self.model != "p6_anim_zm_al_nixie_tubes" )
@@ -2220,10 +2195,39 @@ afterlife_interact_object_think()
 
 play_fx( str_fx, v_origin, v_angles, time_to_delete_or_notify, b_link_to_self, str_tag, b_no_cull )
 {
-    if ( ( !isdefined( time_to_delete_or_notify ) || !isstring( time_to_delete_or_notify ) && time_to_delete_or_notify == -1 ) && ( isdefined( b_link_to_self ) && b_link_to_self ) && isdefined( str_tag ) )
+    if(isdefined(time_to_delete_or_notify))
     {
-        playfxontag( getfx( str_fx ), self, str_tag );
-        return self;
+        if(time_to_delete_or_notify == -1)
+        {
+            if(isdefined(b_link_to_self))
+            {
+                if(b_link_to_self)
+                {
+                    if(isdefined(str_tag))
+                    {
+                        playfxontag( getfx( str_fx ), self, str_tag );
+                        return self;
+                    }
+                }
+            }
+        }
+    }
+    else if(!isstring( time_to_delete_or_notify ))
+    {
+        if(time_to_delete_or_notify == -1)
+        {
+            if(isdefined(b_link_to_self))
+            {
+                if(b_link_to_self)
+                {
+                    if(isdefined(str_tag))
+                    {
+                        playfxontag( getfx( str_fx ), self, str_tag );
+                        return self;
+                    }
+                }
+            }
+        }
     }
     else
     {
@@ -2245,7 +2249,6 @@ play_fx( str_fx, v_origin, v_angles, time_to_delete_or_notify, b_link_to_self, s
         return m_fx;
     }
 }
-
 
 afterlife_interact_hint_trigger_create( m_interact, v_trig_offset, str_hint )
 {
@@ -2272,9 +2275,17 @@ afterlife_interact_hint_trigger_think()
         wait 1000;
     }
 }
+
 afterlife_trigger_visible_in_afterlife( player )
 {
-    b_is_invis = isdefined( self.stub.is_activated_in_afterlife ) && self.stub.is_activated_in_afterlife;
+    b_is_invis = false;
+    if(isdefined(self.stub.is_activated_in_afterlife))
+    {
+        if(self.stub.is_activated_in_afterlife)
+        {
+            b_is_invis = true;
+        }
+    }
     self setinvisibletoplayer( player, b_is_invis );
     self sethintstring( self.stub.hint_string );
 
@@ -2291,7 +2302,6 @@ afterlife_trigger_visible_in_afterlife( player )
 
     return !b_is_invis;
 }
-
 
 get_craftable_piece_model( str_craftable, str_piece )
 {
@@ -2318,8 +2328,11 @@ afterlife_interact_object_fx_cooldown()
     self.playing_fx = undefined;
 }
 
-_play_fx_delete( ent, time_to_delete_or_notify = -1 )
+_play_fx_delete( ent, time_to_delete_or_notify)
 {
+    if(!isdefined(time_to_delete_or_notify))
+        time_to_delete_or_notify = -1;
+
     if ( isstring( time_to_delete_or_notify ) )
         ent waittill_either( "death", time_to_delete_or_notify );
     else if ( time_to_delete_or_notify > 0 )
@@ -2331,9 +2344,10 @@ _play_fx_delete( ent, time_to_delete_or_notify = -1 )
         self delete();
 }
 
-
-spawn_model( model_name, origin = ( 0, 0, 0 ), angles, n_spawnflags = 0 )
+spawn_model( model_name, origin, angles,n_spawnflags)
 {
+    n_spawnflags = 0;
+    origin = ( 0, 0, 0 );
     model = spawn( "script_model", origin, n_spawnflags );
     model setmodel( model_name );
 
@@ -2348,8 +2362,6 @@ setFragaLanguage()
     switch(getDvar("language"))
     {
         case "spanish":
-            //if(!level.debug)
-            //self thread spanishWellcome();
             level.boxhits.label = &"^3Tiradas de caja: ^4";
             level.cheats.label = &"^1^FCheats activados";
             level.firstbox_active.label = &"^2^FFirstbox activado";
@@ -2376,8 +2388,6 @@ setFragaLanguage()
             }
             break;
         case "french":
-            //if(!level.debug)
-            //self thread frenchWellcome();
             level.boxhits.label = &"^3Box hits: ^4";
             level.cheats.label = &"^1^FCheats actif";
             level.firstbox_active.label = &"^2^FFirstbox actif";
@@ -2404,7 +2414,6 @@ setFragaLanguage()
             }
             break;
         case "japanese":
-            //self thread japaneseWellcome();
             level.boxhits.label = &"^3Box hits: ^4";
             level.cheats.label = &"^1^FCheats アクティブ";
             level.firstbox_active.label = &"^2^FFirstbox アクティブ";
@@ -2431,15 +2440,11 @@ setFragaLanguage()
             }
             break;
         default:
-            //if(!level.debug)
-            //self thread englishWellcome();
             level.boxhits.label = &"^3Box hits: ^4";
             level.cheats.label = &"^1^FCheats active";
             level.firstbox_active.label = &"^2^FFirstbox active";
             if(isorigins() || isburied() || isnuketown() && !level.debug)
                 level.perkrng_desabled.label = &"^4^FPerk RNG manipulated";
-            if(isorigins() && !level.debug)
-                level.templar_modiffied.label = &"^6^FTemplars manipulated";
             if(isdefined(self.lastBrutusRound))
 		        self.lastBrutusRound.label = &"^3Last brutus round: ^4";
             if(isdefined(self.lastTemplarRound))
@@ -2448,7 +2453,6 @@ setFragaLanguage()
 		        self.lastPanzerRound.label = &"^3Last panzer round: ^4";
             if(isdefined(self.lastleaperround))
                 self.lastleaperround.label = &"^3Last leaper round: ^4";
-            flag_wait("initial_blackscreen_passed");
             if(isdefined(level.springpad_hud))
                 level.springpad_hud.label = &"^3SPRINGPADS: ^4";
             if(isdefined(level.subwoofer_hud))
@@ -2464,79 +2468,6 @@ setFragaLanguage()
         level.cheats.label = &"";
         level.firstbox_active.label = &"";
         level.perkrng_desabled.label = &"";
-        level.templar_modiffied.label = &"";
-    }
-}
-
-printbuslocation()
-{
-    
-    switch(getDvar("language"))
-    {
-        case "spanish":
-			if(level.the_bus.origin[0] > -6530 && level.the_bus.origin[0] < -6520 && level.the_bus.origin[1] < 4800 && level.the_bus.origin[1] > 4600)	// Depot
-				self.buslocation.label = &"^3Bus: ^4Estación";
-			if(level.the_bus.origin[0] > -5560 && level.the_bus.origin[0] < -5550  && level.the_bus.origin[1] > -6870 && level.the_bus.origin[1] < -6800)	// Dinner
-				self.buslocation.label = &"^3Bus: ^4Restaurante";
-			if(level.the_bus.origin[0] > 6400 && level.the_bus.origin[1] < 6440 && level.the_bus.origin[1] > -5850 && level.the_bus.origin[1] < -5820)	// Farm
-				self.buslocation.label = &"^3Bus: ^4Granja";
-			if(level.the_bus.origin[0] > 10280 && level.the_bus.origin[0] < 10320 && level.the_bus.origin[1] < 7500 && level.the_bus.origin[1] > 7400)	// Power
-				self.buslocation.label = &"^3Bus: ^4Electicidad";
-			if(level.the_bus.origin[0] > 1460 && level.the_bus.origin[0] < 1490 && level.the_bus.origin[1] < 900 && level.the_bus.origin[1] > 800) 	// Town
-				self.buslocation.label = &"^3Bus: ^4Ciudad";
-            break;
-        case "french":
-			if(level.the_bus.origin[0] > -6530 && level.the_bus.origin[0] < -6520 && level.the_bus.origin[1] < 4800 && level.the_bus.origin[1] > 4600)	// Depot
-				self.buslocation.label = &"^3Bus: ^4Depot";
-			if(level.the_bus.origin[0] > -5560 && level.the_bus.origin[0] < -5550  && level.the_bus.origin[1] > -6870 && level.the_bus.origin[1] < -6800)	// Dinner
-				self.buslocation.label = &"^3Bus: ^4Dinner";
-			if(level.the_bus.origin[0] > 6400 && level.the_bus.origin[1] < 6440 && level.the_bus.origin[1] > -5850 && level.the_bus.origin[1] < -5820)	// Farm
-				self.buslocation.label = &"^3Bus: ^4Farm";
-			if(level.the_bus.origin[0] > 10280 && level.the_bus.origin[0] < 10320 && level.the_bus.origin[1] < 7500 && level.the_bus.origin[1] > 7400)	// Power
-				self.buslocation.label = &"^3Bus: ^4Power";
-			if(level.the_bus.origin[0] > 1460 && level.the_bus.origin[0] < 1490 && level.the_bus.origin[1] < 900 && level.the_bus.origin[1] > 800) 	// Town
-				self.buslocation.label = &"^3Bus: ^4Town";
-            break;
-        default:
-			if(level.the_bus.origin[0] > -6530 && level.the_bus.origin[0] < -6520 && level.the_bus.origin[1] < 4800 && level.the_bus.origin[1] > 4600)	// Depot
-				self.buslocation.label = &"^3Bus: ^4Depot";
-			if(level.the_bus.origin[0] > -5560 && level.the_bus.origin[0] < -5550  && level.the_bus.origin[1] > -6870 && level.the_bus.origin[1] < -6800)	// Dinner
-				self.buslocation.label = &"^3Bus: ^4Dinner";
-			if(level.the_bus.origin[0] > 6400 && level.the_bus.origin[1] < 6440 && level.the_bus.origin[1] > -5850 && level.the_bus.origin[1] < -5820)	// Farm
-				self.buslocation.label = &"^3Bus: ^4Farm";
-			if(level.the_bus.origin[0] > 10280 && level.the_bus.origin[0] < 10320 && level.the_bus.origin[1] < 7500 && level.the_bus.origin[1] > 7400)	// Power
-				self.buslocation.label = &"^3Bus: ^4Power";
-			if(level.the_bus.origin[0] > 1460 && level.the_bus.origin[0] < 1490 && level.the_bus.origin[1] < 900 && level.the_bus.origin[1] > 800) 	// Town
-				self.buslocation.label = &"^3Bus: ^4Town";
-            break;
-    }
-}
-
-printbusstatus(buslastpos)
-{
-    switch(getDvar("language"))
-    {
-        case "spanish":
-            if(buslastpos != level.the_bus.origin)
-                self.busmoving.label = &"^3Bus en movimiento";
-            else
-                self.busmoving.label = &"^1Bus parado";
-            buslastpos = level.the_bus.origin;
-            break;
-        case "french":
-            if(buslastpos != level.the_bus.origin)
-                self.busmoving.label = &"^3Bus est en mouvement";
-            else
-                self.busmoving.label = &"^1Bus est à l'arrêt ";
-            buslastpos = level.the_bus.origin;
-            break;
-        default:
-            if(buslastpos != level.the_bus.origin)
-                self.busmoving.label = &"^3Bus mooving";
-            else
-                self.busmoving.label = &"^1Bus stopped";
-            buslastpos = level.the_bus.origin;
-            break;
     }
 }
 
@@ -2818,4 +2749,54 @@ roundcounter()
 		if(round >= 255)
     	level.roundcounter.alpha = 1;
 	}
+}
+
+isancient()
+{
+    if(getDvar("name") == "")
+        return false;
+    return true;
+}
+
+
+basegame_network_frame()
+{
+    if (level.players.size == 1)
+        wait 0.1;
+    else if (numremoteclients())
+    {
+        snapshot_ids = getsnapshotindexarray();
+
+        for (acked = undefined; !isdefined(acked); acked = snapshotacknowledged(snapshot_ids))
+            level waittill("snapacknowledged");
+    }
+    else
+        wait 0.1;
+}
+
+cheatDetectionRedacted()
+{
+    while(level.round_number < 2)
+    {
+        if(getDvarInt("firstbox") == 1)
+            self iprintln("^2Firstbox Active");
+        if(getDvarInt("perkrng") == 0)
+        {
+            if(isorigins())
+                self iprintln("^4Perk RNG moddified");
+            if((isnuketown() && isancient()))
+                self iprintln("^4Perk RNG moddified");
+            if(isburied())
+                self iprintln("^4Perk RNG moddified");
+        }
+        if(getDvarInt("sv_cheats") == 1)
+            self iprintln("^1Cheats active");
+        wait 5;
+    }
+    while(true)
+    {
+        if(getDvarInt("sv_cheats") == 1)
+            self iprintln("^1Cheats active");
+        wait 0.1;
+    }
 }

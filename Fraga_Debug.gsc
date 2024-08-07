@@ -24,17 +24,7 @@ init()
 		{
 			level waittill( "connected", player );
 			player thread connected();
-			player thread debug();
 		}
-	}
-}
-
-debug()
-{
-	while(true)
-	{
-		self iprintln(self.origin);
-		wait 1;
 	}
 }
 

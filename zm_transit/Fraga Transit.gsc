@@ -31,7 +31,6 @@ connected()
 	while(1)
 	{
 		level waittill("connecting", player);
-        player thread fridge();
     	player thread bank();
     	player thread award_permaperks_safe();
 		if(getDvar("scr_kill_infinite_loops") != "")
@@ -41,5 +40,7 @@ connected()
 		}
 		if(getDvarInt("character") != 0)
 			level.givecustomcharacters = ::set_character_option_transit;
+        player waittill("spawned_player");
+		player thread fridge();
 	}
 }

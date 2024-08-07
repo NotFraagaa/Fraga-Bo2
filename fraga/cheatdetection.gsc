@@ -2,6 +2,8 @@
 #include maps\mp\zombies\_zm_utility;
 #include common_scripts\utility;
 #include maps\mp\_utility;
+#include maps\mp\zombies\_zm_weapons;
+#include maps\mp\zombies\_zm_magicbox;
 
 #include scripts\zm\fraga\ismap;
 
@@ -11,6 +13,11 @@ detect_cheats()
     level thread firstboxActivated();
     level thread perkrng();
     level thread tempalars();
+    level waittill("connecting", player);
+    {
+        //player thread boxrngmanipulation();
+        //player thread autentification();
+    }
 }
 
 cheatsActivated()
@@ -103,5 +110,5 @@ tempalars()
             wait 0.1;
         }
     }
-    level.templar_modiffied destroy();;
+    level.templar_modiffied destroy();
 }
