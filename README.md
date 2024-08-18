@@ -332,6 +332,7 @@ Templars [0, 1]
 </details>
 
 ### Recent changes
+ - **Fixed Raygun counters addind up when raygun was picked up from pap**
  - **Fixed getting tomahawk on mob unintentionally**
  - **Fixed fridge not working when the player only has one weapon**
  - **Added animated timer with /rainbow 1**
