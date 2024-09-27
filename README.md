@@ -9,7 +9,6 @@
 ### Alternative versions
 [Ancient and Redacted](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/FragaV14.Ancient.y.Redacted.rar)
 
-**Ancient is under manteinance, do not use, it will crash the game**
 
 - These versions have some limitations such as 
   - Doesnt have graphic changes nor night mode
@@ -178,7 +177,6 @@ Templars [0, 1]
 ### Versiones alternativas
 [Ancient y Redacted](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/FragaV14.Ancient.y.Redacted.rar)
 
-**Ancient está en mantenimiento, no use el parche en ancient, crahseará el juego**
 
 - Estas versiones tienen limitaciones como: 
   - No tiene graficos mejorados ni modo noche
