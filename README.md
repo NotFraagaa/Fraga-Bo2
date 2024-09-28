@@ -334,6 +334,11 @@ Templars [0, 1]
     Puede causar errores si el generador 4 no está activado
 </details>
 
+### DIRECT DOWNLOAD
+
+[Plutonium r2905+](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/FragaV14.Plutonium.rar)
+[Ancient y Redacted](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/FragaV14.Ancient.y.Redacted.rar)
+
 ### Recent changes
  - **Fixed Raygun counters addind up when raygun was picked up from pap**
  - **Fixed getting tomahawk on mob unintentionally**
