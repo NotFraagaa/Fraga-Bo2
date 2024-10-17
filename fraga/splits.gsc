@@ -190,14 +190,14 @@ wait_split( split , last_time)
         case "Round 60":  while ( level.round_number < 60 )   {wait 1; time += 1000;} break;
         case "Round 70":  while ( level.round_number < 70 )   {wait 1; time += 1000;} break;
         case "Round 80":  while ( level.round_number < 80 )   {wait 1; time += 1000;} break;
-        case "Round 90":  while( level.round_number < 80 )  {wait 100; time += 100000;} while ( level.round_number < 90 )   {wait 1; time += 1000;} break;
-        case "Round 100": while( level.round_number < 90 )  {wait 100; time += 100000;} while ( level.round_number < 100 )  {wait 1; time += 1000;} break;
-        case "Round 125": while( level.round_number < 120 ) {wait 100; time += 100000;} while ( level.round_number < 125 )  {wait 1; time += 1000;} break;
-        case "Round 130": while( level.round_number < 120 ) {wait 100; time += 100000;} while ( level.round_number < 130 )  {wait 1; time += 1000;} break;
-        case "Round 140": while( level.round_number < 130 ) {wait 100; time += 100000;} while ( level.round_number < 140 )  {wait 1; time += 1000;} break;
-        case "Round 150": while( level.round_number < 140 ) {wait 100; time += 100000;} while ( level.round_number < 150 )  {wait 1; time += 1000;} break;
-        case "Round 175": while( level.round_number < 170 ) {wait 100; time += 100000;} while ( level.round_number < 175 )  {wait 1; time += 1000;} break;
-        case "Round 200": while( level.round_number < 190 ) {wait 100; time += 100000;} while ( level.round_number < 200 )  {wait 1; time += 1000;} break;
+        case "Round 90":  while ( level.round_number < 80 )   {wait 100; time += 100000;} while ( level.round_number < 90 )   {wait 1; time += 1000;} break;
+        case "Round 100": while ( level.round_number < 90 )   {wait 100; time += 100000;} while ( level.round_number < 100 )  {wait 1; time += 1000;} break;
+        case "Round 125": while ( level.round_number < 120 )  {wait 100; time += 100000;} while ( level.round_number < 125 )  {wait 1; time += 1000;} break;
+        case "Round 130": while ( level.round_number < 120 )  {wait 100; time += 100000;} while ( level.round_number < 130 )  {wait 1; time += 1000;} break;
+        case "Round 140": while ( level.round_number < 130 )  {wait 100; time += 100000;} while ( level.round_number < 140 )  {wait 1; time += 1000;} break;
+        case "Round 150": while ( level.round_number < 140 )  {wait 100; time += 100000;} while ( level.round_number < 150 )  {wait 1; time += 1000;} break;
+        case "Round 175": while ( level.round_number < 170 )  {wait 100; time += 100000;} while ( level.round_number < 175 )  {wait 1; time += 1000;} break;
+        case "Round 200": while ( level.round_number < 190 )  {wait 100; time += 100000;} while ( level.round_number < 200 )  {wait 1; time += 1000;} break;
     }
     level.fraga_splits_time = time;
     return time;
