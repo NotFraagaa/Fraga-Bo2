@@ -12,7 +12,7 @@ init()
 {
     level thread connected();
 	level thread boxlocation();
-	level thread avg();
+	level thread raygun_counter();
 	level waittill("connecting", player);
 	player thread checkpaplocation();
 	level.nextperkindex = -1;
