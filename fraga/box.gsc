@@ -10,6 +10,29 @@
 boxhits()
 {
     level thread displayBoxHits();
+    while(true)
+    {
+        level waittill("connecting", player);
+        player thread track_rays();
+    }
+}
+
+track_rays()
+{
+    wait 2;
+    while(true)
+    {
+        while(self.sessionstate != "playing")
+            wait 0.1;
+        if(self hasweapon("ray_gun_zm"))
+            level.total_ray++;
+        if(self hasweapon("raygun_mark2_zm"))
+            level.total_mk2++;
+
+        while(self has_weapon_or_upgrade("ray_gun_zm") || self has_weapon_or_upgrade("raygun_mark2_zm")) 
+            wait 0.1;
+        wait 0.1;
+    }
 }
 
 displayBoxHits()
@@ -36,14 +59,15 @@ displayBoxHits()
     }
     while(!isDefined(level.total_chest_accessed))
         wait 0.1;
+    while(!isdefined(level.chest_accessed))
+        wait 0.1;
     lol = 0;
     while(1)
     {
-        while(!isdefined(level.chest_accessed))
-            wait 0.1;
         if(lol != level.chest_accessed)
         {
             level.total_chest_accessed++;
+            
             lol = level.chest_accessed;
             level.boxhits setvalue(level.total_chest_accessed);
             i = 1;
@@ -67,123 +91,60 @@ displayBoxHits()
     wait 1;
 }
 
-avg()
-{
-    level thread label();
-    level thread display();
-    level thread make_avg();
-}
-
-label()
+raygun_counter()
 {
     self endon("disconnect");
 
     if(!isDefined(level.total_mk2))
         level.total_mk2 = 0;
-    if(!isDefined(level.total_raygun))
-        level.total_raygun = 0;
-    if(!isDefined(level.avgraygunmk2))
-        level.avgraygunmk2 = 0;
-    if(!isDefined(level.avgraygun))
-        level.avgraygun = 0;
+    if(!isDefined(level.total_ray))
+        level.total_ray = 0;
 
-	level.raygunavg.hidewheninmenu = 1;
-    level.raygunavg = createserverfontstring( "objective", 1.3 );
-    level.raygunavg.y = 26;
-    level.raygunavg.x = 2;
-    level.raygunavg.fontscale = 1.3;
-    level.raygunavg.alignx = "left";
-    level.raygunavg.horzalign = "user_left";
-    level.raygunavg.vertalign = "user_top";
-    level.raygunavg.aligny = "top";
-    level.raygunavg.label = &"^3Raygun AVG: ^4";
-    level.raygunavg.alpha = 1;
-	level.raygunmk2avg.hidewheninmenu = 1;
-    level.raygunmk2avg = createserverfontstring( "objective", 1.3 );
-    level.raygunmk2avg.y = 14;
-    level.raygunmk2avg.x = 2;
-    level.raygunmk2avg.fontscale = 1.3;
-    level.raygunmk2avg.alignx = "left";
-    level.raygunmk2avg.horzalign = "user_left";
-    level.raygunmk2avg.vertalign = "user_top";
-    level.raygunmk2avg.aligny = "top";
-    level.raygunmk2avg.label = &"^3Raygun MK2 AVG: ^4";
-    level.raygunmk2avg.alpha = 1;
-    track_rayguns();
-}
+	level.total_ray_display.hidewheninmenu = 1;
+    level.total_ray_display = createserverfontstring( "objective", 1.3 );
+    level.total_ray_display.y = 26;
+    level.total_ray_display.x = 2;
+    level.total_ray_display.fontscale = 1.3;
+    level.total_ray_display.alignx = "left";
+    level.total_ray_display.horzalign = "user_left";
+    level.total_ray_display.vertalign = "user_top";
+    level.total_ray_display.aligny = "top";
+    level.total_ray_display.alpha = 1;
+	level.total_mk2_display.hidewheninmenu = 1;
+    level.total_mk2_display = createserverfontstring( "objective", 1.3 );
+    level.total_mk2_display.y = 14;
+    level.total_mk2_display.x = 2;
+    level.total_mk2_display.fontscale = 1.3;
+    level.total_mk2_display.alignx = "left";
+    level.total_mk2_display.horzalign = "user_left";
+    level.total_mk2_display.vertalign = "user_top";
+    level.total_mk2_display.aligny = "top";
+    level.total_mk2_display.alpha = 1;
+    
+    level.total_ray_display setvalue(0);
+    level.total_mk2_display setvalue(0);
 
-track_rayguns()
-{
-	level waittill("connecting", player);
-    while(true)
-    {
-        if(player has_weapon_or_upgrade("ray_gun_zm"))
-            level.total_raygun++;
-        if(player has_weapon_or_upgrade("raygun_mark2_zm"))
-            level.total_mk2++;
-
-        while(player has_weapon_or_upgrade("ray_gun_zm") || player has_weapon_or_upgrade("raygun_mark2_zm")) 
-        {
-            if(player has_weapon_or_upgrade("ray_gun_zm") || player has_weapon_or_upgrade("raygun_mark2_zm"))
-                wait 0.1;
-        }
-        wait 1;
-    }
-}
-
-make_avg()
-{
     while(1)
     {
-        if(level.total_chest_accessed)
+        if(getDvarInt("avg"))
         {
-            level.avgraygunmk2 = (level.total_chest_accessed / level.total_mk2);
-            level.avgraygun = (level.total_chest_accessed / level.total_raygun);
+            level.total_mk2_display.label = &"^3Raygun MK2 AVG: ^4";
+            level.total_ray_display.label = &"^3Raygun AVG: ^4";
+            if(isDefined(level.total_ray_display))
+                level.total_ray_display setvalue(level.total_chest_accessed / level.total_ray);
+            if(isDefined(level.total_mk2_display))
+                level.total_mk2_display setvalue(level.total_chest_accessed / level.total_mk2);
+        }
+        else
+        {
+            level.total_mk2_display.label = &"^3Total Raygun MK2: ^4";
+            level.total_ray_display.label = &"^3Total Raygun: ^4";
+            if(isDefined(level.total_ray_display))
+                level.total_ray_display setvalue(level.total_ray);
+            if(isDefined(level.total_mk2_display))
+                level.total_mk2_display setvalue(level.total_mk2);
         }
         wait 0.1;
-    }
-}
-display()
-{
-    self endon("disconnect");
-    
-	level.displayraygunmk2avg.hidewheninmenu = 1;
-    level.displayraygunmk2avg = createserverfontstring( "objective", 1.3 );
-    level.displayraygunmk2avg.y = 14;
-    level.displayraygunmk2avg.x = 82;
-    if(getDvar("language") == "japanese")
-        level.displayraygunmk2avg.x = 143;
-    level.displayraygunmk2avg.fontscale = 1.3;
-    level.displayraygunmk2avg.alignx = "left";
-    level.displayraygunmk2avg.horzalign = "user_left";
-    level.displayraygunmk2avg.vertalign = "user_top";
-    level.displayraygunmk2avg.aligny = "top";
-    level.displayraygunmk2avg.label = &"^4";
-    level.displayraygunmk2avg.alpha = 1;
-    level.displayraygunmk2avg setvalue(0);
-
-	level.displayraygunavg.hidewheninmenu = 1;
-    level.displayraygunavg = createserverfontstring( "objective", 1.3 );
-    level.displayraygunavg.y = 26;
-    level.displayraygunavg.x = 60;
-    if(getDvar("language") == "japanese")
-        level.displayraygunavg.x = 103;
-    level.displayraygunavg.fontscale = 1.3;
-    level.displayraygunavg.alignx = "left";
-    level.displayraygunavg.horzalign = "user_left";
-    level.displayraygunavg.vertalign = "user_top";
-    level.displayraygunavg.aligny = "top";
-    level.displayraygunavg.label = &"^4";
-    level.displayraygunavg.alpha = 1;
-    level.displayraygunavg setvalue(0);
-
-    while(1)
-    {
-        if(isDefined(level.avgraygun))
-            level.displayraygunavg setvalue(level.avgraygun);
-        if(isDefined(level.avgraygunmk2))
-            level.displayraygunmk2avg setvalue(level.avgraygunmk2);
-        wait 1;
     }
 }
 
@@ -278,7 +239,7 @@ firstbox3755()
             level.zombie_weapons[weapon].is_in_box = 1;
         }
 
-        while( (level.total_chest_accessed- level.chest_moves) != level.forced_box_guns.size && level.round_number < 10)
+        while( (level.total_chest_accessed - level.chest_moves) != level.forced_box_guns.size && level.round_number < 10)
             wait 1;
         
         level.special_weapon_magicbox_check = special_weapon_magicbox_check;
