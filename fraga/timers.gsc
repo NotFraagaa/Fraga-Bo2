@@ -17,14 +17,10 @@ timer_fraga()
 	self.timer_fraga.hidewheninmenu = 1;
 	self.timer_fraga.fontscale = 1.7;
 	flag_wait("initial_blackscreen_passed");
-	self.timer_fraga settimerup(0);
-	level waittill("end_game");
-	level.total_time = level.total_time - 0.1;
-
-	while(1)
+	while(true)
 	{
-		self.timer_fraga settimer(level.total_time);
-		wait(0.1);
+		self.timer_fraga settimer( int(gettime() / 1000) - level.start_time);
+		wait 0.05;
 	}
 }
 
