@@ -50,7 +50,7 @@ award_permaperks_safe()
 		wait 0.05;
 
 	wait 0.5;
-		perks_to_process = [];
+    perks_to_process = [];
     
     perks_to_process[perks_to_process.size] = permaperk_array("revive");
     perks_to_process[perks_to_process.size] = permaperk_array("multikill_headshots");
@@ -79,8 +79,6 @@ award_permaperks_safe()
 
 permaperk_array(code, maps_award, maps_take, to_round)
 {
-	/* Damos todas las ventajas en los mapas correspondientes */
-	/* Estoy bastante seguro de que no hace falta porque no se cargan en el resto de mapas */
 	if (!isDefined(maps_award))
 		maps_award = array("zm_transit", "zm_highrise", "zm_buried");
 	if (!isDefined(maps_take))
@@ -103,7 +101,6 @@ resolve_permaperk(perk)
 
 	perk_code = perk["code"];
 
-	/* Too high of a round, return out */
 	if (is_round(perk["to_round"]))
 		return;
 
