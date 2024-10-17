@@ -19,7 +19,7 @@ init()
 		level thread connected();
 
 	if(!istranzit())
-		level thread avg();
+		level thread raygun_counter();
 
 
 	if(istown())
