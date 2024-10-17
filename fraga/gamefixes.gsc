@@ -55,3 +55,48 @@ roundcounter()
     	level.roundcounter.alpha = 1;
 	}
 }
+
+
+fixrotationangle()
+{
+	angulo1 = 0;
+	angulo2 = 0;
+	level.vueltass = 0;
+    level.vueltas = createserverfontstring( "objective", 1.3 );
+	level.vueltas.hidewheninmenu = 1;
+    level.vueltas.y = -40;
+    level.vueltas.x = 0;
+    level.vueltas.fontscale = 1.4;
+    level.vueltas.alignx = "center";
+    level.vueltas.horzalign = "user_center";
+    level.vueltas.vertalign = "user_bottom";
+    level.vueltas.aligny = "bottom";
+    level.vueltas.alpha = 1;
+    level.vueltas.label = &"^F^1Warning: you're close to the max rotation angle";
+	thread showWarning();
+    while(true)
+    {
+		angulo1 = self.angles[1];
+		diferencia = angulo1 - angulo2;
+		if(diferencia  < -180)
+			level.vueltass++;
+		if(diferencia  > 180)
+			level.vueltass--;
+		
+		angulo2 = angulo1;
+		wait 0.0078125;
+    }
+}
+
+showWarning()
+{
+	while(true)
+	{
+		if(level.vueltass > 10 || -level.vueltass > 10)//4000000 )
+			level.vueltas.alpha = 1;
+		else level.vueltas.alpha = 0;
+
+		self iprintln(level.vueltass);
+		wait 0.5;
+	}
+}
