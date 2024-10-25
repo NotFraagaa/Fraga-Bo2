@@ -4,11 +4,10 @@
 
 ## Downloads
 ### New pluto (Recomended version)
-[Plutonium r2905+](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/Fraga.Plutonium.rar)
+[Plutonium r2905+](https://github.com/Fraagaa/Fraga-Bo2/releases/latest/download/Fraga.Plutonium.rar)
   - Round splits only work on the newest version on pluto
 ### Alternative versions
-[Ancient and Redacted](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/Fraga.Ancient.y.Redacted.rar)
-
+[Ancient y Redacted](https://github.com/Fraagaa/Fraga-Bo2/releases/latest/download/Fraga.Ancient.y.Redacted.rar)
 
 - These versions have some limitations such as 
   - Doesnt have graphic changes nor night mode
@@ -172,11 +171,10 @@ Templars [0, 1]
 
 ## Descargas
 ### New pluto (Versión recomendada)
-[Plutonium r2905+](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/FragaV14.Plutonium.rar)
+[Plutonium r2905+](https://github.com/Fraagaa/Fraga-Bo2/releases/latest/download/Fraga.Plutonium.rar)
   - Los timer de ronda solo funcionan en new pluto.
 ### Versiones alternativas
-[Ancient y Redacted](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/FragaV14.Ancient.y.Redacted.rar)
-
+[Ancient y Redacted](https://github.com/Fraagaa/Fraga-Bo2/releases/latest/download/Fraga.Ancient.y.Redacted.rar)
 
 - Estas versiones tienen limitaciones como: 
   - No tiene graficos mejorados ni modo noche
