@@ -4,7 +4,7 @@
 
 ## Downloads
 ### New pluto (Recomended version)
-[Plutonium r2905+](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/Fraga.Plutonium.rar)
+[Plutonium r2905+](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/Fraga.Ancient.y.Redacted.rar)
   - Round splits only work on the newest version on pluto
 ### Alternative versions
 [Ancient and Redacted](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/Fraga.Ancient.y.Redacted.rar)
