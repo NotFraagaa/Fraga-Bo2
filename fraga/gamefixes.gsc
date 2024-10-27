@@ -84,19 +84,18 @@ fixrotationangle()
 			level.vueltass--;
 		
 		angulo2 = angulo1;
-		wait 0.0078125;
+		wait 0.001;
     }
 }
 
 showWarning()
 {
-	while(true)
+	while(!getDvarInt("stop_warning"))
 	{
-		if(level.vueltass > 10 || -level.vueltass > 10)//4000000 )
+		if(level.vueltass > 5000000 || -level.vueltass > 5000000)
 			level.vueltas.alpha = 1;
 		else level.vueltas.alpha = 0;
-
-		self iprintln(level.vueltass);
 		wait 0.5;
 	}
+	level.vueltas destroy();
 }
