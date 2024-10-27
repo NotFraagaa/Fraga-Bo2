@@ -15,6 +15,7 @@
 #include scripts\zm\fraga\firstroom;
 #include scripts\zm\fraga\localizedstrings;
 #include scripts\zm\fraga\ismap;
+#include scripts\zm\fraga\st;
 
 init()
 {
@@ -35,21 +36,23 @@ init()
     level thread firstbox();
 	level thread boxhits();
     level thread roundcounter();
-    if(!level.debug)
+    if(!level.debug || !level.strat_tester)
         level thread detect_cheats();
+    if(getDvarInt("st"))
+        thread st_init();
     while(true)
     {
         level waittill("connecting", player);
-        player thread connected();
+        player thread fraga_connected();
     }
 }
 
-connected()
+fraga_connected()
 {
 	self endon("disconnect");
 	self waittill("spawned_player");
 
-	self thread timer_fraga();
+	self thread timer();
 	self thread timerlocation();
 	self useservervisionset(1);
 	self setvisionsetforplayer(GetDvar( "mapname" ), 1.0 );
@@ -58,7 +61,10 @@ connected()
 	self thread nightmode();
     self thread setFragaLanguage();
     self thread rainbow();
-    self iprintln("^6Fraga^5V14  ^3Active");
+    self thread fixrotationangle();
+    self iprintln("^6Fraga^5V15  ^3Active");
+    if(getDvar("language") == "french")
+        self iprintln("^1Spanish ^3Ruleset  ^1Active");
 }
 
 setDvars()
@@ -89,7 +95,16 @@ setDvars()
 		setdvar("nightmode", 0 );
 	if(GetDvar("firstbox") == "")
 		setdvar("firstbox", 0);
+    if(getDvar("st") == "")
+        setDvar("st", 0);
+    if(getDvar("stop_warning") == "")
+        setDvar("stop_warning", 0);
     
+    if(issurvivalmap())
+    {
+        if(!getDvar("avg") == "")
+            setDvar("avg", 1);
+    }
     if(isvictismap())
     {
         if(GetDvar("pers_perk") == "")
@@ -131,7 +146,34 @@ setDvars()
     {
         if(getDvar("perkRNG") == "")
             setDvar("perkRNG", 1);
+        if(getDvar("pap") == "")
+            setDvar("pap", 0);
     }
+    if(getDvarInt("st"))
+    {
+        if(getDvar("start_round") == "")
+            setDvar("start_round", 100);
+        if(getDvar("start_delay") == "")
+            setDvar("start_delay", 60);
+        if(getDvar("st_remove_boards") == "")
+            setDvar("st_remove_boards", 1);
+        if(getDvar("st_power_on") == "")
+            setDvar("st_power_on", 1);
+        if(getDvar("st_perks") == "")
+            setDvar("st_perks", 1);
+        if(getDvar("st_doors") == "")
+            setDvar("st_doors", 0);
+        if(getDvar("st_weapons") == "")
+            setDvar("st_weapons", 1);
+        if(getDvar("hud_remaining") == "")
+            setDvar("hud_remaining", 1);
+        if(getDvar("hud_zone") == "")
+            setDvar("hud_zone", 1);
+        if(getDvar("perkRNG") == "")
+            setDvar("perkRNG", 1);
+    }
+	flag_wait("initial_blackscreen_passed");
+    level.start_time = int(gettime() / 1000);
 }
 
 base_game_network_frame()
