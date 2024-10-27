@@ -28,13 +28,13 @@ st_init()
 		wait 0.1;
     level.cheats destroy();
     thread wait_for_players();
-    level thread round_pause();
     level thread turn_on_power();
     level thread set_starting_round();
     level thread remove_boards_from_windows();
     level thread mob_map_changes();
     
 	flag_wait("initial_blackscreen_passed");
+    level thread round_pause();
     level thread buildbuildables();
     level thread buildcraftables();
 }
