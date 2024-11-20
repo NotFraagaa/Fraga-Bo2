@@ -339,6 +339,7 @@ Templars [0, 1]
 [Ancient y Redacted](https://github.com/Fraagaa/Fraga-Bo2/releases/latest/download/Fraga.Ancient.y.Redacted.rar)
 
 ### Recent changes
+ - **Fixed Origins crash on Ancient/Redacted**
  - **Fixed Raygun counters addind up when raygun was picked up from pap**
  - **Fixed getting tomahawk on mob unintentionally**
  - **Fixed fridge not working when the player only has one weapon**
