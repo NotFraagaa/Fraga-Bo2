@@ -200,30 +200,60 @@ boxlocation()
         default: break;
     }
 }
-
-startBox(start_chest)
+/*
+startBox(chest_name)
 {
     self endon("disconnect");
-    
-	for(i = 0; i < level.chests.size; i++)
-	{
-        if(level.chests[i].script_noteworthy == start_chest)
-    		desired_chest_index = i; 
-        else if(level.chests[i].hidden == 0)
-     		nondesired_chest_index = i;               	
-	}
+	flag_wait("initial_blackscreen_passed");
 
-	if( isdefined(nondesired_chest_index) && (nondesired_chest_index < desired_chest_index))
-	{
-		level.chests[nondesired_chest_index] hide_chest();
-		level.chests[nondesired_chest_index].hidden = 1;
-
-		level.chests[desired_chest_index].hidden = 0;
-		level.chests[desired_chest_index] show_chest();
-		level.chest_index = desired_chest_index;
-	}
+    foreach(chest in level.chests)
+    {
+        if(chest.script_noteworthy == chest_name)
+        {
+            chest.hidden = false;
+            //chest.unitrigger_stub destroy();
+            chest show_chest();
+        }
+        else
+        {
+            chest hide_chest();
+            chest.hidden = true;
+            chest.unitrigger_stub destroy();
+            chest.stub.trigger_target.chest_user = undefined;
+        }
+    }
 }
-
+*/
+startBox(chest_name)
+{
+    self endon("disconnect");
+    flag_wait("initial_blackscreen_passed");
+    
+    foreach(chest in level.chests)
+    {
+        if(chest.script_noteworthy == chest_name)
+        {
+            chest.hidden = false;
+            chest thread magic_box_arrives(); // Espera a que la caja llegue correctamente
+            chest show_chest();
+        }
+        else
+        {
+            if (!chest.hidden) // Solo ocultar si está visible
+            {
+                chest thread magic_box_leaves(); // Espera a que la caja desaparezca correctamente
+                chest hide_chest();
+                chest.hidden = true;
+            }
+            
+            if (isdefined(chest.unitrigger_stub)) // Evitar errores si no está definido
+            {
+                chest.unitrigger_stub destroy();
+                chest.stub.trigger_target.chest_user = undefined;
+            }
+        }
+    }
+}
 
 firstbox()
 {

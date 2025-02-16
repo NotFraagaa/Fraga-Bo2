@@ -27,7 +27,7 @@ init()
 
 connected()
 {
-	while(1)
+	while(true)
 	{
 		level waittill("connecting", player);
 		player thread PanzerTracker();
@@ -39,7 +39,6 @@ connected()
 
 fizzStartLocation()
 {
-	level waittill("connecting", player);
 	level waittill("initial_players_connected");
 	wait(3);
 	machines = getentarray("random_perk_machine", "targetname");
@@ -47,16 +46,12 @@ fizzStartLocation()
 	level.random_perk_start_machine = machines[index];
 	foreach(machine in machines)
 	{
-		if(machine != level.random_perk_start_machine)
-		{
-			machine hidepart("j_ball");
-			machine.is_current_ball_location = 0;
-			machine setclientfield("turn_on_location_indicator", 0);
-			continue;
-		}
-		machine.is_current_ball_location = 1;
-		level.wunderfizz_starting_machine = machine;
-		level notify("wunderfizz_setup");
-		machine thread maps\mp\zombies\_zm_perk_random::machine_think();
+		machine hidepart("j_ball");
+		machine.is_current_ball_location = false;
+		machine setclientfield("turn_on_location_indicator", false);
 	}
+
+	level.random_perk_start_machine.is_current_ball_location = true;
+	level notify("wunderfizz_setup");
+	level.random_perk_start_machine thread maps\mp\zombies\_zm_perk_random::machine_think();
 }

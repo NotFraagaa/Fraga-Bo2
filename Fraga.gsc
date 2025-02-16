@@ -36,8 +36,6 @@ init()
     level thread roundcounter();
     if(!level.debug || !level.strat_tester)
         level thread detect_cheats();
-    if(getDvarInt("st"))
-        thread st_init();
     while(true)
     {
         level waittill("connecting", player);

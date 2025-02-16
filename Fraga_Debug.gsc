@@ -19,7 +19,7 @@ init()
 		level.player_out_of_playable_area_monitor = 0;
 		level thread debugmode();
 		setdvar("sv_cheats", level.debug);
-		setdvar("cg_ufo_scaler", 1);
+		setdvar("cg_ufo_scaler", 5);
 		while(true)
 		{
 			level waittill( "connected", player );
