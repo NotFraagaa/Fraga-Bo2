@@ -3,7 +3,6 @@
 #include common_scripts\utility;
 #include maps\mp\_utility;
 
-
 #include scripts\zm\fraga\timers;
 #include scripts\zm\fraga\graphics;
 #include scripts\zm\fraga\splits;
@@ -15,7 +14,6 @@
 #include scripts\zm\fraga\firstroom;
 #include scripts\zm\fraga\localizedstrings;
 #include scripts\zm\fraga\ismap;
-#include scripts\zm\fraga\st;
 
 init()
 {

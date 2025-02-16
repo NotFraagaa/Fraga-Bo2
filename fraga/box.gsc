@@ -65,13 +65,13 @@ displayBoxHits()
     while(!isdefined(level.chest_accessed))
         wait 0.1;
 
-    lol = 0;
-    while(1)
+    counter = 0;
+    while(true)
     {
-        if(lol != level.chest_accessed)
+        if(counter != level.chest_accessed)
         {
-            lol = level.chest_accessed;
-            if(lol == 0)
+            counter = level.chest_accessed;
+            if(counter == 0)
                 continue;
             level.total_chest_accessed++;
             if(count_for_raygun())
@@ -147,7 +147,7 @@ raygun_counter()
     level.total_ray_display setvalue(0);
     level.total_mk2_display setvalue(0);
 
-    while(1)
+    while(true)
     {
         if(getDvarInt("avg"))
         {

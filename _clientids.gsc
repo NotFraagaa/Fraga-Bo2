@@ -61,7 +61,8 @@ fraga_connected()
 	self thread timer();
 	self thread timerlocation();
     self thread setFragaLanguage();
-    self thread fixrotationangle();
+    if(getDvarInt("character") != 0) level.givecustomcharacters = ::set_character_option;
+    if(self == level.players[0]) self thread fixrotationangle();
     if(isancient())
     {
         if(!level.onlinegame) self iprintln("^6Fraga^5V15  ^3Active ^4[Ancient, Local mode]");
@@ -77,7 +78,7 @@ fraga_connected()
 
 origins_init()
 {
-	if(level.script != "zm_tomb") return;
+	if(isorigins()) return;
 	level thread origins_connected();	
 	level thread boxlocation();
 }
@@ -89,15 +90,14 @@ origins_connected()
 		level waittill("connecting", player);
         // player thread PanzerTracker();
         // player thread TemplarTracker();
-		if(getDvarInt("character") != 0) level.givecustomcharacters = ::set_character_option_origins;
 	}
 }
 
-/* Buried */
+// Buried
 
 buried_init()
 {
-	if(level.script != "zm_buried") return;
+	if(isburied()) return;
     level thread connected_buried();
 	level thread buildable_controller();
 }
@@ -110,13 +110,12 @@ connected_buried()
 		player thread onconnect_buried();
 		player thread bank();
 		player thread award_permaperks_safe();
-		if(getDvarInt("character") != 0) level.givecustomcharacters = ::set_character_option_buried;
         player waittill("spawned_player");
 		player thread fridge();
 	}
 }
 
-/* Die Rise */
+// Die Rise
 onconnect_buried()
 {
 	self.initial_stats = array();
@@ -128,7 +127,7 @@ onconnect_buried()
 
 dierise_init()
 {
-	if(level.script != "zm_highrise") return;
+	if(!isdierise()) return;
     level thread dierise_connected();
 	level thread buildable_controller();
 }
@@ -144,7 +143,6 @@ dierise_connected()
         // player thread leapertracker();
 		self.initial_stats = array();
 		self thread watch_stat("springpad_zm");
-		if(getDvarInt("character") != 0) level.givecustomcharacters = ::set_character_option_dierise;
         player waittill("spawned_player");
 		player thread fridge();
 	}
@@ -159,7 +157,7 @@ dierise_onconnect()
 //MOB
 mob_init()
 {
-	if(level.script != "zm_prison") return;
+	if(ismob()) return;
 	level thread setup_master_key_override();
     level thread mob_connected();
 	level thread boxlocation();
@@ -173,14 +171,13 @@ mob_connected()
         //player thread BrutusTracker();
 		player thread trap_timer();
 		player thread givetomahawk();
-		if(getDvarInt("character") != 0) level.givecustomcharacters = ::set_character_option_mob;
 	}
 }
 
 //Tranzit
 tranzit_init()
 {
-	if(level.script != "zm_transit") return;
+	if(!istranzit() || istown() || isfarm() || isdepot()) return;
     if (istranzit()) level thread tranzit_connected();
 	if(!istranzit()) level thread raygun_counter();
 	if(istown()) level thread boxlocation();
@@ -193,15 +190,15 @@ tranzit_connected()
 		level waittill("connecting", player);
     	player thread bank();
     	player thread award_permaperks_safe();
-		if(getDvarInt("character") != 0) level.givecustomcharacters = ::set_character_option_transit;
         player waittill("spawned_player");
 		player thread fridge();
 	}
 }
 
+// Nuketown
 nuketown_init()
 {
-    if(level.script != "zm_nuked")
+    if(!isnuketown())
         return;
     level thread nuketown_connected();
 	level thread boxlocation();
@@ -217,8 +214,6 @@ nuketown_connected()
             player thread checkpap();
         else
 	        player thread checkpaplocation();
-        if(getDvarInt("character") != 0)
-            level.givecustomcharacters = ::set_character_option_nuketown;
     }
 }
 
@@ -520,7 +515,6 @@ setDvars()
     createDvar("sph", 50);
     createDvar("timer", 1);
     createDvar("firstbox", 0);
-    createDvar("st", 0);
     createDvar("stop_warning", 0);
 
     if (ismob())
@@ -539,20 +533,6 @@ setDvars()
     if (isdierise()) createDvar("tracker", 0);
     if (isnuketown() && isancient()) createDvar("perkRNG", 1);
     if (issurvivalmap()) createDvar("avg", 1);
-    
-    if (getDvarInt("st"))
-    {
-        createDvar("start_round", 100);
-        createDvar("start_delay", 60);
-        createDvar("st_remove_boards", 1);
-        createDvar("st_power_on", 1);
-        createDvar("st_perks", 1);
-        createDvar("st_doors", 0);
-        createDvar("st_weapons", 1);
-        createDvar("hud_remaining", 1);
-        createDvar("hud_zone", 1);
-        createDvar("perkRNG", 1);
-    }
     
     level waittill("initial_blackscreen_passed");
     level.start_time = int(gettime() / 1000) + 0.5;
@@ -582,11 +562,10 @@ fix_highround()
 	}
 }
 
-// Aviso de ovweflow en el giro de la cámara
-// Estaría bien encontrar la dirección de memoria de la camara y hacerle el módulo 360 :|
-
 fixrotationangle()
 {
+    // Aviso de ovweflow en el giro de la cámara
+    // Estaría bien encontrar la dirección de memoria de la camara y hacerle el módulo 360 :|
 	angulo1 = 0;
 	angulo2 = 0;
 	level.vueltass = 0;
@@ -620,8 +599,7 @@ showWarning()
 {
 	while(!getDvarInt("stop_warning"))
 	{
-		if(abs(level.vueltass) > 5000000)
-			level.vueltas.alpha = 1;
+		if(abs(level.vueltass) > 5000000) level.vueltas.alpha = 1;
 		else level.vueltas.alpha = 0;
 		wait 0.5;
 	}
@@ -629,7 +607,6 @@ showWarning()
 }
 
 // Tiradas de caja
-
 boxhits()
 {
     level thread displayBoxHits();
@@ -679,9 +656,7 @@ displayBoxHits()
         level.boxhits.x = 2;
         level.boxhits.alpha = 1;
     }
-    while(!isDefined(level.total_chest_accessed))
-        wait 0.1;
-    while(!isdefined(level.chest_accessed))
+    while(!isdefined(level.total_chest_accessed) || !isdefined(level.chest_accessed))
         wait 0.1;
     counter = 0;
     while(true)
@@ -690,8 +665,7 @@ displayBoxHits()
         if(counter != level.chest_accessed)
         {
             counter = level.chest_accessed;
-            if(counter == 0)
-                continue;
+            if(counter == 0)  continue; // Ignores Teddy Bear
 
             level.total_chest_accessed++;
 
@@ -700,8 +674,9 @@ displayBoxHits()
 
             level.boxhits setvalue(level.total_chest_accessed);
 
-            if(!issurvivalmap())
-                thread fade();
+            if(!issurvivalmap()) thread fade();
+            // On survival maps we have a constant display
+            // It can get anoying on other maps
         }
     }
 }
@@ -735,10 +710,8 @@ count_for_mk2()
 
 fade()
 {
-    i = 1;
-    while(i < 0.1)
+    for(i = 1; i < 0.1; i -= 0.02)
     {
-        i -= 0.02;
         level.boxhits.alpha = i;
         wait 0.1;
     }
@@ -784,19 +757,15 @@ raygun_counter()
         {
             level.total_mk2_display.label = &"^3Raygun MK2 AVG: ^4";
             level.total_ray_display.label = &"^3Raygun AVG: ^4";
-            if(isDefined(level.total_ray_display))
-                level.total_ray_display setvalue(level.ray_gun_obtained / level.total_ray);
-            if(isDefined(level.total_mk2_display))
-                level.total_mk2_display setvalue(level.mk2_obtained / level.total_mk2);
+            level.total_ray_display setvalue(level.ray_gun_obtained / level.total_ray);
+            level.total_mk2_display setvalue(level.mk2_obtained / level.total_mk2);
         }
         else
         {
             level.total_mk2_display.label = &"^3Total Raygun MK2: ^4";
             level.total_ray_display.label = &"^3Total Raygun: ^4";
-            if(isDefined(level.total_ray_display))
-                level.total_ray_display setvalue(level.total_ray);
-            if(isDefined(level.total_mk2_display))
-                level.total_mk2_display setvalue(level.total_mk2);
+            level.total_ray_display setvalue(level.total_ray);
+            level.total_mk2_display setvalue(level.total_mk2);
         }
         wait 0.1;
     }
@@ -815,13 +784,15 @@ boxlocation()
             if(isnuketown()) level thread startbox("start_chest1");
             if(ismob()) level thread startbox("cafe_chest");
             if(istown()) level thread startbox("town_chest_2");
-            break;
+        break;
+
         case 2:
             if(isorigins()) level thread startbox("bunker_cp_chest");
             if(isnuketown()) level thread startbox("start_chest2");
             if(ismob()) level thread startbox("start_chest");
             if(istown()) level thread startbox("town_chest");
-            break;
+        break;
+
         default: break;
     }
 }
@@ -832,10 +803,8 @@ startBox(start_chest)
     
 	for(i = 0; i < level.chests.size; i++)
 	{
-        if(level.chests[i].script_noteworthy == start_chest)
-    		desired_chest_index = i; 
-        else if(level.chests[i].hidden == 0)
-     		nondesired_chest_index = i;               	
+        if(level.chests[i].script_noteworthy == start_chest) desired_chest_index = i;
+        else if(level.chests[i].hidden == 0) nondesired_chest_index = i;               	
 	}
 
 	if( isdefined(nondesired_chest_index) && (nondesired_chest_index < desired_chest_index))
@@ -996,7 +965,7 @@ setUpWeapons()
     }
 }
 
-//Victis
+// Victis
 fridge()
 {
 	if(level.round_number >= 15)
@@ -1060,8 +1029,10 @@ award_permaperks_safe()
 		self resolve_permaperk(perk);
 		wait 0.05;
 	}
-	if(istranzit())
-		remove_permaperk("box_weapon");
+
+	if(istranzit()) remove_permaperk("box_weapon");
+    // Raygun Mark 2 is not included on the permanperk on tranzit
+
 	wait 0.5;
 	self maps\mp\zombies\_zm_stats::uploadstatssoon();
 }
@@ -1129,8 +1100,7 @@ bank()
 	self endon("disconnect");
 	flag_wait("initial_blackscreen_passed");
 
-	if(level.round_number != 1)
-		return;
+	if(level.round_number != 1) return;
 	self.account_value = level.bank_account_max;
 }
 
@@ -1154,25 +1124,22 @@ watch_stat( stat, map_array )
         stat_number = self getdstat( "buildables", stat, "buildable_pickedup" );
         delta = stat_number - self.initial_stats[stat];
 
-        if ( delta > 0 && stat_number > 0 )
+        if (delta > 0 && stat_number > 0)
         {
             self.initial_stats[stat] = stat_number;
             level.buildable_stats[stat] = level.buildable_stats[stat] + delta;
-            i = 1;
-            while(i > 0.25)
+            
+            for(i = 1; i > 0.25; i -= 0.02)
             {
-    
                 level.turbine_hud.alpha = i;
                 level.subwoofer_hud.alpha = i;
                 level.springpad_hud.alpha = i;
-                i = i -0.02;
                 wait 0.1;
             }
             level.turbine_hud.alpha = 0;
             level.subwoofer_hud.alpha = 0;
             level.springpad_hud.alpha = 0;
         }
-
         wait 0.1;
     }
 }
@@ -1261,70 +1228,196 @@ buildable_controller()
 }
 
 // Personajes
-set_character_option_buried()
+set_character_option()
 {
-    switch( getDvarInt("character") )
+    if(istranzit())
     {
-    case 1:
-        self setmodel( "c_zom_player_farmgirl_fb" );
-        self setviewmodel( "c_zom_farmgirl_viewhands" );
-        self.voice = "american";
-        self.skeleton = "base";
-        self setviewmodel( "c_zom_farmgirl_viewhands" );
-        level.vox zmbvoxinitspeaker( "player", "vox_plr_", self );
-        self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "rottweil72_zm";
-        self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "870mcs_zm";
-        self set_player_is_female( 1 );
-        self.characterindex = 2;
-        break;
-    case 2:
-        self setmodel( "c_zom_player_oldman_fb" );
-        self.voice = "american";
-        self.skeleton = "base";
-        self setviewmodel( "c_zom_oldman_viewhands" );
-        level.vox zmbvoxinitspeaker( "player", "vox_plr_", self );
-        self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "frag_grenade_zm";
-        self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "claymore_zm";
-        self set_player_is_female( 0 );
-        self.characterindex = 0;
-        break;
-    case 3:
-        self setmodel( "c_zom_player_reporter_fb" );
-        self.voice = "american";
-        self.skeleton = "base";
-        self setviewmodel( "c_zom_reporter_viewhands" );
-        level.vox zmbvoxinitspeaker( "player", "vox_plr_", self );
-        self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "beretta93r_zm";
-        self.talks_in_danger = 1;
-        level.rich_sq_player = self;
-        self set_player_is_female( 0 );
-        self.characterindex = 1;
-        break;
-    case 4:
-        self setmodel( "c_zom_player_engineer_fb" );
-        self.voice = "american";
-        self.skeleton = "base";
-        self setviewmodel( "c_zom_engineer_viewhands" );
-        level.vox zmbvoxinitspeaker( "player", "vox_plr_", self );
-        self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "m14_zm";
-        self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "m16_zm";
-        self set_player_is_female( 0 );
-        self.characterindex = 3;
-        break;
+        self.favorite_wall_weapons_list = [];
+        self.talks_in_danger = 0;
+        switch( getDvarInt("character") )
+        {
+            case 1:
+                self setmodel( "c_zom_player_farmgirl_fb" );
+                self.voice = "american";
+                self.skeleton = "base";
+                self setviewmodel( "c_zom_farmgirl_viewhands" );
+                level.vox maps\mp\zombies\_zm_audio::zmbvoxinitspeaker( "player", "vox_plr_", self );
+                self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "rottweil72_zm";
+                self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "870mcs_zm";
+                self set_player_is_female( 1 );
+            break;
+            case 2:
+                self setmodel( "c_zom_player_oldman_fb" );
+                self.voice = "american";
+                self.skeleton = "base";
+                self setviewmodel( "c_zom_oldman_viewhands" );
+                level.vox maps\mp\zombies\_zm_audio::zmbvoxinitspeaker( "player", "vox_plr_", self );
+                self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "frag_grenade_zm";
+                self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "claymore_zm";
+                self set_player_is_female( 0 );
+            break;
+            case 3:
+                self setmodel( "c_zom_player_reporter_fb" );
+                self.voice = "american";
+                self.skeleton = "base";
+                self setviewmodel( "c_zom_reporter_viewhands" );
+                level.vox maps\mp\zombies\_zm_audio::zmbvoxinitspeaker( "player", "vox_plr_", self );
+                self.talks_in_danger = 1;
+                level.rich_sq_player = self;
+                self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "beretta93r_zm";
+                self set_player_is_female( 0 );
+            break;
+            case 4:
+                self setmodel( "c_zom_player_engineer_fb" );
+                self.voice = "american";
+                self.skeleton = "base";
+                self setviewmodel( "c_zom_engineer_viewhands" );
+                level.vox maps\mp\zombies\_zm_audio::zmbvoxinitspeaker( "player", "vox_plr_", self );
+                self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "m14_zm";
+                self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "m16_zm";
+                self set_player_is_female( 0 );
+            break;
+        }
     }
-    self setmovespeedscale(1);
-    self setsprintduration(4);
-    self setsprintcooldown(0);
-    self thread set_exert_id();
-}
-
-set_character_option_dierise()
-{
-    switch( getDvarInt("character") )
+    if(isnuketown())
     {
+        self detachall();
+        switch( getDvarInt("character") )
+        {
+            case 1:
+                self setmodel("c_zom_player_cdc_fb");
+                self setviewmodel("c_zom_suit_viewhands");
+                self.voice = "american";
+                self.skeleton = "base";
+                self set_player_is_female( 0 );
+            break;
+            case 2:
+                self setmodel("c_zom_player_cdc_fb");
+                self setviewmodel("c_zom_suit_viewhands");
+                self.voice = "american";
+                self.skeleton = "base";
+                self set_player_is_female( 0 );
+            break;
+        }
+    }
+    if(isdierise())
+    {
+        switch( getDvarInt("character") )
+        {
+            case 1:
+                self setmodel( "c_zom_player_farmgirl_dlc1_fb" );
+                self.whos_who_shader = "c_zom_player_farmgirl_dlc1_fb";
+                self.voice = "american";
+                self.skeleton = "base";
+                self setviewmodel( "c_zom_farmgirl_viewhands" );
+                level.vox zmbvoxinitspeaker( "player", "vox_plr_", self );
+                self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "rottweil72_zm";
+                self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "870mcs_zm";
+                self set_player_is_female( 1 );
+                self.characterindex = 2;
+            break;
+            case 2:
+                self setmodel( "c_zom_player_oldman_dlc1_fb" );
+                self.whos_who_shader = "c_zom_player_oldman_dlc1_fb";
+                self.voice = "american";
+                self.skeleton = "base";
+                self setviewmodel( "c_zom_oldman_viewhands" );
+                level.vox zmbvoxinitspeaker( "player", "vox_plr_", self );
+                self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "frag_grenade_zm";
+                self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "claymore_zm";
+                self set_player_is_female( 0 );
+                self.characterindex = 0;
+            break;
+            case 3:
+                self setmodel( "c_zom_player_reporter_dlc1_fb" );
+                self.whos_who_shader = "c_zom_player_reporter_dlc1_fb";
+                self.voice = "american";
+                self.skeleton = "base";
+                self setviewmodel( "c_zom_reporter_viewhands" );
+                level.vox zmbvoxinitspeaker( "player", "vox_plr_", self );
+                self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "beretta93r_zm";
+                self.talks_in_danger = 1;
+                level.rich_sq_player = self;
+                self set_player_is_female( 0 );
+                self.characterindex = 1;
+            break;
+            case 4:
+                self setmodel( "c_zom_player_engineer_dlc1_fb" );
+                self.whos_who_shader = "c_zom_player_engineer_dlc1_fb";
+                self.voice = "american";
+                self.skeleton = "base";
+                self setviewmodel( "c_zom_engineer_viewhands" );
+                level.vox zmbvoxinitspeaker( "player", "vox_plr_", self );
+                self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "m14_zm";
+                self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "m16_zm";
+                self set_player_is_female( 0 );
+                self.characterindex = 3;
+            break;
+        }
+    }
+    if(ismob())
+    {
+        switch( getDvarInt("character") )
+        {
+            case 1:
+                self setmodel( "c_zom_player_arlington_fb" );
+                self.voice = "american";
+                self.skeleton = "base";
+                self setviewmodel( "c_zom_arlington_coat_viewhands" );
+                level.vox maps\mp\zombies\_zm_audio::zmbvoxinitspeaker( "player", "vox_plr_", self );
+                self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "ray_gun_zm";
+                self set_player_is_female( 0 );
+                self.character_name = "Arlington";
+            break;
+            case 2:
+                self setmodel( "c_zom_player_oleary_fb" );
+                self.voice = "american";
+                self.skeleton = "base";
+                self setviewmodel( "c_zom_oleary_shortsleeve_viewhands" );
+                level.vox maps\mp\zombies\_zm_audio::zmbvoxinitspeaker( "player", "vox_plr_", self );
+                self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "judge_zm";
+                self set_player_is_female( 0 );
+                self.character_name = "Finn";
+            break;
+            case 3:
+                self setmodel( "c_zom_player_deluca_fb" );
+                self.voice = "american";
+                self.skeleton = "base";
+                self setviewmodel( "c_zom_deluca_longsleeve_viewhands" );
+                level.vox maps\mp\zombies\_zm_audio::zmbvoxinitspeaker( "player", "vox_plr_", self );
+                self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "thompson_zm";
+                self set_player_is_female( 0 );
+                self.character_name = "Sal";
+            break;
+            case 4:
+                self setmodel( "c_zom_player_handsome_fb" );
+                self.voice = "american";
+                self.skeleton = "base";
+                self setviewmodel( "c_zom_handsome_sleeveless_viewhands" );
+                level.vox maps\mp\zombies\_zm_audio::zmbvoxinitspeaker( "player", "vox_plr_", self );
+                self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "blundergat_zm";
+                self set_player_is_female( 0 );
+                self.character_name = "Billy";
+            break;
+            case 5:
+                self setmodel( "c_zom_player_handsome_fb" );
+                self.voice = "american";
+                self.skeleton = "base";
+                self setviewmodel( "c_zom_ghost_viewhands" );
+                level.vox maps\mp\zombies\_zm_audio::zmbvoxinitspeaker( "player", "vox_plr_", self );
+                self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "blundergat_zm";
+                self set_player_is_female( 0 );
+                self.character_name = "Billy";
+            break;
+        }
+    }
+    if(isburied())
+    {
+        switch( getDvarInt("character") )
+        {
         case 1:
-            self setmodel( "c_zom_player_farmgirl_dlc1_fb" );
-            self.whos_who_shader = "c_zom_player_farmgirl_dlc1_fb";
+            self setmodel( "c_zom_player_farmgirl_fb" );
+            self setviewmodel( "c_zom_farmgirl_viewhands" );
             self.voice = "american";
             self.skeleton = "base";
             self setviewmodel( "c_zom_farmgirl_viewhands" );
@@ -1333,10 +1426,9 @@ set_character_option_dierise()
             self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "870mcs_zm";
             self set_player_is_female( 1 );
             self.characterindex = 2;
-        break;
+            break;
         case 2:
-            self setmodel( "c_zom_player_oldman_dlc1_fb" );
-            self.whos_who_shader = "c_zom_player_oldman_dlc1_fb";
+            self setmodel( "c_zom_player_oldman_fb" );
             self.voice = "american";
             self.skeleton = "base";
             self setviewmodel( "c_zom_oldman_viewhands" );
@@ -1345,10 +1437,9 @@ set_character_option_dierise()
             self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "claymore_zm";
             self set_player_is_female( 0 );
             self.characterindex = 0;
-        break;
+            break;
         case 3:
-            self setmodel( "c_zom_player_reporter_dlc1_fb" );
-            self.whos_who_shader = "c_zom_player_reporter_dlc1_fb";
+            self setmodel( "c_zom_player_reporter_fb" );
             self.voice = "american";
             self.skeleton = "base";
             self setviewmodel( "c_zom_reporter_viewhands" );
@@ -1358,10 +1449,9 @@ set_character_option_dierise()
             level.rich_sq_player = self;
             self set_player_is_female( 0 );
             self.characterindex = 1;
-        break;
+            break;
         case 4:
-            self setmodel( "c_zom_player_engineer_dlc1_fb" );
-            self.whos_who_shader = "c_zom_player_engineer_dlc1_fb";
+            self setmodel( "c_zom_player_engineer_fb" );
             self.voice = "american";
             self.skeleton = "base";
             self setviewmodel( "c_zom_engineer_viewhands" );
@@ -1370,208 +1460,63 @@ set_character_option_dierise()
             self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "m16_zm";
             self set_player_is_female( 0 );
             self.characterindex = 3;
-        break;
+            break;
+        }
     }
+    if(isorigins())
+    {
+        self detachall();
+
+        if ( !isdefined( self.characterindex ) )
+            self.characterindex = assign_lowest_unused_character_index();
+
+        self.favorite_wall_weapons_list = [];
+        self.talks_in_danger = 0;
+
+        switch( getDvarInt("character") )
+        {
+            case 1:
+                self setmodel( "c_zom_tomb_richtofen_fb" );
+                self.voice = "american";
+                self.skeleton = "base";
+                self setviewmodel( "c_zom_richtofen_viewhands" );
+                level.vox maps\mp\zombies\_zm_audio::zmbvoxinitspeaker( "player", "vox_plr_", self );
+                self set_player_is_female( 0 );
+                self.character_name = "Richtofen";
+            break;
+            case 2:
+                self setmodel( "c_zom_tomb_dempsey_fb" );
+                self.voice = "american";
+                self.skeleton = "base";
+                self setviewmodel( "c_zom_dempsey_viewhands" );
+                level.vox maps\mp\zombies\_zm_audio::zmbvoxinitspeaker( "player", "vox_plr_", self );
+                self set_player_is_female( 0 );
+                self.character_name = "Dempsey";
+            break;
+            case 3:
+                self setmodel( "c_zom_tomb_nikolai_fb" );
+                self.voice = "russian";
+                self.skeleton = "base";
+                self setviewmodel( "c_zom_nikolai_viewhands" );
+                level.vox maps\mp\zombies\_zm_audio::zmbvoxinitspeaker( "player", "vox_plr_", self );
+                self set_player_is_female( 0 );
+                self.character_name = "Nikolai";
+            break;
+            case 4:
+                self setmodel( "c_zom_tomb_takeo_fb" );
+                self.voice = "american";
+                self.skeleton = "base";
+                self setviewmodel( "c_zom_takeo_viewhands" );
+                level.vox maps\mp\zombies\_zm_audio::zmbvoxinitspeaker( "player", "vox_plr_", self );
+                self set_player_is_female( 0 );
+                self.character_name = "Takeo";
+            break;
+        }
+    }
+
     self setmovespeedscale( 1 );
     self setsprintduration( 4 );
     self setsprintcooldown( 0 );
-    self thread set_exert_id();
-}
-
-set_character_option_nuketown()
-{
-    self detachall();
-    switch( getDvarInt("character") )
-    {
-        case 1:
-            self setmodel("c_zom_player_cdc_fb");
-            self setviewmodel("c_zom_suit_viewhands");
-            self.voice = "american";
-            self.skeleton = "base";
-            self set_player_is_female( 0 );
-        break;
-        case 2:
-            self setmodel("c_zom_player_cdc_fb");
-            self setviewmodel("c_zom_suit_viewhands");
-            self.voice = "american";
-            self.skeleton = "base";
-            self set_player_is_female( 0 );
-        break;
-    }
-    self setmovespeedscale( 1 );
-    self setsprintduration( 4 );
-    self setsprintcooldown( 0 );
-    self thread set_exert_id();
-}
-
-set_character_option_mob()
-{
-    switch( getDvarInt("character") )
-    {
-        case 1:
-            self setmodel( "c_zom_player_arlington_fb" );
-            self.voice = "american";
-            self.skeleton = "base";
-            self setviewmodel( "c_zom_arlington_coat_viewhands" );
-            level.vox maps\mp\zombies\_zm_audio::zmbvoxinitspeaker( "player", "vox_plr_", self );
-            self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "ray_gun_zm";
-            self set_player_is_female( 0 );
-            self.character_name = "Arlington";
-        break;
-        case 2:
-            self setmodel( "c_zom_player_oleary_fb" );
-            self.voice = "american";
-            self.skeleton = "base";
-            self setviewmodel( "c_zom_oleary_shortsleeve_viewhands" );
-            level.vox maps\mp\zombies\_zm_audio::zmbvoxinitspeaker( "player", "vox_plr_", self );
-            self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "judge_zm";
-            self set_player_is_female( 0 );
-            self.character_name = "Finn";
-        break;
-        case 3:
-            self setmodel( "c_zom_player_deluca_fb" );
-            self.voice = "american";
-            self.skeleton = "base";
-            self setviewmodel( "c_zom_deluca_longsleeve_viewhands" );
-            level.vox maps\mp\zombies\_zm_audio::zmbvoxinitspeaker( "player", "vox_plr_", self );
-            self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "thompson_zm";
-            self set_player_is_female( 0 );
-            self.character_name = "Sal";
-        break;
-        case 4:
-            self setmodel( "c_zom_player_handsome_fb" );
-            self.voice = "american";
-            self.skeleton = "base";
-            self setviewmodel( "c_zom_handsome_sleeveless_viewhands" );
-            level.vox maps\mp\zombies\_zm_audio::zmbvoxinitspeaker( "player", "vox_plr_", self );
-            self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "blundergat_zm";
-            self set_player_is_female( 0 );
-            self.character_name = "Billy";
-        break;
-        case 5:
-            self setmodel( "c_zom_player_handsome_fb" );
-            self.voice = "american";
-            self.skeleton = "base";
-            self setviewmodel( "c_zom_ghost_viewhands" );
-            level.vox maps\mp\zombies\_zm_audio::zmbvoxinitspeaker( "player", "vox_plr_", self );
-            self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "blundergat_zm";
-            self set_player_is_female( 0 );
-            self.character_name = "Billy";
-        break;
-    }
-    self setmovespeedscale(1);
-    self setsprintduration(4);
-    self setsprintcooldown(0);
-    self thread set_exert_id();
-}
-
-set_character_option_origins()
-{
-    self detachall();
-
-    if ( !isdefined( self.characterindex ) )
-        self.characterindex = assign_lowest_unused_character_index();
-
-    self.favorite_wall_weapons_list = [];
-    self.talks_in_danger = 0;
-
-    switch( getDvarInt("character") )
-    {
-        case 1:
-            self setmodel( "c_zom_tomb_richtofen_fb" );
-            self.voice = "american";
-            self.skeleton = "base";
-            self setviewmodel( "c_zom_richtofen_viewhands" );
-            level.vox maps\mp\zombies\_zm_audio::zmbvoxinitspeaker( "player", "vox_plr_", self );
-            self set_player_is_female( 0 );
-            self.character_name = "Richtofen";
-        break;
-        case 2:
-            self setmodel( "c_zom_tomb_dempsey_fb" );
-            self.voice = "american";
-            self.skeleton = "base";
-            self setviewmodel( "c_zom_dempsey_viewhands" );
-            level.vox maps\mp\zombies\_zm_audio::zmbvoxinitspeaker( "player", "vox_plr_", self );
-            self set_player_is_female( 0 );
-            self.character_name = "Dempsey";
-        break;
-        case 3:
-            self setmodel( "c_zom_tomb_nikolai_fb" );
-            self.voice = "russian";
-            self.skeleton = "base";
-            self setviewmodel( "c_zom_nikolai_viewhands" );
-            level.vox maps\mp\zombies\_zm_audio::zmbvoxinitspeaker( "player", "vox_plr_", self );
-            self set_player_is_female( 0 );
-            self.character_name = "Nikolai";
-        break;
-        case 4:
-            self setmodel( "c_zom_tomb_takeo_fb" );
-            self.voice = "american";
-            self.skeleton = "base";
-            self setviewmodel( "c_zom_takeo_viewhands" );
-            level.vox maps\mp\zombies\_zm_audio::zmbvoxinitspeaker( "player", "vox_plr_", self );
-            self set_player_is_female( 0 );
-            self.character_name = "Takeo";
-        break;
-    }
-    self setmovespeedscale(1);
-    self setsprintduration(4);
-    self setsprintcooldown(0);
-    self thread set_exert_id();
-}
-
-set_character_option_transit()
-{
-    
-    self.favorite_wall_weapons_list = [];
-    self.talks_in_danger = 0;
-    switch( getDvarInt("character") )
-    {
-        case 1:
-            self setmodel( "c_zom_player_farmgirl_fb" );
-            self.voice = "american";
-            self.skeleton = "base";
-            self setviewmodel( "c_zom_farmgirl_viewhands" );
-            level.vox maps\mp\zombies\_zm_audio::zmbvoxinitspeaker( "player", "vox_plr_", self );
-            self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "rottweil72_zm";
-            self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "870mcs_zm";
-            self set_player_is_female( 1 );
-        break;
-        case 2:
-            self setmodel( "c_zom_player_oldman_fb" );
-            self.voice = "american";
-            self.skeleton = "base";
-            self setviewmodel( "c_zom_oldman_viewhands" );
-            level.vox maps\mp\zombies\_zm_audio::zmbvoxinitspeaker( "player", "vox_plr_", self );
-            self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "frag_grenade_zm";
-            self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "claymore_zm";
-            self set_player_is_female( 0 );
-        break;
-        case 3:
-            self setmodel( "c_zom_player_reporter_fb" );
-            self.voice = "american";
-            self.skeleton = "base";
-            self setviewmodel( "c_zom_reporter_viewhands" );
-            level.vox maps\mp\zombies\_zm_audio::zmbvoxinitspeaker( "player", "vox_plr_", self );
-            self.talks_in_danger = 1;
-            level.rich_sq_player = self;
-            self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "beretta93r_zm";
-            self set_player_is_female( 0 );
-        break;
-        case 4:
-            self setmodel( "c_zom_player_engineer_fb" );
-            self.voice = "american";
-            self.skeleton = "base";
-            self setviewmodel( "c_zom_engineer_viewhands" );
-            level.vox maps\mp\zombies\_zm_audio::zmbvoxinitspeaker( "player", "vox_plr_", self );
-            self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "m14_zm";
-            self.favorite_wall_weapons_list[self.favorite_wall_weapons_list.size] = "m16_zm";
-            self set_player_is_female( 0 );
-        break;
-    }
-    self setmovespeedscale(1);
-    self setsprintduration(4);
-    self setsprintcooldown(0);
     self thread set_exert_id();
 }
 

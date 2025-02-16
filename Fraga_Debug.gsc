@@ -34,9 +34,7 @@ connected()
     self endon( "disconnect" );
     flag_wait( "start_zombie_round_logic" );
 	if(level.script == "zm_prison")
-	{
 		flag_wait( "afterlife_start_over" );
-	}
 	self.score = GetDvarInt("score");
 }
 
