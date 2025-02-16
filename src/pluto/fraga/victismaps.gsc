@@ -72,6 +72,8 @@ award_permaperks_safe()
 	}
 	if(istranzit())
         level.pers_box_weapon_lose_round = 0;
+    if(!getDvar("rayWallBuy"))
+        level.pers_nube_lose_round = -1;
 
 	wait 0.5;
 	self maps\mp\zombies\_zm_stats::uploadstatssoon();

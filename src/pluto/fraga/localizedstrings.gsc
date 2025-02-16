@@ -10,8 +10,6 @@ setFragaLanguage()
     switch(getDvar("language"))
     {
         case "spanish":
-            //if(!level.debug)
-            //self thread spanishWellcome();
             level.boxhits.label = &"^3Tiradas de caja: ^4";
             level.cheats.label = &"^1^FCheats activados";
             level.firstbox_active.label = &"^2^FFirstbox activado";
@@ -38,8 +36,6 @@ setFragaLanguage()
             }
             break;
         case "french":
-            //if(!level.debug)
-            //self thread frenchWellcome();
             level.boxhits.label = &"^3Box hits: ^4";
             level.cheats.label = &"^1^FCheats actif";
             level.firstbox_active.label = &"^2^FFirstbox actif";
@@ -66,7 +62,6 @@ setFragaLanguage()
             }
             break;
         case "japanese":
-            //self thread japaneseWellcome();
             level.boxhits.label = &"^3Box hits: ^4";
             level.cheats.label = &"^1^FCheats アクティブ";
             level.firstbox_active.label = &"^2^FFirstbox アクティブ";

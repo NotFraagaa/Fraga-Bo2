@@ -16,7 +16,6 @@
 #include scripts\zm\fraga\box;
 #include scripts\zm\fraga\character;
 #include scripts\zm\fraga\timers;
-#include scripts\zm\fraga\trackers;
 
 init()
 {
@@ -30,7 +29,6 @@ connected()
 	while(1)
 	{
 		level waittill("connecting", player);
-		player thread BrutusTracker();
 		if(getDvarInt("character") != 0)
 			level.givecustomcharacters = ::set_character_option_mob;
 		player thread trap_timer();

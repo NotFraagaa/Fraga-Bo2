@@ -5,7 +5,6 @@
 #include maps\mp\zombies\_zm_perk_random;
 
 #include scripts\zm\fraga\character;
-#include scripts\zm\fraga\trackers;
 #include scripts\zm\fraga\papcamo;
 #include scripts\zm\fraga\RNGmoddifier;
 #include scripts\zm\fraga\box;
@@ -30,8 +29,6 @@ connected()
 	while(1)
 	{
 		level waittill("connecting", player);
-		player thread PanzerTracker();
-		player thread TemplarTracker();
 		if(getDvarInt("character") != 0)
 			level.givecustomcharacters = ::set_character_option_origins;
 	}

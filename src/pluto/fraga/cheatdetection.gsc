@@ -13,11 +13,6 @@ detect_cheats()
     level thread firstboxActivated();
     level thread perkrng();
     level thread tempalars();
-    level waittill("connecting", player);
-    {
-        //player thread boxrngmanipulation();
-        //player thread autentification();
-    }
 }
 
 cheatsActivated()
@@ -101,7 +96,7 @@ tempalars()
     level.templar_modiffied.vertalign = "user_bottom";
     level.templar_modiffied.aligny = "bottom";
     level.templar_modiffied.label = &"^6^FTemplars manipulated";
-    if(isburied() || isorigins() || isnuketown())
+    if(isorigins())
     {
         if(getDvarInt("templars"))
         while(level.round_number < 2)
