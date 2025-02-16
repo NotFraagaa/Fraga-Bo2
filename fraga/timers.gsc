@@ -6,35 +6,35 @@
 #include scripts\zm\fraga\ismap;
 #include scripts\zm\fraga\localizedstrings;
 
-timer_fraga()
+timer()
 {
 	self endon("disconnect");
 
-	self thread roundtimer_fraga();
-	self.timer_fraga = newclienthudelem(self);
-	self.timer_fraga.alpha = 0;
-	self.timer_fraga.color = (1, 1, 1);
-	self.timer_fraga.hidewheninmenu = 1;
-	self.timer_fraga.fontscale = 1.7;
+	self thread round_timer();
+	self.timer = newclienthudelem(self);
+	self.timer.alpha = !getDvarInt("st") * 0;
+	self.timer.color = (1, 1, 1);
+	self.timer.hidewheninmenu = 1;
+	self.timer.fontscale = 1.7;
 	flag_wait("initial_blackscreen_passed");
 	while(true)
 	{
-		self.timer_fraga settimer( int(gettime() / 1000) - level.start_time);
+		self.timer settimer( int(gettime() / 1000) - level.start_time);
 		wait 0.05;
 	}
 }
 
-roundtimer_fraga()
+round_timer()
 {
 	self endon("disconnect");
 
-	self.roundtimer_fraga = newclienthudelem(self);
-	self.roundtimer_fraga.alpha = 0;
-	self.roundtimer_fraga.fontscale = 1.7;
-	self.roundtimer_fraga.color = (0.8, 0.8, 0.8);
-	self.roundtimer_fraga.hidewheninmenu = 1;
-	self.roundtimer_fraga.x = self.timer_fraga.x;
-	self.roundtimer_fraga.y = self.timer_fraga.y + 15;
+	self.round_timer = newclienthudelem(self);
+	self.round_timer.alpha = 0;
+	self.round_timer.fontscale = 1.7;
+	self.round_timer.color = (0.8, 0.8, 0.8);
+	self.round_timer.hidewheninmenu = 1;
+	self.round_timer.x = self.timer.x;
+	self.round_timer.y = self.timer.y + 15;
 	flag_wait("initial_blackscreen_passed");
 	level.fade_time = 0.2;
 
@@ -44,16 +44,16 @@ roundtimer_fraga()
 		hordes = zombies_this_round / 24;
 		dog_round = flag("dog_round");
 		leaper_round = flag("leaper_round");
-		self.roundtimer_fraga settimerup(0);
+		self.round_timer settimerup(0);
 		start_time = int(GetTime() / 1000);
 		level waittill("end_of_round");
 		end_time = int(GetTime() / 1000);
 		time = end_time - start_time;
 		self display_round_time(time, hordes, dog_round, leaper_round);
 		level waittill("start_of_round");
-		self.roundtimer_fraga.label = &"";
-		self.roundtimer_fraga fadeovertime(level.fade_time);
-		self.roundtimer_fraga.alpha = 1;
+		self.round_timer.label = &"";
+		self.round_timer fadeovertime(level.fade_time);
+		self.round_timer.alpha = 1;
 	}
 }
 
@@ -64,12 +64,12 @@ display_round_time(time, hordes, dog_round, leaper_round)
 
 	if(level.round_number > GetDvarInt("sph") && !dog_round && !leaper_round)
 		sph_off = 0;
-	self.roundtimer_fraga.alpha = 1;
+	self.round_timer.alpha = 1;
 	if(sph_off)
 	{
 		for(i = 0; i < 228; i++)
 		{
-			self.roundtimer_fraga settimer(timer_for_hud);
+			self.round_timer settimer(timer_for_hud);
 			wait(0.05);
 		}
 	}
@@ -77,11 +77,11 @@ display_round_time(time, hordes, dog_round, leaper_round)
 	{
 		for(i = 0; i < 100; i++)
 		{
-			self.roundtimer_fraga settimer(timer_for_hud);
+			self.round_timer settimer(timer_for_hud);
 			wait(0.05);
 		}
-		self.roundtimer_fraga fadeovertime(level.fade_time);
-		self.roundtimer_fraga.alpha = 0;
+		self.round_timer fadeovertime(level.fade_time);
+		self.round_timer.alpha = 0;
 		wait(level.fade_time * 2);
 		self display_sph(time, hordes);
 	}
@@ -90,39 +90,38 @@ display_round_time(time, hordes, dog_round, leaper_round)
 display_sph(time, hordes)
 {
 	sph = time / hordes;
-	self.roundtimer_fraga fadeovertime(level.fade_time);
-	self.roundtimer_fraga.alpha = 1;
-	self.roundtimer_fraga.label = &"SPH: ";
-	self.roundtimer_fraga setvalue(sph);
+	self.round_timer fadeovertime(level.fade_time);
+	self.round_timer.alpha = 1;
+	self.round_timer.label = &"SPH: ";
+	self.round_timer setvalue(sph);
 
 	for(i = 0; i < 5; i++)
 	{
 		wait(1);
 	}
 
-	self.roundtimer_fraga fadeovertime(level.fade_time);
-	self.roundtimer_fraga.alpha = 0;
+	self.round_timer fadeovertime(level.fade_time);
+	self.round_timer.alpha = 0;
 	wait(level.fade_time);
 }
 
-trap_timer_fraga()
+trap_timer()
 {
 	self endon( "disconnect" );
 
-	self.trap_timer_fraga = newclienthudelem( self );
-	self.trap_timer_fraga.alignx = "right";
-	self.trap_timer_fraga.aligny = "top";
-	self.trap_timer_fraga.horzalign = "user_right";
-	self.trap_timer_fraga.vertalign = "user_top";
-	self.trap_timer_fraga.x = -2;
-	self.trap_timer_fraga.y = 14;
-	self.trap_timer_fraga.fontscale = 1.4;
-	self.trap_timer_fraga.hidewheninmenu = 1;
-	self.trap_timer_fraga.hidden = 0;
-	self.trap_timer_fraga.label = &"";
-	self.trap_timer_fragax.alpha = 1;
+	self.trap_timer = newclienthudelem( self );
+	self.trap_timer.alignx = "right";
+	self.trap_timer.aligny = "top";
+	self.trap_timer.horzalign = "user_right";
+	self.trap_timer.vertalign = "user_top";
+	self.trap_timer.x = -2;
+	self.trap_timer.y = 14;
+	self.trap_timer.fontscale = 1.4;
+	self.trap_timer.hidewheninmenu = 1;
+	self.trap_timer.hidden = 0;
+	self.trap_timer.label = &"";
 
-	while( 1 )
+	while(true)
 	{
 		if(getDvarInt("traptimer"))
 		{
@@ -130,14 +129,14 @@ trap_timer_fraga()
 			if( level.trap_activated )
 			{
 				wait 0.1;
-				self.trap_timer_fraga.color = ( 0, 1, 0 );
-				self.trap_timer_fraga.alpha = 1;
-				self.trap_timer_fraga settimer( 25 );
+				self.trap_timer.color = ( 0, 1, 0 );
+				self.trap_timer.alpha = 1;
+				self.trap_timer settimer( 25 );
 				wait 25;
-				self.trap_timer_fraga settimer( 25 );
-				self.trap_timer_fraga.color = ( 1, 0, 0 );
+				self.trap_timer settimer( 25 );
+				self.trap_timer.color = ( 1, 0, 0 );
 				wait 25;
-				self.trap_timer_fraga.alpha = 0;
+				self.trap_timer.alpha = 0;
 			}
 		}
 		wait 0.1;	
@@ -153,99 +152,99 @@ timerlocation()
 		switch(getDvarInt("timer"))
 		{
 			case 0:
-				self.timer_fraga.alpha = 0;
-				self.roundtimer_fraga.alpha = 0;
+				self.timer.alpha = !getDvarInt("st") * 0;
+				self.round_timer.alpha = 0;
 				break;
 			case 1:
-				self.roundtimer_fraga.alignx = "right";
-				self.roundtimer_fraga.aligny = "top";
-				self.roundtimer_fraga.horzalign = "user_right";
-				self.roundtimer_fraga.vertalign = "user_top";
-				self.timer_fraga.alignx = "right";
-				self.timer_fraga.aligny = "top";
-				self.timer_fraga.horzalign = "user_right";
-				self.timer_fraga.vertalign = "user_top";
-				self.timer_fraga.x = -1;
-				self.timer_fraga.y = 13;
-				self.timer_fraga.alpha = 1;
-				self.roundtimer_fraga.alpha = 1;
+				self.round_timer.alignx = "right";
+				self.round_timer.aligny = "top";
+				self.round_timer.horzalign = "user_right";
+				self.round_timer.vertalign = "user_top";
+				self.timer.alignx = "right";
+				self.timer.aligny = "top";
+				self.timer.horzalign = "user_right";
+				self.timer.vertalign = "user_top";
+				self.timer.x = -1;
+				self.timer.y = 13;
+				self.timer.alpha = !getDvarInt("st") * 1;
+				self.round_timer.alpha = 1;
 				if(getDvar("cg_drawFPS") != "Off")
-					self.timer_fraga.y += 4;
+					self.timer.y += 4;
 				if(getDvar("cg_drawFPS") != "Off" && GetDvar("language") == "japanese")
-					self.timer_fraga.y += 10;
+					self.timer.y += 10;
 				if(ismob())
 				{
-					self.timer_fraga.y = 40;
-					self.trap_timer_fraga.y = 19;
+					self.timer.y = 40;
+					self.trap_timer.y = 19;
 				}
 				if(isdierise())
-					self.timer_fraga.y = 30;
+					self.timer.y = 30;
 				break;
 			case 2:
-				self.roundtimer_fraga.alignx = "left";
-				self.roundtimer_fraga.aligny = "top";
-				self.roundtimer_fraga.horzalign = "user_left";
-				self.roundtimer_fraga.vertalign = "user_top";
-				self.timer_fraga.alignx = "left";
-				self.timer_fraga.aligny = "top";
-				self.timer_fraga.horzalign = "user_left";
-				self.timer_fraga.vertalign = "user_top";
-				self.timer_fraga.x = 1;
-				self.timer_fraga.y = 0;
-				self.timer_fraga.alpha = 1;
-				self.roundtimer_fraga.alpha = 1;
+				self.round_timer.alignx = "left";
+				self.round_timer.aligny = "top";
+				self.round_timer.horzalign = "user_left";
+				self.round_timer.vertalign = "user_top";
+				self.timer.alignx = "left";
+				self.timer.aligny = "top";
+				self.timer.horzalign = "user_left";
+				self.timer.vertalign = "user_top";
+				self.timer.x = 1;
+				self.timer.y = 0;
+				self.timer.alpha = !getDvarInt("st") * 1;
+				self.round_timer.alpha = 1;
 				if(isorigins())
-					self.timer_fraga.y = 45;
+					self.timer.y = 45;
 				if(issurvivalmap())
-					self.timer_fraga.y = 40;
+					self.timer.y = 40;
 				if(isdierise() && level.springpad_hud.alpha != 0)
-					self.timer_fraga.y = 10;
+					self.timer.y = 10;
 				if(isburied() && level.springpad_hud.alpha != 0)
-					self.timer_fraga.y = 35;
+					self.timer.y = 35;
 				if(istranzit() && getDvarInt("bus"))
-					self.timer_fraga.y = 21;
+					self.timer.y = 21;
 				if(istranzit() && getDvarInt("bus") && GetDvar("language") == "japanese")
-					self.timer_fraga.y = 25;
+					self.timer.y = 25;
 				break;
 			case 3:
-				self.timer_fraga.alignx = "left";
-				self.timer_fraga.aligny = "top";
-				self.timer_fraga.horzalign = "user_left";
-				self.timer_fraga.vertalign = "user_top";
-				self.roundtimer_fraga.alignx = "left";
-				self.roundtimer_fraga.aligny = "top";
-				self.roundtimer_fraga.horzalign = "user_left";
-				self.roundtimer_fraga.vertalign = "user_top";
-				self.timer_fraga.x = 1;
-				self.timer_fraga.y = 250;
-				self.timer_fraga.alpha = 1;
-				self.roundtimer_fraga.alpha = 1;
+				self.timer.alignx = "left";
+				self.timer.aligny = "top";
+				self.timer.horzalign = "user_left";
+				self.timer.vertalign = "user_top";
+				self.round_timer.alignx = "left";
+				self.round_timer.aligny = "top";
+				self.round_timer.horzalign = "user_left";
+				self.round_timer.vertalign = "user_top";
+				self.timer.x = 1;
+				self.timer.y = 250;
+				self.timer.alpha = !getDvarInt("st") * 1;
+				self.round_timer.alpha = 1;
 				break;
 			case 4:
-				self.roundtimer_fraga.alignx = "right";
-				self.roundtimer_fraga.aligny = "top";
-				self.roundtimer_fraga.horzalign = "user_right";
-				self.roundtimer_fraga.vertalign = "user_top";
-				self.timer_fraga.alignx = "right";
-				self.timer_fraga.aligny = "top";
-				self.timer_fraga.horzalign = "user_right";
-				self.timer_fraga.vertalign = "user_top";
-				self.timer_fraga.x = -170;
-				self.timer_fraga.y = 415;
-				self.timer_fraga.alpha = 1;
-				self.roundtimer_fraga.alpha = 1;
+				self.round_timer.alignx = "right";
+				self.round_timer.aligny = "top";
+				self.round_timer.horzalign = "user_right";
+				self.round_timer.vertalign = "user_top";
+				self.timer.alignx = "right";
+				self.timer.aligny = "top";
+				self.timer.horzalign = "user_right";
+				self.timer.vertalign = "user_top";
+				self.timer.x = -170;
+				self.timer.y = 415;
+				self.timer.alpha = !getDvarInt("st") * 1;
+				self.round_timer.alpha = 1;
 				break;
 
 			default: break;
 		}
-		self.roundtimer_fraga.x = self.timer_fraga.x;
-		self.roundtimer_fraga.y = self.timer_fraga.y + 15;
+		self.round_timer.x = self.timer.x;
+		self.round_timer.y = self.timer.y + 15;
 		
 		wait 0.1;
 		if(GetDvar("language") == "japanese")
 		{
-			self.timer_fraga.fontscale = 1.5;
-			self.roundtimer_fraga.fontscale = self.timer_fraga.fontscale;
+			self.timer.fontscale = 1.5;
+			self.round_timer.fontscale = self.timer.fontscale;
 		}
 	}
 }
@@ -259,46 +258,46 @@ rainbow()
 		wait 0.1;
 		if(!getDvarInt("RGB"))
 		{
-			self.roundtimer_fraga.color = (0.8, 0.8, 0.8);
-			self.timer_fraga.color = (1, 1, 1);
+			self.round_timer.color = (0.8, 0.8, 0.8);
+			self.timer.color = (1, 1, 1);
 			while(!getDvarInt("RGB"))
 				wait 0.1;
 		}
 
 		for(i = 0; i <= 1; i += 0.02)
 		{
-			self.timer_fraga.color = (1, i, 0);
-			self.roundtimer_fraga.color = self.timer_fraga.color;
+			self.timer.color = (1, i, 0);
+			self.round_timer.color = self.timer.color;
 			wait 0.1;
 		}
 		for(i = 0; i <= 1; i += 0.02)
 		{
-			self.timer_fraga.color = (1 - i, 1, 0);
-			self.roundtimer_fraga.color = self.timer_fraga.color;
+			self.timer.color = (1 - i, 1, 0);
+			self.round_timer.color = self.timer.color;
 			wait 0.1;
 		}
 		for(i = 0; i <= 1; i += 0.02)
 		{
-			self.timer_fraga.color = (0, 1, i);
-			self.roundtimer_fraga.color = self.timer_fraga.color;
+			self.timer.color = (0, 1, i);
+			self.round_timer.color = self.timer.color;
 			wait 0.1;
 		}
 		for(i = 0; i <= 1; i += 0.02)
 		{
-			self.timer_fraga.color = (0, 1 - i, 1);
-			self.roundtimer_fraga.color = self.timer_fraga.color;
+			self.timer.color = (0, 1 - i, 1);
+			self.round_timer.color = self.timer.color;
 			wait 0.1;
 		}
 		for(i = 0; i <= 1; i += 0.02)
 		{
-			self.timer_fraga.color = (i, 0, 1);
-			self.roundtimer_fraga.color = self.timer_fraga.color;
+			self.timer.color = (i, 0, 1);
+			self.round_timer.color = self.timer.color;
 			wait 0.1;
 		}
 		for(i = 0; i <= 1; i += 0.02)
 		{
-			self.timer_fraga.color = (1, 0, 1 - i);
-			self.roundtimer_fraga.color = self.timer_fraga.color;
+			self.timer.color = (1, 0, 1 - i);
+			self.round_timer.color = self.timer.color;
 			wait 0.1;
 		}
 	}

@@ -52,43 +52,66 @@ displayBoxHits()
     level.boxhits setvalue(0);
     if(issurvivalmap())
     {
+        level.total_chest_accessed_mk2 = 0;
+        level.total_chest_accessed_ray = 0;
         level.boxhits.alignx = "left";
         level.boxhits.horzalign = "user_left";
         level.boxhits.x = 2;
         level.boxhits.alpha = 1;
     }
+
     while(!isDefined(level.total_chest_accessed))
         wait 0.1;
     while(!isdefined(level.chest_accessed))
         wait 0.1;
+
     lol = 0;
     while(1)
     {
         if(lol != level.chest_accessed)
         {
-            level.total_chest_accessed++;
-            
             lol = level.chest_accessed;
+            if(lol == 0)
+                continue;
+            level.total_chest_accessed++;
+            if(count_for_raygun())
+                level.total_chest_accessed_ray++;
+            if(count_for_mk2())
+                level.total_chest_accessed_mk2++;
+            
             level.boxhits setvalue(level.total_chest_accessed);
-            i = 1;
             if(!issurvivalmap())
-            {
-                while(true)
-                {
-                    i -= 0.02;
-                    level.boxhits.alpha = i;
-                    wait 0.1;
-                    if(i < 0.1)
-                    {
-                        level.boxhits.alpha = 0;
-                        break;
-                    }
-                }
-            }
+                fade();
         }
         wait 0.1;
     }
-    wait 1;
+}
+
+count_for_raygun()
+{
+    foreach(player in level.players)
+        if (!player has_weapon_or_upgrade("ray_gun_zm"))
+            return true;
+    return false;
+}
+count_for_mk2()
+{
+    foreach(player in level.players)
+        if(player has_weapon_or_upgrade("raygun_mark2_zm"))
+            return false;
+    return true;
+}
+
+fade()
+{
+    i = 1;
+    while(i < 0.1)
+    {
+        i -= 0.02;
+        level.boxhits.alpha = i;
+        wait 0.1;
+    }
+    level.boxhits.alpha = 0;
 }
 
 raygun_counter()
@@ -131,9 +154,9 @@ raygun_counter()
             level.total_mk2_display.label = &"^3Raygun MK2 AVG: ^4";
             level.total_ray_display.label = &"^3Raygun AVG: ^4";
             if(isDefined(level.total_ray_display))
-                level.total_ray_display setvalue(level.total_chest_accessed / level.total_ray);
+                level.total_ray_display setvalue(level.total_chest_accessed_ray / level.total_ray);
             if(isDefined(level.total_mk2_display))
-                level.total_mk2_display setvalue(level.total_chest_accessed / level.total_mk2);
+                level.total_mk2_display setvalue(level.total_chest_accessed_mk2 / level.total_mk2);
         }
         else
         {
@@ -226,11 +249,8 @@ firstbox3755()
         level.special_weapon_magicbox_check = undefined;
         foreach(weapon in level.zombie_weapons)
         {
-            //if(weapon.is_in_box)
-            //{
-                println("Removing " + weapon.weapon_name + " from the box");
-                weapon.is_in_box = 0;
-            //}
+            println("Removing " + weapon.weapon_name + " from the box");
+            weapon.is_in_box = 0;
         }
         
         foreach(weapon in level.forced_box_guns)
@@ -402,7 +422,7 @@ setUpWeapons()
                 switch(level.players.size)
                 {
                     case 1: 
-                    level.forced_box_guns = array("scar_zm", "raygun_mark2_zm", "m32_zm");
+                    level.forced_box_guns = array("scar_zm", "raygun_mark2_zm", "m32_zm", "cymbal_monkey_zm");
                     break;
                     case 2:
                     level.forced_box_guns = array("scar_zm", "scar_zm", "raygun_mark2_zm", "ray_gun_zm", "cymbal_monkey_zm", "cymbal_monkey_zm");
