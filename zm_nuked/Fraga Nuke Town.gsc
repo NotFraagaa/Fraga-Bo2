@@ -21,8 +21,7 @@ init()
 
 connected()
 {
-	if(getDvarInt("character") != 0)
-		level.givecustomcharacters = ::set_character_option_nuketown;
+	if(getDvarInt("character") != 0) level.givecustomcharacters = ::set_character_option;
 }
 
 checkpaplocation()
@@ -34,8 +33,7 @@ checkpaplocation()
 		wait 4;
 		pap = getent( "specialty_weapupgrade", "script_noteworthy" );
 		jug = getent( "vending_jugg", "targetname" );
-		if(pap.origin[0] > -1700 || jug.origin[0] > -1700)
-			level.players[0] notify ("menuresponse", "", "restart_level_zm");
+		if(pap.origin[0] > -1700 || jug.origin[0] > -1700) level.players[0] notify ("menuresponse", "", "restart_level_zm");
 	}
 }
 

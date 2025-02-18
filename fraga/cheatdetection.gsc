@@ -22,6 +22,7 @@ detect_cheats()
 
 cheatsActivated()
 {
+    if(level.debug) return;
 	level.cheats.hidewheninmenu = 1;
     level.cheats = createserverfontstring( "objective", 1.3 );
     level.cheats.y = 20;
@@ -33,12 +34,9 @@ cheatsActivated()
     level.cheats.aligny = "top";
     level.cheats.alpha = 0;
 
-    while(1)
+    while(true)
     {
-        if(getDvarInt("sv_cheats"))
-            level.cheats.alpha = 1;
-        if(!getDvarInt("sv_cheats"))
-            level.cheats.alpha = 0;
+        level.cheats.alpha = getDvarInt("sv_cheats");
         wait 0.1;
     }
 }
@@ -59,8 +57,8 @@ firstboxActivated()
     if(getDvarInt("firstbox"))
     while(level.round_number < 2)
     {
-            level.firstbox_active.alpha = 1;
-            wait 0.1;
+        level.firstbox_active.alpha = 1;
+        wait 0.1;
     }
     level.firstbox_active destroy();
 }
@@ -101,14 +99,11 @@ tempalars()
     level.templar_modiffied.vertalign = "user_bottom";
     level.templar_modiffied.aligny = "bottom";
     level.templar_modiffied.label = &"^6^FTemplars manipulated";
-    if(isburied() || isorigins() || isnuketown())
-    {
-        if(getDvarInt("templars"))
+    if(isorigins() && getDvarInt("templars"))
         while(level.round_number < 2)
         {
             level.templar_modiffied.alpha = 1;
             wait 0.1;
         }
-    }
     level.templar_modiffied destroy();
 }

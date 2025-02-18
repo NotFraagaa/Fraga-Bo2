@@ -5,29 +5,17 @@
 
 fix_highround()
 {
-	if(level.script == "zm_tomb")
-		return;
+	if(isorigins()) return;
 	while(level.round_number > 155)
 	{
 		zombies = getaiarray("axis");
-		i = 0;
-		while(i < zombies.size)
-		{
-			if(zombies[i].targetname != "zombie")
-			{
-				continue;
-			}
-			if(zombies[i].targetname == "zombie")
-			{
-				if(!isdefined(zombies[i].health_override))
-				{
-					zombies[i].health_override = 1;
-					zombies[i].health = 1044606723;
-				}
-			}
-			i++;
-		}
-		wait(0.1);
+        foreach(zombie in zombies)
+            if(zombie.targetname == "zombie" && !isdefined(zombie.health_override))
+            {
+					zombie.health_override = true;
+					zombie.health = 1044606723;
+            }
+		wait 0.1;
 	}
 }
 
@@ -51,8 +39,7 @@ roundcounter()
 		level waittill("start_of_round");
 		round++;
     	level.roundcounter setvalue(round);
-		if(round >= 255)
-    	level.roundcounter.alpha = 1;
+		if(round >= 255) level.roundcounter.alpha = 1;
 	}
 }
 

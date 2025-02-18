@@ -11,30 +11,19 @@
 trackeralpha()
 {
 	self endon("disconnect");
-	while(1)
+	while(true)
 	{
-		if(getDvarInt("tracker"))
-		{
-			if(isDefined(level.trackingLeapers))
-				self.lastleaperround.alpha  = 1;
-			if(isDefined(level.trackingTemplars))
-				self.lastTemplarRound.alpha = 1;
-			if(isDefined(level.trackingBrutus))
-				self.lastBrutusRound.alpha  = 1;
-			if(isDefined(level.trackingPanzers))
-				self.lastPanzerRound.alpha  = 1;
-		}
-		if(!getDvarInt("tracker"))
-		{
-			if(isDefined(level.trackingLeapers))
-				self.lastleaperround.alpha  = 0;
-			if(isDefined(level.trackingTemplars))
-				self.lastTemplarRound.alpha = 0;
-			if(isDefined(level.trackingBrutus))
-				self.lastBrutusRound.alpha  = 0;
-			if(isDefined(level.trackingPanzers))
-				self.lastPanzerRound.alpha  = 0;
-		}
+		alpha = getDvarInt("tracker");
+
+		if(isDefined(level.trackingLeapers))
+			self.lastleaperround.alpha  = alpha;
+		if(isDefined(level.trackingTemplars))
+			self.lastTemplarRound.alpha = alpha;
+		if(isDefined(level.trackingBrutus))
+			self.lastBrutusRound.alpha  = alpha;
+		if(isDefined(level.trackingPanzers))
+			self.lastPanzerRound.alpha  = alpha;
+
 		wait 0.1;
 	}
 }
@@ -59,7 +48,7 @@ leapertracker()
 	self.lastleaperround.alpha = 1;
 	self.lastleaperround setValue(0);
 	self thread trackeralpha();
-	while(1)
+	while(true)
 	{
 		level waittill("start_of_round");
 		if(flag("leaper_round"))
@@ -87,7 +76,7 @@ PanzerTracker()
 	self.lastPanzerRound.alpha = 1;
 	self.lastPanzerRound setValue(0);
 	self thread trackeralpha();
-	while(1)
+	while(true)
 	{
 		level waittill( "spawn_mechz" );
 		self.lastPanzerRound setvalue(level.round_number);
@@ -114,7 +103,7 @@ TemplarTracker()
 	self.lastTemplarRound.alpha = 1;
 	self.lastTemplarRound setValue(0);
 	self thread trackeralpha();
-	while(1)
+	while(true)
 	{
 		level waittill( "generator_under_attack" );
 		self.lastTemplarRound setvalue(level.round_number);
@@ -142,7 +131,7 @@ BrutusTracker()
 	self.lastBrutusRound.alpha = 1;
 	self.lastBrutusRound setValue(0);
 	self thread trackeralpha();
-	while(1)
+	while(true)
 	{
 		level waittill( "brutus_spawned");
 		self.lastBrutusRound setvalue(level.round_number);

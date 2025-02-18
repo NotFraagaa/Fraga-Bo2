@@ -38,7 +38,7 @@ round_timer()
 	flag_wait("initial_blackscreen_passed");
 	level.fade_time = 0.2;
 
-	while(1)
+	while(true)
 	{
 		zombies_this_round = level.zombie_total + get_round_enemy_array().size;
 		hordes = zombies_this_round / 24;
@@ -96,9 +96,7 @@ display_sph(time, hordes)
 	self.round_timer setvalue(sph);
 
 	for(i = 0; i < 5; i++)
-	{
 		wait(1);
-	}
 
 	self.round_timer fadeovertime(level.fade_time);
 	self.round_timer.alpha = 0;
@@ -191,20 +189,12 @@ timerlocation()
 				self.timer.vertalign = "user_top";
 				self.timer.x = 1;
 				self.timer.y = 0;
-				self.timer.alpha = !getDvarInt("st") * 1;
+				self.timer.alpha = 1;
 				self.round_timer.alpha = 1;
-				if(isorigins())
-					self.timer.y = 45;
-				if(issurvivalmap())
-					self.timer.y = 40;
-				if(isdierise() && level.springpad_hud.alpha != 0)
-					self.timer.y = 10;
-				if(isburied() && level.springpad_hud.alpha != 0)
-					self.timer.y = 35;
-				if(istranzit() && getDvarInt("bus"))
-					self.timer.y = 21;
-				if(istranzit() && getDvarInt("bus") && GetDvar("language") == "japanese")
-					self.timer.y = 25;
+				if(isorigins()) self.timer.y = 45;
+				if(issurvivalmap()) self.timer.y = 40;
+				if(isdierise() && level.springpad_hud.alpha != 0) self.timer.y = 10;
+				if(isburied() && level.springpad_hud.alpha != 0) self.timer.y = 35;
 				break;
 			case 3:
 				self.timer.alignx = "left";
@@ -217,7 +207,7 @@ timerlocation()
 				self.round_timer.vertalign = "user_top";
 				self.timer.x = 1;
 				self.timer.y = 250;
-				self.timer.alpha = !getDvarInt("st") * 1;
+				self.timer.alpha = 1;
 				self.round_timer.alpha = 1;
 				break;
 			case 4:
@@ -231,7 +221,7 @@ timerlocation()
 				self.timer.vertalign = "user_top";
 				self.timer.x = -170;
 				self.timer.y = 415;
-				self.timer.alpha = !getDvarInt("st") * 1;
+				self.timer.alpha = 1;
 				self.round_timer.alpha = 1;
 				break;
 
@@ -245,60 +235,6 @@ timerlocation()
 		{
 			self.timer.fontscale = 1.5;
 			self.round_timer.fontscale = self.timer.fontscale;
-		}
-	}
-}
-
-rainbow()
-{
-	if(getDvar("RGB") == "")
-		setDvar("RGB", 0);
-	while(true)
-	{
-		wait 0.1;
-		if(!getDvarInt("RGB"))
-		{
-			self.round_timer.color = (0.8, 0.8, 0.8);
-			self.timer.color = (1, 1, 1);
-			while(!getDvarInt("RGB"))
-				wait 0.1;
-		}
-
-		for(i = 0; i <= 1; i += 0.02)
-		{
-			self.timer.color = (1, i, 0);
-			self.round_timer.color = self.timer.color;
-			wait 0.1;
-		}
-		for(i = 0; i <= 1; i += 0.02)
-		{
-			self.timer.color = (1 - i, 1, 0);
-			self.round_timer.color = self.timer.color;
-			wait 0.1;
-		}
-		for(i = 0; i <= 1; i += 0.02)
-		{
-			self.timer.color = (0, 1, i);
-			self.round_timer.color = self.timer.color;
-			wait 0.1;
-		}
-		for(i = 0; i <= 1; i += 0.02)
-		{
-			self.timer.color = (0, 1 - i, 1);
-			self.round_timer.color = self.timer.color;
-			wait 0.1;
-		}
-		for(i = 0; i <= 1; i += 0.02)
-		{
-			self.timer.color = (i, 0, 1);
-			self.round_timer.color = self.timer.color;
-			wait 0.1;
-		}
-		for(i = 0; i <= 1; i += 0.02)
-		{
-			self.timer.color = (1, 0, 1 - i);
-			self.round_timer.color = self.timer.color;
-			wait 0.1;
 		}
 	}
 }

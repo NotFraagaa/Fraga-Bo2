@@ -56,10 +56,8 @@ buildable_hud()
 {
 	level.springpad_hud.hidewheninmenu = 1;
     level.springpad_hud = createserverfontstring( "objective", 1.3 );
-    if(level.script == "zm_buried")
-        level.springpad_hud.y = 0;
-    else
-        level.springpad_hud.y = 15;
+    if(level.script == "zm_buried") level.springpad_hud.y = 0;
+    else level.springpad_hud.y = 15;
     level.springpad_hud.x = 2;
     level.springpad_hud.fontscale = 1.1;
     level.springpad_hud.alignx = "left";
@@ -91,7 +89,7 @@ buildable_hud()
     level.subwoofer_hud.alpha = 0;
     level.springpad_hud.alpha = 0;
 
-    if ( isdierise() )
+    if (isdierise())
     {
         level.subwoofer_hud destroy();
         level.turbine_hud destroy();
@@ -115,15 +113,19 @@ buildable_controller()
 		level.buildable_stats["turbine"] = 0;
 	if(level.buildable_stats["subwoofer_zm"] > 0)
 		level.buildable_stats["subwoofer_zm"] = 0;
-    while ( true )
-    {
-        if ( isburied() )
+
+    if(isburied())
+        while(true)
         {
             level.subwoofer_hud setvalue( level.buildable_stats["subwoofer_zm"] );
             level.turbine_hud setvalue( level.buildable_stats["turbine"] );
+            level.springpad_hud setvalue( level.buildable_stats["springpad_zm"] );
+            wait 0.1;
         }
-
-        level.springpad_hud setvalue( level.buildable_stats["springpad_zm"] );
-        wait 0.1;
-    }
+    if(isdierise())
+        while(true)
+        {
+            level.springpad_hud setvalue( level.buildable_stats["springpad_zm"] );
+            wait 0.1;
+        }
 }

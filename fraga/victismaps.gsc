@@ -145,30 +145,23 @@ bank()
 	self.account_value = level.bank_account_max;
 }
 
-
-
 enablepersperks()
 {
-    if(!isvictismap())
-        return;
-	if(level.round_number >= 15)
-		return;
+    if(!isvictismap()) return;
+	if(level.round_number >= 15) return;
     self thread minijug();
     self thread tombstone();
     if(isburied())
     {
         wait 5;
         maps\mp\zombies\_zm::register_player_damage_callback( ::phd );
-        self playsound( "evt_player_upgrade" );
-        wait 0.5;
-        self playsound( "evt_player_upgrade" );
-        wait 0.5;
+        self playsound( "evt_player_upgrade" ); wait 0.5;
+        self playsound( "evt_player_upgrade" ); wait 0.5;
         self playsound( "evt_player_upgrade" );
     }
     else
     {
-        self playsound( "evt_player_upgrade" );
-        wait 0.5;
+        self playsound( "evt_player_upgrade" ); wait 0.5;
         self playsound( "evt_player_upgrade" );
     }
 }
@@ -180,16 +173,15 @@ minijug()
     while(!player_downed)
     {
         player_downed = self.downs;
-        if(!self hasperk("specialty_armorvest"))
-            self.maxhealth = 190;
-        else
-            self.maxhealth = 340;
+        if(!self hasperk("specialty_armorvest")) self.maxhealth = 190;
+        else self.maxhealth = 340;
         wait 0.5;
     }
     self playsoundtoplayer("evt_player_downgrade", self);
 }
 tombstone()
 {
+    // Player shouldnt get the effect if he dies due to falling on the maze's fountain
     wait 1;
     self thread saveplayerdata();
 
@@ -233,7 +225,7 @@ saveplayerdata()
         if(self hasperk("specialty_scavenger"))
             self.a_saved_perks[self.a_saved_perks.size] = "specialty_scavenger";    // tumba
         if(self hasperk("specialty_nomotionsensor"))
-            self.a_saved_perks[self.a_saved_perks.size] = "specialty_nomotionsensor"; // Stam
+            self.a_saved_perks[self.a_saved_perks.size] = "specialty_nomotionsensor"; // Vulture
         if(self hasperk("specialty_longersprint"))
             self.a_saved_perks[self.a_saved_perks.size] = "specialty_longersprint"; // Stam
     }

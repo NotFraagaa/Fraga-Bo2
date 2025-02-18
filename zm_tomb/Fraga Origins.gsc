@@ -32,8 +32,7 @@ connected()
 		level waittill("connecting", player);
 		player thread PanzerTracker();
 		player thread TemplarTracker();
-		if(getDvarInt("character") != 0)
-			level.givecustomcharacters = ::set_character_option_origins;
+		if(getDvarInt("character") != 0) level.givecustomcharacters = ::set_character_option;
 	}
 }
 

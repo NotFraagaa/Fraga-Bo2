@@ -34,8 +34,7 @@ init()
     level thread firstbox();
 	level thread boxhits();
     level thread roundcounter();
-    if(!level.debug || !level.strat_tester)
-        level thread detect_cheats();
+    if(!level.debug || !level.strat_tester) level thread detect_cheats();
     while(true)
     {
         level waittill("connecting", player);
@@ -50,7 +49,7 @@ fraga_connected()
 
 	self thread timer();
 	self thread timerlocation();
-	self useservervisionset(1);
+	self useservervisionset(true);
 	self setvisionsetforplayer(GetDvar( "mapname" ), 1.0 );
 	self thread rotate_skydome();
 	self thread graphic_tweaks();
@@ -59,117 +58,62 @@ fraga_connected()
     self thread rainbow();
     self thread fixrotationangle();
     self iprintln("^6Fraga^5V15  ^3Active");
-    if(getDvar("language") == "french")
-        self iprintln("^1Spanish ^3Ruleset  ^1Active");
+    if(getDvar("language") == "french") self iprintln("^1Spanish ^3Ruleset  ^1Active");
 }
-
 setDvars()
 {
-    setdvar("sv_cheats", 0 );
-    setdvar("player_strafeSpeedScale", 1 );
-    setdvar("player_backSpeedScale", 1 );
-    setdvar("r_dof_enable", 0 );
-	if(GetDvar("box") == "")
-		setdvar("box", 1);
-	if(GetDvar("character") == "")
-		setdvar("character", 0);
-	if(GetDvar("FragaDebug") == "")
-		setdvar("FragaDebug", 0);
-    if(getdvar("SR") == "")
-        setdvar("SR", 0 );
-    if(getdvar("bus") == "")
-        setdvar("bus", 0 );
-    if(getdvar("graphictweaks") == "")
-        setdvar("graphictweaks", 0 );
-    if(getdvar("sph") == "")
-        setdvar("sph", 50 );
-    if(getdvar("timer") == "")
-        setdvar("timer", 1 );
-    if(getdvar("splits") != "")
-        setdvar("splits", 0 );
-	if( getdvar("nightmode") == "")
-		setdvar("nightmode", 0 );
-	if(GetDvar("firstbox") == "")
-		setdvar("firstbox", 0);
-    if(getDvar("st") == "")
-        setDvar("st", 0);
-    if(getDvar("stop_warning") == "")
-        setDvar("stop_warning", 0);
+    setdvar("sv_cheats", 0);
+    setdvar("player_strafeSpeedScale", 1);
+    setdvar("player_backSpeedScale", 1);
+    setdvar("r_dof_enable", 0);
     
-    if(issurvivalmap())
+    createDvar("box", 1);
+    createDvar("character", 0);
+    createDvar("FragaDebug", 0);
+    createDvar("SR", 0);
+    createDvar("graphictweaks", 0);
+    createDvar("sph", 50);
+    createDvar("timer", 1);
+    createDvar("splits", 0);
+    createDvar("nightmode", 0);
+    createDvar("firstbox", 0);
+    createDvar("stop_warning", 0);
+    
+    if (issurvivalmap()) createDvar("avg", 1);
+    if (isvictismap())
     {
-        if(!getDvar("avg") == "")
-            setDvar("avg", 1);
+        createDvar("pers_perk", 1);
+        createDvar("full_bank", 1);
+        createDvar("buildables", 1);
+        createDvar("fridge", "m16");
     }
-    if(isvictismap())
+    if (ismob())
     {
-        if(GetDvar("pers_perk") == "")
-            setdvar("pers_perk", 1);
-        if(GetDvar("full_bank") == "")
-            setdvar("full_bank", 1);
-        if(GetDvar("buildables") == "")
-            setdvar("buildables", 1);
-        if(getdvar("fridge") == "")
-            setdvar("fridge", "m16");
+        createDvar("tracker", 0);
+        createDvar("traptimer", 0);
     }
-    if(ismob())
+    if (isorigins())
     {
-        if(getDvarInt("tracker") == "")
-            setDvar("tracker", 1);
-        if(getdvar("traptimer") == "")
-            setdvar("traptimer", 0 );
+        createDvar("templars", 0);
+        createDvar("tracker", 0);
+        createDvar("perkRNG", 1);
     }
-    if(isorigins())
+    if (isburied()) createDvar("perkRNG", 1);
+    if (isdierise()) createDvar("tracker", 0);
+    if (isnuketown())
     {
-        if(GetDvar("templars") == "")
-            setdvar("templars", 0);
-        if(getDvarInt("tracker") == "")
-            setDvar("tracker", 1);
-        if(GetDvar("perkRNG") == "")
-            setdvar("perkRNG", 1);
+        createDvar("perkRNG", 1);
+        createDvar("pap", 0);
     }
-    if(isburied())
-    {
-        if(GetDvar("perkRNG") == "")
-            setdvar("perkRNG", 1);
-    }
-    if(isdierise())
-    {
-        if(getDvarInt("tracker") == "")
-            setDvar("tracker", 1);
-    }
-    if(isnuketown())
-    {
-        if(getDvar("perkRNG") == "")
-            setDvar("perkRNG", 1);
-        if(getDvar("pap") == "")
-            setDvar("pap", 0);
-    }
-    if(getDvarInt("st"))
-    {
-        if(getDvar("start_round") == "")
-            setDvar("start_round", 100);
-        if(getDvar("start_delay") == "")
-            setDvar("start_delay", 60);
-        if(getDvar("st_remove_boards") == "")
-            setDvar("st_remove_boards", 1);
-        if(getDvar("st_power_on") == "")
-            setDvar("st_power_on", 1);
-        if(getDvar("st_perks") == "")
-            setDvar("st_perks", 1);
-        if(getDvar("st_doors") == "")
-            setDvar("st_doors", 0);
-        if(getDvar("st_weapons") == "")
-            setDvar("st_weapons", 1);
-        if(getDvar("hud_remaining") == "")
-            setDvar("hud_remaining", 1);
-        if(getDvar("hud_zone") == "")
-            setDvar("hud_zone", 1);
-        if(getDvar("perkRNG") == "")
-            setDvar("perkRNG", 1);
-    }
-	flag_wait("initial_blackscreen_passed");
+
+    flag_wait("initial_blackscreen_passed");
     level.start_time = int(gettime() / 1000);
+}
+
+createDvar(dvar, set)
+{
+    if (getDvar(dvar) == "")
+        setDvar(dvar, set);
 }
 
 base_game_network_frame()

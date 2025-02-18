@@ -23,14 +23,10 @@ graphic_tweaks()
 
 nightmode()
 {
-	if ( !isDefined( self.nightmode ) )
-	{
+	if (!isDefined( self.nightmode))
 		self.nightmode = true;
-	}
 	else
-	{
 		return;
-	}
 
 	flag_wait( "start_zombie_round_logic" );
 	wait 0.05;	
@@ -41,22 +37,18 @@ nightmode()
 
 nightmode_watcher()
 {	
-
 	wait 1;
-
-	while(1)
+	while(true)
 	{
-		while( !getDvarInt( "nightmode" ) )
-		{
+		while(!getDvarInt("nightmode"))
 			wait 0.1;
-		}
+
 		self thread enable_nightmode();
 		self thread visual_fix();
 
-		while( getDvarInt( "nightmode" ) )
-		{
+		while(getDvarInt("nightmode"))
 			wait 0.1;
-		}
+
 		self thread disable_nightmode();
 	}
 }
@@ -79,22 +71,10 @@ enable_nightmode()
 	self setclientdvar( "r_exposureValue", 3.9 );
 	self setclientdvar( "r_lightTweakSunLight", 16 );
 	self setclientdvar( "r_sky_intensity_factor0", 3 );
-	if( level.script == "zm_buried" )
-	{
-		self setclientdvar( "r_exposureValue", 3.5 );
-	}
-	else if( level.script == "zm_tomb" )
-	{
-		self setclientdvar( "r_exposureValue", 4 );
-	}
-	else if( level.script == "zm_nuked" )
-	{
-		self setclientdvar( "r_exposureValue", 5.6 );
-	}
-	else if( level.script == "zm_highrise" )
-	{
-		self setclientdvar( "r_exposureValue", 3 );
-	}
+	if(isburied()) self setclientdvar( "r_exposureValue", 3.5 );
+	if(isorigins()) self setclientdvar( "r_exposureValue", 4 );
+	if(isnuketown()) self setclientdvar( "r_exposureValue", 5.6 );
+	if(isdierise()) self setclientdvar( "r_exposureValue", 3 );
 }
 
 disable_nightmode()
@@ -117,7 +97,7 @@ visual_fix()
 	level endon( "game_ended" );
 	self endon( "disconnect" );
 	self endon( "disable_nightmode" );
-	if( level.script == "zm_buried" )
+	if(isburied())
 	{
 		while( getDvar( "r_sky_intensity_factor0" ) != 0 )
 		{	
@@ -126,7 +106,7 @@ visual_fix()
 			wait 0.05;
 		}
 	}
-	else if( level.script == "zm_prison" || level.script == "zm_tomb" )
+	else if(ismob()|| isorigins())
 	{
 		while( getDvar( "r_lightTweakSunLight" ) != 0 )
 		{
@@ -143,22 +123,14 @@ visual_fix()
 
 rotate_skydome()
 {
-	if ( level.script == "zm_tomb" )
-	{
-		return;
-	}
-	
-	x = 360;
-	
+	if (isorigins()) return;
+
 	self endon("disconnect");
-	while(1)
-	{
-		x -= 0.025;
-		if ( x < 0 )
+
+	while(true)
+		for(x = 360; x > 0; x -= 0.025)
 		{
-			x += 360;
+			self setclientdvar( "r_skyRotation", x );
+			wait 0.1;
 		}
-		self setclientdvar( "r_skyRotation", x );
-		wait 0.1;
-	}
 }

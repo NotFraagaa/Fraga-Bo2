@@ -27,12 +27,11 @@ init()
 
 connected()
 {
-	while(1)
+	while(true)
 	{
 		level waittill("connecting", player);
 		player thread BrutusTracker();
-		if(getDvarInt("character") != 0)
-			level.givecustomcharacters = ::set_character_option_mob;
+		if(getDvarInt("character") != 0) level.givecustomcharacters = ::set_character_option;
 		player thread trap_timer();
 		player thread givetomahawk();
 	}

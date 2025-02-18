@@ -21,7 +21,7 @@ init()
 
 connected()
 {
-	while(1)
+	while(true)
 	{
 		level waittill("connecting", player);
 		player thread onconnect();
@@ -30,8 +30,7 @@ connected()
 		player thread leapertracker();
 		self.initial_stats = array();
 		self thread watch_stat("springpad_zm");
-		if(getDvarInt("character") != 0)
-			level.givecustomcharacters = ::set_character_option_dierise;
+		if(getDvarInt("character") != 0) level.givecustomcharacters = ::set_character_option;
         player waittill("spawned_player");
 		player thread fridge();
 	}

@@ -36,7 +36,7 @@ SplitTimer(split_list, y_offset)
     flag_wait( "initial_blackscreen_passed" );
 
     foreach ( split in split_list )
-        CrearNovoSplit( split, y_offset );
+        makeList( split, y_offset );
     level.fraga_splits_start_time = gettime();
     for ( i = 0; i < split_list.size; i++ )
     {
@@ -45,7 +45,7 @@ SplitTimer(split_list, y_offset)
     }
 }
 
-CrearNovoSplit( split_name , y_offset)
+makeList( split_name , y_offset)
 {
     y = y_offset;
 
@@ -65,11 +65,11 @@ CrearNovoSplit( split_name , y_offset)
     level.fraga_splits_splits[split_name].finished = 0;
     level.fraga_splits_splits[split_name].color = ( 1, 1, 1 );
     level thread StartSplit( split_name );
-    NomeDoSplit( split_name );
+    splitLabel( split_name );
 }
 
 
-NomeDoSplit( split_name )
+splitLabel( split_name )
 {
     if(GetDvar("language") != "galego" || GetDvar("language") != "spanish")
     {
@@ -165,7 +165,7 @@ NomeDoSplit( split_name )
 
 wait_split( split , last_time)
 {
-    while(1)
+    while(true)
     {
         if(isDefined(level.fraga_splits_time))
         {
@@ -304,7 +304,7 @@ show_splits()
 {
     self endon("disconnect");
     splits_finished = 0;
-    while(1)
+    while(true)
     {
         wait 0.1;
 
@@ -320,152 +320,21 @@ show_splits()
                 wait 0.3;
                 if(i < 0.13)
                     i = 0;
-                if(level.fraga_splits_splits["Round 2"].finished == 1)
-                    level.fraga_splits_splits["Round 2"].alpha = i;
-                if(level.fraga_splits_splits["Round 3"].finished == 1)
-                    level.fraga_splits_splits["Round 3"].alpha = i;
-                if(level.fraga_splits_splits["Round 4"].finished == 1)
-                    level.fraga_splits_splits["Round 4"].alpha = i;
-                if(level.fraga_splits_splits["Round 5"].finished == 1)
-                    level.fraga_splits_splits["Round 5"].alpha = i; 
-                if(level.fraga_splits_splits["Round 10"].finished == 1)
-                    level.fraga_splits_splits["Round 10"].alpha = i;
-                if(level.fraga_splits_splits["Round 15"].finished == 1)
-                    level.fraga_splits_splits["Round 15"].alpha = i;
-                if(level.fraga_splits_splits["Round 20"].finished == 1)
-                    level.fraga_splits_splits["Round 20"].alpha = i;
-                if(level.fraga_splits_splits["Round 25"].finished == 1)
-                    level.fraga_splits_splits["Round 25"].alpha = i;
-                if(level.fraga_splits_splits["Round 30"].finished == 1)
-                    level.fraga_splits_splits["Round 30"].alpha = i;
-                if(level.fraga_splits_splits["Round 40"].finished == 1)
-                    level.fraga_splits_splits["Round 40"].alpha = i;
-                if(level.fraga_splits_splits["Round 50"].finished == 1)
-                    level.fraga_splits_splits["Round 50"].alpha = i;
-                if(level.fraga_splits_splits["Round 60"].finished == 1)
-                    level.fraga_splits_splits["Round 60"].alpha = i;
-                if(level.fraga_splits_splits["Round 70"].finished == 1)
-                    level.fraga_splits_splits["Round 70"].alpha = i;
-                if(level.fraga_splits_splits["Round 80"].finished == 1)
-                    level.fraga_splits_splits["Round 80"].alpha = i;
-                if(level.fraga_splits_splits["Round 90"].finished == 1)
-                    level.fraga_splits_splits["Round 90"].alpha = i;
-                if(level.fraga_splits_splits["Round 95"].finished == 1)
-                    level.fraga_splits_splits["Round 95"].alpha = i;
-                if(level.fraga_splits_splits["Round 100"].finished == 1)
-                    level.fraga_splits_splits["Round 100"].alpha = i;
-                if(level.fraga_splits_splits["Round 125"].finished == 1)
-                    level.fraga_splits_splits["Round 125"].alpha = i;
-                if(level.fraga_splits_splits["Round 130"].finished == 1)
-                    level.fraga_splits_splits["Round 130"].alpha = i;
-                if(level.fraga_splits_splits["Round 140"].finished == 1)
-                    level.fraga_splits_splits["Round 140"].alpha = i;
-                if(level.fraga_splits_splits["Round 150"].finished == 1)
-                    level.fraga_splits_splits["Round 150"].alpha = i;
-                if(level.fraga_splits_splits["Round 175"].finished == 1)
-                    level.fraga_splits_splits["Round 175"].alpha = i;
-                if(level.fraga_splits_splits["Round 200"].finished == 1)
-                    level.fraga_splits_splits["Round 200"].alpha = i;
+                
+                foreach(split in level.fraga_splits_splits)
+                    split.alpha = split.finished * i;
             }
             splits_finished = level.finished_splits;
         }
         if(getDvarInt("splits") == 1)
         {
-            if(level.fraga_splits_splits["Round 2"].finished == 1)
-                level.fraga_splits_splits["Round 2"].alpha = 1;
-            if(level.fraga_splits_splits["Round 3"].finished == 1)
-                level.fraga_splits_splits["Round 3"].alpha = 1;
-            if(level.fraga_splits_splits["Round 4"].finished == 1)
-                level.fraga_splits_splits["Round 4"].alpha = 1;
-            if(level.fraga_splits_splits["Round 5"].finished == 1)
-                level.fraga_splits_splits["Round 5"].alpha = 1; 
-            if(level.fraga_splits_splits["Round 10"].finished == 1)
-                level.fraga_splits_splits["Round 10"].alpha = 1;
-            if(level.fraga_splits_splits["Round 15"].finished == 1)
-                level.fraga_splits_splits["Round 15"].alpha = 1;
-            if(level.fraga_splits_splits["Round 20"].finished == 1)
-                level.fraga_splits_splits["Round 20"].alpha = 1;
-            if(level.fraga_splits_splits["Round 25"].finished == 1)
-                level.fraga_splits_splits["Round 25"].alpha = 1;
-            if(level.fraga_splits_splits["Round 30"].finished == 1)
-                level.fraga_splits_splits["Round 30"].alpha = 1;
-            if(level.fraga_splits_splits["Round 40"].finished == 1)
-                level.fraga_splits_splits["Round 40"].alpha = 1;
-            if(level.fraga_splits_splits["Round 50"].finished == 1)
-                level.fraga_splits_splits["Round 50"].alpha = 1;
-            if(level.fraga_splits_splits["Round 60"].finished == 1)
-                level.fraga_splits_splits["Round 60"].alpha = 1;
-            if(level.fraga_splits_splits["Round 70"].finished == 1)
-                level.fraga_splits_splits["Round 70"].alpha = 1;
-            if(level.fraga_splits_splits["Round 80"].finished == 1)
-                level.fraga_splits_splits["Round 80"].alpha = 1;
-            if(level.fraga_splits_splits["Round 90"].finished == 1)
-                level.fraga_splits_splits["Round 90"].alpha = 1;
-            if(level.fraga_splits_splits["Round 95"].finished == 1)
-                level.fraga_splits_splits["Round 95"].alpha = 1;
-            if(level.fraga_splits_splits["Round 100"].finished == 1)
-                level.fraga_splits_splits["Round 100"].alpha = 1;
-            if(level.fraga_splits_splits["Round 125"].finished == 1)
-                level.fraga_splits_splits["Round 125"].alpha = 1;
-            if(level.fraga_splits_splits["Round 130"].finished == 1)
-                level.fraga_splits_splits["Round 130"].alpha = 1;
-            if(level.fraga_splits_splits["Round 140"].finished == 1)
-                level.fraga_splits_splits["Round 140"].alpha = 1;
-            if(level.fraga_splits_splits["Round 150"].finished == 1)
-                level.fraga_splits_splits["Round 150"].alpha = 1;
-            if(level.fraga_splits_splits["Round 175"].finished == 1)
-                level.fraga_splits_splits["Round 175"].alpha = 1;
-            if(level.fraga_splits_splits["Round 200"].finished == 1)
-                level.fraga_splits_splits["Round 200"].alpha = 1;
+            foreach(split in level.fraga_splits_splits)
+                split.alpha = 1;
         }
         if(getDvarInt("splits") == 0 && splits_finished == level.finished_splits)
         {
-            if(level.fraga_splits_splits["Round 2"].finished == 1)
-                level.fraga_splits_splits["Round 2"].alpha = 0;
-            if(level.fraga_splits_splits["Round 3"].finished == 1)
-                level.fraga_splits_splits["Round 3"].alpha = 0;
-            if(level.fraga_splits_splits["Round 4"].finished == 1)
-                level.fraga_splits_splits["Round 4"].alpha = 0;
-            if(level.fraga_splits_splits["Round 5"].finished == 1)
-                level.fraga_splits_splits["Round 5"].alpha = 0; 
-            if(level.fraga_splits_splits["Round 10"].finished == 1)
-                level.fraga_splits_splits["Round 10"].alpha = 0;
-            if(level.fraga_splits_splits["Round 15"].finished == 1)
-                level.fraga_splits_splits["Round 15"].alpha = 0;
-            if(level.fraga_splits_splits["Round 20"].finished == 1)
-                level.fraga_splits_splits["Round 20"].alpha = 0;
-            if(level.fraga_splits_splits["Round 25"].finished == 1)
-                level.fraga_splits_splits["Round 25"].alpha = 0;
-            if(level.fraga_splits_splits["Round 30"].finished == 1)
-                level.fraga_splits_splits["Round 30"].alpha = 0;
-            if(level.fraga_splits_splits["Round 40"].finished == 1)
-                level.fraga_splits_splits["Round 40"].alpha = 0;
-            if(level.fraga_splits_splits["Round 50"].finished == 1)
-                level.fraga_splits_splits["Round 50"].alpha = 0;
-            if(level.fraga_splits_splits["Round 60"].finished == 1)
-                level.fraga_splits_splits["Round 60"].alpha = 0;
-            if(level.fraga_splits_splits["Round 70"].finished == 1)
-                level.fraga_splits_splits["Round 70"].alpha = 0;
-            if(level.fraga_splits_splits["Round 80"].finished == 1)
-                level.fraga_splits_splits["Round 80"].alpha = 0;
-            if(level.fraga_splits_splits["Round 90"].finished == 1)
-                level.fraga_splits_splits["Round 90"].alpha = 0;
-            if(level.fraga_splits_splits["Round 95"].finished == 1)
-                level.fraga_splits_splits["Round 95"].alpha = 0;
-            if(level.fraga_splits_splits["Round 100"].finished == 1)
-                level.fraga_splits_splits["Round 100"].alpha = 0;
-            if(level.fraga_splits_splits["Round 125"].finished == 1)
-                level.fraga_splits_splits["Round 125"].alpha = 0;
-            if(level.fraga_splits_splits["Round 130"].finished == 1)
-                level.fraga_splits_splits["Round 130"].alpha = 0;
-            if(level.fraga_splits_splits["Round 140"].finished == 1)
-                level.fraga_splits_splits["Round 140"].alpha = 0;
-            if(level.fraga_splits_splits["Round 150"].finished == 1)
-                level.fraga_splits_splits["Round 150"].alpha = 0;
-            if(level.fraga_splits_splits["Round 175"].finished == 1)
-                level.fraga_splits_splits["Round 175"].alpha = 0;
-            if(level.fraga_splits_splits["Round 200"].finished == 1)
-                level.fraga_splits_splits["Round 200"].alpha = 0;
+            foreach(split in level.fraga_splits_splits)
+                split.alpha = 0;
         }
     }
 }
