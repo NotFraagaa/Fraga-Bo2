@@ -55,7 +55,6 @@ fraga_connected()
 	self thread graphic_tweaks();
 	self thread nightmode();
     self thread setFragaLanguage();
-    self thread rainbow();
     self thread fixrotationangle();
     self iprintln("^6Fraga^5V15  ^3Active");
     if(getDvar("language") == "french") self iprintln("^1Spanish ^3Ruleset  ^1Active");

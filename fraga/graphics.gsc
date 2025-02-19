@@ -3,6 +3,8 @@
 #include common_scripts\utility;
 #include maps\mp\_utility;
 
+#include scripts\zm\fraga\ismap;
+
 graphic_tweaks()
 {
 	if(GetDvarInt("graphictweaks") != 0)

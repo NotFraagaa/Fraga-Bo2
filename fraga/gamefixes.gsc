@@ -3,6 +3,8 @@
 #include common_scripts\utility;
 #include maps\mp\_utility;
 
+#include scripts\zm\fraga\ismap;
+
 fix_highround()
 {
 	if(isorigins()) return;
@@ -42,7 +44,6 @@ roundcounter()
 		if(round >= 255) level.roundcounter.alpha = 1;
 	}
 }
-
 
 fixrotationangle()
 {

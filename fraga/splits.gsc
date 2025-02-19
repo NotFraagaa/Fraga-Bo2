@@ -45,7 +45,7 @@ SplitTimer(split_list, y_offset)
     }
 }
 
-makeList( split_name , y_offset)
+makeList(split_name , y_offset)
 {
     y = y_offset;
 
@@ -313,28 +313,20 @@ show_splits()
 
         if(splits_finished != level.finished_splits && getDvarInt("splits") == 0)
         {
-            i = 1;
-            while(i > 0.1)
+            for(i = 1; i > 0.1; i -= 0.02)
             {
-                i = i - 0.02;
-                wait 0.3;
-                if(i < 0.13)
-                    i = 0;
-                
                 foreach(split in level.fraga_splits_splits)
                     split.alpha = split.finished * i;
-            }
-            splits_finished = level.finished_splits;
-        }
-        if(getDvarInt("splits") == 1)
-        {
-            foreach(split in level.fraga_splits_splits)
-                split.alpha = 1;
-        }
-        if(getDvarInt("splits") == 0 && splits_finished == level.finished_splits)
-        {
+                wait 0.3;
+            }   
             foreach(split in level.fraga_splits_splits)
                 split.alpha = 0;
+            splits_finished = level.finished_splits;
+        }
+        if(getDvarFloat("splits") > 0)
+        {
+            foreach(split in level.fraga_splits_splits)
+                split.alpha = getDvarFloat("splits");
         }
     }
 }

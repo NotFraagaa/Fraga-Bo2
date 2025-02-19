@@ -354,7 +354,7 @@ setUpWeapons()
             break;
         }
         
-    if(isnuked())
+    if(isnuketown())
         switch(level.players.size)
         {
             case 1: 
