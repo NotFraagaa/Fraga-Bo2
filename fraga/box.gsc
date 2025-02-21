@@ -24,10 +24,8 @@ track_rays()
     {
         while(self.sessionstate != "playing")
             wait 0.1;
-        if(self hasweapon("ray_gun_zm"))
-            level.total_ray++;
-        if(self hasweapon("raygun_mark2_zm"))
-            level.total_mk2++;
+        if(self hasweapon("ray_gun_zm")) level.total_ray++;
+        if(self hasweapon("raygun_mark2_zm")) level.total_mk2++;
 
         while(self has_weapon_or_upgrade("ray_gun_zm") || self has_weapon_or_upgrade("raygun_mark2_zm")) 
             wait 0.1;
@@ -37,11 +35,9 @@ track_rays()
 
 displayBoxHits()
 {
-	level.boxhits.hidewheninmenu = 1;
+	level.boxhits.hidewheninmenu = true;
     level.boxhits = createserverfontstring( "objective", 1.3 );
     level.boxhits.y = 0;
-    if(isdierise())
-        level.boxhits.y = 10;
     level.boxhits.x = 0;
     level.boxhits.fontscale = 1.4;
     level.boxhits.alignx = "center";
@@ -71,13 +67,12 @@ displayBoxHits()
         if(counter != level.chest_accessed)
         {
             counter = level.chest_accessed;
-            if(counter == 0)
-                continue;
+            if(counter == 0) continue;
+
             level.total_chest_accessed++;
-            if(count_for_raygun())
-                level.total_chest_accessed_ray++;
-            if(count_for_mk2())
-                level.total_chest_accessed_mk2++;
+
+            if(count_for_raygun()) level.total_chest_accessed_ray++;
+            if(count_for_mk2()) level.total_chest_accessed_mk2++;
             
             level.boxhits setvalue(level.total_chest_accessed);
             if(!issurvivalmap())
@@ -104,10 +99,8 @@ count_for_mk2()
 
 fade()
 {
-    i = 1;
-    while(i < 0.1)
+    for(i = 0; i > 0.1; i -= 0.02)
     {
-        i -= 0.02;
         level.boxhits.alpha = i;
         wait 0.1;
     }
@@ -118,12 +111,10 @@ raygun_counter()
 {
     self endon("disconnect");
 
-    if(!isDefined(level.total_mk2))
-        level.total_mk2 = 0;
-    if(!isDefined(level.total_ray))
-        level.total_ray = 0;
+    if(!isDefined(level.total_mk2)) level.total_mk2 = 0;
+    if(!isDefined(level.total_ray)) level.total_ray = 0;
 
-	level.total_ray_display.hidewheninmenu = 1;
+	level.total_ray_display.hidewheninmenu = true;
     level.total_ray_display = createserverfontstring( "objective", 1.3 );
     level.total_ray_display.y = 26;
     level.total_ray_display.x = 2;
@@ -133,7 +124,7 @@ raygun_counter()
     level.total_ray_display.vertalign = "user_top";
     level.total_ray_display.aligny = "top";
     level.total_ray_display.alpha = 1;
-	level.total_mk2_display.hidewheninmenu = 1;
+	level.total_mk2_display.hidewheninmenu = true;
     level.total_mk2_display = createserverfontstring( "objective", 1.3 );
     level.total_mk2_display.y = 14;
     level.total_mk2_display.x = 2;
@@ -153,19 +144,15 @@ raygun_counter()
         {
             level.total_mk2_display.label = &"^3Raygun MK2 AVG: ^4";
             level.total_ray_display.label = &"^3Raygun AVG: ^4";
-            if(isDefined(level.total_ray_display))
-                level.total_ray_display setvalue(level.total_chest_accessed_ray / level.total_ray);
-            if(isDefined(level.total_mk2_display))
-                level.total_mk2_display setvalue(level.total_chest_accessed_mk2 / level.total_mk2);
+            if(isDefined(level.total_ray_display)) level.total_ray_display setvalue(level.total_chest_accessed_ray / level.total_ray);
+            if(isDefined(level.total_mk2_display)) level.total_mk2_display setvalue(level.total_chest_accessed_mk2 / level.total_mk2);
         }
         else
         {
             level.total_mk2_display.label = &"^3Total Raygun MK2: ^4";
             level.total_ray_display.label = &"^3Total Raygun: ^4";
-            if(isDefined(level.total_ray_display))
-                level.total_ray_display setvalue(level.total_ray);
-            if(isDefined(level.total_mk2_display))
-                level.total_mk2_display setvalue(level.total_mk2);
+            if(isDefined(level.total_ray_display)) level.total_ray_display setvalue(level.total_ray);
+            if(isDefined(level.total_mk2_display)) level.total_mk2_display setvalue(level.total_mk2);
         }
         wait 0.1;
     }
@@ -178,52 +165,21 @@ boxlocation()
     switch(getDvarInt("box"))
     {
         case 1: 
-            if(isorigins())
-                level thread startbox("bunker_tank_chest");
-            if(isnuketown())
-                level thread startbox("start_chest1");
-            if(ismob())
-                level thread startbox("cafe_chest");
-            if(istown())
-                level thread startbox("town_chest_2");
+            if(isorigins()) level thread startbox("bunker_tank_chest");
+            if(isnuketown()) level thread startbox("start_chest1");
+            if(ismob()) level thread startbox("cafe_chest");
+            if(istown()) level thread startbox("town_chest_2");
             break;
         case 2:
-            if(isorigins())
-                level thread startbox("bunker_cp_chest");
-            if(isnuketown())
-                level thread startbox("start_chest2");
-            if(ismob())
-                level thread startbox("start_chest");
-            if(istown())
-                level thread startbox("town_chest");
+            if(isorigins()) level thread startbox("bunker_cp_chest");
+            if(isnuketown()) level thread startbox("start_chest2");
+            if(ismob()) level thread startbox("start_chest");
+            if(istown()) level thread startbox("town_chest");
             break;
         default: break;
     }
 }
-/*
-startBox(chest_name)
-{
-    self endon("disconnect");
-	flag_wait("initial_blackscreen_passed");
 
-    foreach(chest in level.chests)
-    {
-        if(chest.script_noteworthy == chest_name)
-        {
-            chest.hidden = false;
-            //chest.unitrigger_stub destroy();
-            chest show_chest();
-        }
-        else
-        {
-            chest hide_chest();
-            chest.hidden = true;
-            chest.unitrigger_stub destroy();
-            chest.stub.trigger_target.chest_user = undefined;
-        }
-    }
-}
-*/
 startBox(chest_name)
 {
     self endon("disconnect");
@@ -234,19 +190,19 @@ startBox(chest_name)
         if(chest.script_noteworthy == chest_name)
         {
             chest.hidden = false;
-            chest thread magic_box_arrives(); // Espera a que la caja llegue correctamente
+            chest thread magic_box_arrives(); 
             chest show_chest();
         }
         else
         {
-            if (!chest.hidden) // Solo ocultar si está visible
+            if (!chest.hidden)
             {
-                chest thread magic_box_leaves(); // Espera a que la caja desaparezca correctamente
+                chest thread magic_box_leaves(); 
                 chest hide_chest();
                 chest.hidden = true;
             }
             
-            if (isdefined(chest.unitrigger_stub)) // Evitar errores si no está definido
+            if (isdefined(chest.unitrigger_stub)) 
             {
                 chest.unitrigger_stub destroy();
                 chest.stub.trigger_target.chest_user = undefined;
@@ -275,17 +231,12 @@ firstbox3755()
 
         special_weapon_magicbox_check = level.special_weapon_magicbox_check;
         level.special_weapon_magicbox_check = undefined;
+
         foreach(weapon in level.zombie_weapons)
-        {
-            println("Removing " + weapon.weapon_name + " from the box");
-            weapon.is_in_box = 0;
-        }
+            weapon.is_in_box = false;
         
         foreach(weapon in level.forced_box_guns)
-        {
-            println("Adding " + level.zombie_weapons[weapon].weapon_name + " to the box");
-            level.zombie_weapons[weapon].is_in_box = 1;
-        }
+            level.zombie_weapons[weapon].is_in_box = true;
 
         while( (level.total_chest_accessed - level.chest_moves) != level.forced_box_guns.size && level.round_number < 10)
             wait 1;
@@ -293,44 +244,35 @@ firstbox3755()
         level.special_weapon_magicbox_check = special_weapon_magicbox_check;
 
         foreach(weapon in getarraykeys(level.zombie_include_weapons))
-        {
-            if(level.zombie_include_weapons[weapon] == 1)
-            {
-                println("Adding " + level.zombie_weapons[weapon].weapon_name + " to the box");
-                level.zombie_weapons[weapon].is_in_box = 1;
-            }
-        }
+            level.zombie_weapons[weapon].is_in_box = level.zombie_include_weapons[weapon];
 	}
 }
 
 firstbox2905()
 {
+    if(!getDvarInt("firstbox"))
+        return;
+
 	self endon("disconnect");
 	flag_wait("initial_blackscreen_passed");
 
-    if(getDvarInt("firstbox"))
-    {
-        level thread setUpWeapons();
+   level thread setUpWeapons();
 
-        special_weapon_magicbox_check = level.special_weapon_magicbox_check;
-        level.special_weapon_magicbox_check = undefined;
+   special_weapon_magicbox_check = level.special_weapon_magicbox_check;
+   level.special_weapon_magicbox_check = undefined;
 
-        foreach(weapon in getarraykeys(level.zombie_weapons))   // this is the only difference in the code
-            level.zombie_weapons[weapon].is_in_box = 0;
-        
-        foreach(weapon in level.forced_box_guns)
-            level.zombie_weapons[weapon].is_in_box = 1;
+   foreach(weapon in getarraykeys(level.zombie_weapons))   // this is the only difference in the code
+       level.zombie_weapons[weapon].is_in_box = false;
+   
+   foreach(weapon in level.forced_box_guns)
+       level.zombie_weapons[weapon].is_in_box = true;
 
-        while( (level.total_chest_accessed - level.chest_moves)!= level.forced_box_guns.size && level.round_number < 10)
-            wait 1;
+   while( (level.total_chest_accessed - level.chest_moves)!= level.forced_box_guns.size && level.round_number < 10)
+       wait 1;
 
-        level.special_weapon_magicbox_check = special_weapon_magicbox_check;
-        foreach(weapon in getarraykeys(level.zombie_include_weapons))
-        {
-            if(level.zombie_include_weapons[weapon] == 1)
-                level.zombie_weapons[weapon].is_in_box = 1;
-        }
-    }
+   level.special_weapon_magicbox_check = special_weapon_magicbox_check;
+   foreach(weapon in getarraykeys(level.zombie_include_weapons))
+       level.zombie_weapons[weapon].is_in_box = level.zombie_include_weapons[weapon];
 }
 
 setUpWeapons()

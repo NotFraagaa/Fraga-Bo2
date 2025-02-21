@@ -44,7 +44,7 @@ leapertracker()
 	self.lastleaperround.fontscale = 1.1;
 	self.lastleaperround.sort = 1;
 	self.lastleaperround.color = (1, 1 ,1);
-	self.lastleaperround.hidewheninmenu = 1;
+	self.lastleaperround.hidewheninmenu = true;
 	self.lastleaperround.alpha = 1;
 	self.lastleaperround setValue(0);
 	self thread trackeralpha();
@@ -72,7 +72,7 @@ PanzerTracker()
 	self.lastPanzerRound.fontscale = 1.1;
 	self.lastPanzerRound.sort = 1;
 	self.lastPanzerRound.color = (1, 1 ,1);
-	self.lastPanzerRound.hidewheninmenu = 1;
+	self.lastPanzerRound.hidewheninmenu = true;
 	self.lastPanzerRound.alpha = 1;
 	self.lastPanzerRound setValue(0);
 	self thread trackeralpha();
@@ -99,7 +99,7 @@ TemplarTracker()
 	self.lastTemplarRound.fontscale = 1.1;
 	self.lastTemplarRound.sort = 1;
 	self.lastTemplarRound.color = (1, 1 ,1);
-	self.lastTemplarRound.hidewheninmenu = 1;
+	self.lastTemplarRound.hidewheninmenu = true;
 	self.lastTemplarRound.alpha = 1;
 	self.lastTemplarRound setValue(0);
 	self thread trackeralpha();
@@ -114,8 +114,7 @@ TemplarTracker()
 BrutusTracker()
 {
 	self endon("disconnect");
-	if(!isDefined(level.trackingBrutus))
-		level.trackingBrutus = true;
+	if(!isDefined(level.trackingBrutus)) level.trackingBrutus = true;
 
 	self.lastBrutusRound = newclienthudelem(self);
 	self.lastBrutusRound.alignx = "left";
@@ -127,7 +126,7 @@ BrutusTracker()
 	self.lastBrutusRound.fontscale = 1.1;
 	self.lastBrutusRound.sort = 1;
 	self.lastBrutusRound.color = (1, 1 ,1);
-	self.lastBrutusRound.hidewheninmenu = 1;
+	self.lastBrutusRound.hidewheninmenu = true;
 	self.lastBrutusRound.alpha = 1;
 	self.lastBrutusRound setValue(0);
 	self thread trackeralpha();

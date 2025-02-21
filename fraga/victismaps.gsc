@@ -169,10 +169,8 @@ enablepersperks()
 
 minijug()
 {
-    player_downed = self.downs;
-    while(!player_downed)
+    while(self.downs == 0)
     {
-        player_downed = self.downs;
         if(!self hasperk("specialty_armorvest")) self.maxhealth = 190;
         else self.maxhealth = 340;
         wait 0.5;

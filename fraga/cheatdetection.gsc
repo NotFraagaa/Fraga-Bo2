@@ -23,7 +23,7 @@ detect_cheats()
 cheatsActivated()
 {
     if(level.debug) return;
-	level.cheats.hidewheninmenu = 1;
+	level.cheats.hidewheninmenu = true;
     level.cheats = createserverfontstring( "objective", 1.3 );
     level.cheats.y = 20;
     level.cheats.x = 0;
@@ -43,7 +43,7 @@ cheatsActivated()
 
 firstboxActivated()
 {
-	level.firstbox_active.hidewheninmenu = 1;
+	level.firstbox_active.hidewheninmenu = true;
     level.firstbox_active = createserverfontstring( "objective", 1.3 );
     level.firstbox_active.y = -20;
     level.firstbox_active.x = 0;
@@ -65,7 +65,7 @@ firstboxActivated()
 
 perkrng()
 {
-	level.perkrng_desabled.hidewheninmenu = 1;
+	level.perkrng_desabled.hidewheninmenu = true;
     level.perkrng_desabled = createserverfontstring( "objective", 1.3 );
     level.perkrng_desabled.y = -30;
     level.perkrng_desabled.x = 0;
@@ -89,7 +89,7 @@ perkrng()
 
 tempalars()
 {
-	level.templar_modiffied.hidewheninmenu = 1;
+	level.templar_modiffied.hidewheninmenu = true;
     level.templar_modiffied = createserverfontstring( "objective", 1.3 );
     level.templar_modiffied.y = -40;
     level.templar_modiffied.x = 0;

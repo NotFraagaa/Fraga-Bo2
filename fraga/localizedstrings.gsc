@@ -10,8 +10,6 @@ setFragaLanguage()
     switch(getDvar("language"))
     {
         case "spanish":
-            //if(!level.debug)
-            //self thread spanishWellcome();
             level.boxhits.label = &"^3Tiradas de caja: ^4";
             level.cheats.label = &"^1^FCheats activados";
             level.firstbox_active.label = &"^2^FFirstbox activado";
@@ -38,8 +36,6 @@ setFragaLanguage()
             }
             break;
         case "french":
-            //if(!level.debug)
-            //self thread frenchWellcome();
             level.boxhits.label = &"^3Box hits: ^4";
             level.cheats.label = &"^1^FCheats actif";
             level.firstbox_active.label = &"^2^FFirstbox actif";
@@ -66,7 +62,6 @@ setFragaLanguage()
             }
             break;
         case "japanese":
-            //self thread japaneseWellcome();
             level.boxhits.label = &"^3Box hits: ^4";
             level.cheats.label = &"^1^FCheats アクティブ";
             level.firstbox_active.label = &"^2^FFirstbox アクティブ";
@@ -268,78 +263,6 @@ printplayerkills()
             level.playerkills1.label = &"^3Kills player 3: ^4";
             if(isdefined(level.playerkills4))
             level.playerkills1.label = &"^3Kills player 4: ^4";
-            break;
-    }
-}
-
-printbuslocation()
-{
-    
-    switch(getDvar("language"))
-    {
-        case "spanish":
-			if(level.the_bus.origin[0] > -6530 && level.the_bus.origin[0] < -6520 && level.the_bus.origin[1] < 4800 && level.the_bus.origin[1] > 4600)	// Depot
-				self.buslocation.label = &"^3Bus: ^4Estación";
-			if(level.the_bus.origin[0] > -5560 && level.the_bus.origin[0] < -5550  && level.the_bus.origin[1] > -6870 && level.the_bus.origin[1] < -6800)	// Dinner
-				self.buslocation.label = &"^3Bus: ^4Restaurante";
-			if(level.the_bus.origin[0] > 6400 && level.the_bus.origin[1] < 6440 && level.the_bus.origin[1] > -5850 && level.the_bus.origin[1] < -5820)	// Farm
-				self.buslocation.label = &"^3Bus: ^4Granja";
-			if(level.the_bus.origin[0] > 10280 && level.the_bus.origin[0] < 10320 && level.the_bus.origin[1] < 7500 && level.the_bus.origin[1] > 7400)	// Power
-				self.buslocation.label = &"^3Bus: ^4Electicidad";
-			if(level.the_bus.origin[0] > 1460 && level.the_bus.origin[0] < 1490 && level.the_bus.origin[1] < 900 && level.the_bus.origin[1] > 800) 	// Town
-				self.buslocation.label = &"^3Bus: ^4Ciudad";
-            break;
-        case "french":
-			if(level.the_bus.origin[0] > -6530 && level.the_bus.origin[0] < -6520 && level.the_bus.origin[1] < 4800 && level.the_bus.origin[1] > 4600)	// Depot
-				self.buslocation.label = &"^3Bus: ^4Depot";
-			if(level.the_bus.origin[0] > -5560 && level.the_bus.origin[0] < -5550  && level.the_bus.origin[1] > -6870 && level.the_bus.origin[1] < -6800)	// Dinner
-				self.buslocation.label = &"^3Bus: ^4Dinner";
-			if(level.the_bus.origin[0] > 6400 && level.the_bus.origin[1] < 6440 && level.the_bus.origin[1] > -5850 && level.the_bus.origin[1] < -5820)	// Farm
-				self.buslocation.label = &"^3Bus: ^4Farm";
-			if(level.the_bus.origin[0] > 10280 && level.the_bus.origin[0] < 10320 && level.the_bus.origin[1] < 7500 && level.the_bus.origin[1] > 7400)	// Power
-				self.buslocation.label = &"^3Bus: ^4Power";
-			if(level.the_bus.origin[0] > 1460 && level.the_bus.origin[0] < 1490 && level.the_bus.origin[1] < 900 && level.the_bus.origin[1] > 800) 	// Town
-				self.buslocation.label = &"^3Bus: ^4Town";
-            break;
-        default:
-			if(level.the_bus.origin[0] > -6530 && level.the_bus.origin[0] < -6520 && level.the_bus.origin[1] < 4800 && level.the_bus.origin[1] > 4600)	// Depot
-				self.buslocation.label = &"^3Bus: ^4Depot";
-			if(level.the_bus.origin[0] > -5560 && level.the_bus.origin[0] < -5550  && level.the_bus.origin[1] > -6870 && level.the_bus.origin[1] < -6800)	// Dinner
-				self.buslocation.label = &"^3Bus: ^4Dinner";
-			if(level.the_bus.origin[0] > 6400 && level.the_bus.origin[1] < 6440 && level.the_bus.origin[1] > -5850 && level.the_bus.origin[1] < -5820)	// Farm
-				self.buslocation.label = &"^3Bus: ^4Farm";
-			if(level.the_bus.origin[0] > 10280 && level.the_bus.origin[0] < 10320 && level.the_bus.origin[1] < 7500 && level.the_bus.origin[1] > 7400)	// Power
-				self.buslocation.label = &"^3Bus: ^4Power";
-			if(level.the_bus.origin[0] > 1460 && level.the_bus.origin[0] < 1490 && level.the_bus.origin[1] < 900 && level.the_bus.origin[1] > 800) 	// Town
-				self.buslocation.label = &"^3Bus: ^4Town";
-            break;
-    }
-}
-
-printbusstatus(buslastpos)
-{
-    switch(getDvar("language"))
-    {
-        case "spanish":
-            if(buslastpos != level.the_bus.origin)
-                self.busmoving.label = &"^3Bus en movimiento";
-            else
-                self.busmoving.label = &"^1Bus parado";
-            buslastpos = level.the_bus.origin;
-            break;
-        case "french":
-            if(buslastpos != level.the_bus.origin)
-                self.busmoving.label = &"^3Bus est en mouvement";
-            else
-                self.busmoving.label = &"^1Bus est à l'arrêt ";
-            buslastpos = level.the_bus.origin;
-            break;
-        default:
-            if(buslastpos != level.the_bus.origin)
-                self.busmoving.label = &"^3Bus mooving";
-            else
-                self.busmoving.label = &"^1Bus stopped";
-            buslastpos = level.the_bus.origin;
             break;
     }
 }

@@ -25,7 +25,7 @@ roundcounter()
 {
 	round = 0;
 	level.roundcounter setvalue(round);
-	level.roundcounter.hidewheninmenu = 1;
+	level.roundcounter.hidewheninmenu = true;
     level.roundcounter = createserverfontstring( "objective", 1.3 );
     level.roundcounter.y = -5;
     level.roundcounter.x = 70;
@@ -51,7 +51,7 @@ fixrotationangle()
 	angulo2 = 0;
 	level.vueltass = 0;
     level.vueltas = createserverfontstring( "objective", 1.3 );
-	level.vueltas.hidewheninmenu = 1;
+	level.vueltas.hidewheninmenu = true;
     level.vueltas.y = -40;
     level.vueltas.x = 0;
     level.vueltas.fontscale = 1.4;

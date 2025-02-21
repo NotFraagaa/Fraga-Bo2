@@ -15,15 +15,9 @@
 
 init()
 {
-    if (istranzit())
-		level thread connected();
-
-	if(!istranzit())
-		level thread raygun_counter();
-
-
-	if(istown())
-		level thread boxlocation();
+    if(istranzit()) level thread connected();
+	if(!istranzit()) level thread raygun_counter();
+	if(istown()) level thread boxlocation();
 }
 
 connected()

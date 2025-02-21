@@ -35,7 +35,7 @@ connected()
 
 debugmode()
 {
-	level.debugmode.hidewheninmenu = 1;
+	level.debugmode.hidewheninmenu = true;
     level.debugmode = createserverfontstring( "objective", 1.3 );
     level.debugmode.y = 20;
     level.debugmode.x = 0;

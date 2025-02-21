@@ -61,7 +61,7 @@ makeList(split_name , y_offset)
     level.fraga_splits_splits[split_name].y = -30 + y;
     level.fraga_splits_splits[split_name].alpha = 0;
     level.fraga_splits_splits[split_name].fontscale = 1.4;
-    level.fraga_splits_splits[split_name].hidewheninmenu = 1;
+    level.fraga_splits_splits[split_name].hidewheninmenu = true;
     level.fraga_splits_splits[split_name].finished = 0;
     level.fraga_splits_splits[split_name].color = ( 1, 1, 1 );
     level thread StartSplit( split_name );
@@ -324,9 +324,7 @@ show_splits()
             splits_finished = level.finished_splits;
         }
         if(getDvarFloat("splits") > 0)
-        {
             foreach(split in level.fraga_splits_splits)
                 split.alpha = getDvarFloat("splits");
-        }
     }
 }

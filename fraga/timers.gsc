@@ -14,7 +14,7 @@ timer()
 	self.timer = newclienthudelem(self);
 	self.timer.alpha = !getDvarInt("st") * 0;
 	self.timer.color = (1, 1, 1);
-	self.timer.hidewheninmenu = 1;
+	self.timer.hidewheninmenu = true;
 	self.timer.fontscale = 1.7;
 	flag_wait("initial_blackscreen_passed");
 	while(true)
@@ -32,7 +32,7 @@ round_timer()
 	self.round_timer.alpha = 0;
 	self.round_timer.fontscale = 1.7;
 	self.round_timer.color = (0.8, 0.8, 0.8);
-	self.round_timer.hidewheninmenu = 1;
+	self.round_timer.hidewheninmenu = true;
 	self.round_timer.x = self.timer.x;
 	self.round_timer.y = self.timer.y + 15;
 	flag_wait("initial_blackscreen_passed");
@@ -115,7 +115,7 @@ trap_timer()
 	self.trap_timer.x = -2;
 	self.trap_timer.y = 14;
 	self.trap_timer.fontscale = 1.4;
-	self.trap_timer.hidewheninmenu = 1;
+	self.trap_timer.hidewheninmenu = true;
 	self.trap_timer.hidden = 0;
 	self.trap_timer.label = &"";
 

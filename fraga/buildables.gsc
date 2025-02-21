@@ -54,7 +54,7 @@ watch_stat( stat, map_array )
 
 buildable_hud()
 {
-	level.springpad_hud.hidewheninmenu = 1;
+	level.springpad_hud.hidewheninmenu = true;
     level.springpad_hud = createserverfontstring( "objective", 1.3 );
     if(level.script == "zm_buried") level.springpad_hud.y = 0;
     else level.springpad_hud.y = 15;
@@ -65,7 +65,7 @@ buildable_hud()
     level.springpad_hud.vertalign = "user_top";
     level.springpad_hud.aligny = "top";
     level.springpad_hud setvalue( 0 );
-	level.subwoofer_hud.hidewheninmenu = 1;
+	level.subwoofer_hud.hidewheninmenu = true;
     level.subwoofer_hud = createserverfontstring( "objective", 1.3 );
     level.subwoofer_hud.y = 10;
     level.subwoofer_hud.x = 2;
@@ -75,7 +75,7 @@ buildable_hud()
     level.subwoofer_hud.vertalign = "user_top";
     level.subwoofer_hud.aligny = "top";
     level.subwoofer_hud setvalue( 0 );
-	level.turbine_hud.hidewheninmenu = 1;
+	level.turbine_hud.hidewheninmenu = true;
     level.turbine_hud = createserverfontstring( "objective", 1.3 );
     level.turbine_hud.y = 20;
     level.turbine_hud.x = 2;
