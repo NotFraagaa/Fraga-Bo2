@@ -61,6 +61,7 @@ fraga_connected()
 }
 setDvars()
 {
+    createDvar("papcamo", 40);
     setdvar("sv_cheats", 0);
     setdvar("player_strafeSpeedScale", 1);
     setdvar("player_backSpeedScale", 1);

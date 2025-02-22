@@ -12,19 +12,18 @@
 
 watch_stat( stat, map_array )
 {
-    if ( !isdefined( map_array ) )
-        map_array = array( "zm_buried" );
-
-    if ( !isinarray( map_array, level.script ) )
-        return;
-
     level endon( "end_game" );
     self endon( "disconnect" );
 
-    if ( !isdefined( self.initial_stats[stat] ) )
+    if (!isdefined(map_array)) map_array = array( "zm_buried" );
+
+    if (!isinarray( map_array, level.script ))
+        return;
+
+    if (!isdefined(self.initial_stats[stat]))
         self.initial_stats[stat] = self getdstat( "buildables", stat, "buildable_pickedup" );
 
-    while ( true )
+    while(true)
     {
         stat_number = self getdstat( "buildables", stat, "buildable_pickedup" );
         delta = stat_number - self.initial_stats[stat];
@@ -33,21 +32,17 @@ watch_stat( stat, map_array )
         {
             self.initial_stats[stat] = stat_number;
             level.buildable_stats[stat] = level.buildable_stats[stat] + delta;
-            i = 1;
-            while(i != 0)
+            for(i = 1; i > 0; i -= 0.02)
             {
-    
                 level.turbine_hud.alpha = i;
                 level.subwoofer_hud.alpha = i;
                 level.springpad_hud.alpha = i;
-                i = i -0.02;
                 wait 0.1;
             }
             level.turbine_hud.alpha = 0;
             level.subwoofer_hud.alpha = 0;
             level.springpad_hud.alpha = 0;
         }
-
         wait 0.1;
     }
 }

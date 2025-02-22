@@ -20,7 +20,7 @@ buried_pap_camo(weapon)
 	camo_index = 39;
 
 	if(base == "rnma_upgraded_zm" || base == "rnma_zm") camo_index = 39;
-	else camo_index = 40;
+	else camo_index = getDvarInt("papcamo");
 
 	lens_index = randomintrange(0, 6);
 	reticle_index = randomintrange(0, 16);
@@ -72,7 +72,7 @@ origins_pap_camo(weapon)
 	camo_index = 39;
 
 	if(base == "mg08_upgraded_zm" || base == "mg08_zm" || base == "c96_upgraded_zm" || base == "c96_zm") camo_index = 40;
-	else camo_index = 40;
+	else camo_index = getDvarInt("papcamo");
 
 	lens_index = randomintrange(0, 6);
 	reticle_index = randomintrange(0, 16);

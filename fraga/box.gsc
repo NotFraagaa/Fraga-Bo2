@@ -62,24 +62,42 @@ displayBoxHits()
         wait 0.1;
 
     counter = 0;
-    while(true)
-    {
-        if(counter != level.chest_accessed)
+    if(issurvivalmap())
+        while(true)
         {
-            counter = level.chest_accessed;
-            if(counter == 0) continue;
+            if(counter != level.chest_accessed)
+            {
+                counter = level.chest_accessed;
+                if(counter == 0) continue;
 
-            level.total_chest_accessed++;
+                level.total_chest_accessed++;
 
-            if(count_for_raygun()) level.total_chest_accessed_ray++;
-            if(count_for_mk2()) level.total_chest_accessed_mk2++;
-            
-            level.boxhits setvalue(level.total_chest_accessed);
-            if(!issurvivalmap())
-                fade();
+                if(count_for_raygun()) level.total_chest_accessed_ray++;
+                if(count_for_mk2()) level.total_chest_accessed_mk2++;
+                
+                level.boxhits setvalue(level.total_chest_accessed);
+            }
+            wait 0.1;
         }
-        wait 0.1;
-    }
+    else
+        while(true)
+        {
+            if(counter != level.chest_accessed)
+            {
+                counter = level.chest_accessed;
+                if(counter == 0) continue;
+
+                level.total_chest_accessed++;
+                level.boxhits setvalue(level.total_chest_accessed);
+                for(i = 1; i > 0.1; i -= 0.02)
+                {
+                    level.boxhits.alpha = i;
+                    wait 0.1;
+                }
+                level.boxhits.alpha = 0;
+            }
+            wait 0.1;
+        }
 }
 
 count_for_raygun()
@@ -95,16 +113,6 @@ count_for_mk2()
         if(player has_weapon_or_upgrade("raygun_mark2_zm"))
             return false;
     return true;
-}
-
-fade()
-{
-    for(i = 0; i > 0.1; i -= 0.02)
-    {
-        level.boxhits.alpha = i;
-        wait 0.1;
-    }
-    level.boxhits.alpha = 0;
 }
 
 raygun_counter()
@@ -160,8 +168,12 @@ raygun_counter()
 
 boxlocation()
 {
+    
+    flag_wait("initial_blackscreen_passed");
+
     while(!isdefined(level.chests))
         wait 0.1;
+    wait 1;
     switch(getDvarInt("box"))
     {
         case 1: 
@@ -180,35 +192,55 @@ boxlocation()
     }
 }
 
-startBox(chest_name)
+startBox(box)
 {
-    self endon("disconnect");
-    flag_wait("initial_blackscreen_passed");
-    
-    foreach(chest in level.chests)
+    if(isDefined(level._zombiemode_custom_box_move_logic))
+        kept_move_logic = level._zombiemode_custom_box_move_logic;
+
+    level._zombiemode_custom_box_move_logic = ::force_next_location;
+
+    foreach (chest in level.chests)
     {
-        if(chest.script_noteworthy == chest_name)
+        if (!chest.hidden && chest.script_noteworthy == box)
         {
-            chest.hidden = false;
-            chest thread magic_box_arrives(); 
-            chest show_chest();
+            if (isDefined(kept_move_logic))
+                level._zombiemode_custom_box_move_logic = kept_move_logic;
+            return;
         }
-        else
+        if (!chest.hidden)
         {
-            if (!chest.hidden)
-            {
-                chest thread magic_box_leaves(); 
-                chest hide_chest();
-                chest.hidden = true;
-            }
-            
-            if (isdefined(chest.unitrigger_stub)) 
-            {
-                chest.unitrigger_stub destroy();
-                chest.stub.trigger_target.chest_user = undefined;
-            }
+            level.chest_min_move_usage = 8;
+            level.chest_name = box;
+
+            flag_set("moving_chest_now");
+            chest thread maps\mp\zombies\_zm_magicbox::treasure_chest_move();
+
+            wait 0.05;
+            level notify("weapon_fly_away_start");
+            wait 0.05;
+            level notify("weapon_fly_away_end");
+
+            break;
         }
     }
+
+    while (flag("moving_chest_now"))
+        wait 0.05;
+
+    if (isDefined(kept_move_logic))
+        level._zombiemode_custom_box_move_logic = kept_move_logic;
+
+    if (isDefined(level.chest_name) && isDefined(level.dig_magic_box_moved))
+        level.dig_magic_box_moved = 0;
+
+    level.chest_min_move_usage = 4;
+}
+
+force_next_location()
+{
+    for (i = 0; i < level.chests.size; i++)
+        if (level.chests[i].script_noteworthy == level.chest_name)
+            level.chest_index = i;
 }
 
 firstbox()
