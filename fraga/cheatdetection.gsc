@@ -100,10 +100,13 @@ tempalars()
     level.templar_modiffied.aligny = "bottom";
     level.templar_modiffied.label = &"^6^FTemplars manipulated";
     if(isorigins() && getDvarInt("templars"))
+    {
+        if(getDvarInt("templars"))
         while(level.round_number < 2)
         {
             level.templar_modiffied.alpha = 1;
             wait 0.1;
         }
+    }
     level.templar_modiffied destroy();
 }

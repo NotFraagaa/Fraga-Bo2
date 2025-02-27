@@ -13,6 +13,7 @@
 #include scripts\zm\fraga\box;
 #include scripts\zm\fraga\firstroom;
 #include scripts\zm\fraga\localizedstrings;
+#include scripts\zm\fraga\monitor;
 #include scripts\zm\fraga\ismap;
 
 init()
@@ -30,7 +31,8 @@ init()
     else
         level.plutoVersion = 2905;
 
-    thread SRswitch();
+    level thread SRswitch();
+    level thread monitor_init();
     level thread firstbox();
 	level thread boxhits();
     level thread roundcounter();
