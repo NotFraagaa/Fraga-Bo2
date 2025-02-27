@@ -45,12 +45,25 @@ init()
     level thread firstboxActivated();
     level thread perkrng();
     level thread cheatsActivated();
+    if(!isancient()) level thread changefov();
     while(true)
     {
         level waittill("connecting", player);
         player thread fraga_connected();
         if(!level.onlinegame) player thread enablepersperks();
         player thread cheatDetectionRedacted();
+    }
+}
+
+changefov()
+{
+    createDvar("fov", getDvarInt("cg_fov"));
+    while(true)
+    {
+        if(level.players.size > 1)
+            return;
+        setDvar("cg_fov", getDvarInt("fov"));
+        wait 0.1;
     }
 }
 

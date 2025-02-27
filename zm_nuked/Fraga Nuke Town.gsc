@@ -7,6 +7,7 @@
 #include scripts\zm\fraga\RNGmoddifier;
 #include scripts\zm\fraga\character;
 #include scripts\zm\fraga\box;
+#include scripts\zm\fraga\papcamo;
 
 init()
 {
@@ -17,6 +18,7 @@ init()
 	player thread checkpaplocation();
 	level.nextperkindex = -1;
 	replacefunc(maps\mp\zm_nuked_perks::bring_random_perk, ::perk_order);
+    replacefunc(maps\mp\zombies\_zm_weapons::get_pack_a_punch_weapon_options, ::pap_camo);
 }
 
 connected()

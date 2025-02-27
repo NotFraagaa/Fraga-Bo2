@@ -12,12 +12,14 @@
 #include scripts\zm\fraga\ismap;
 #include scripts\zm\fraga\bus;
 #include scripts\zm\fraga\box;
+#include scripts\zm\fraga\papcamo;
 
 init()
 {
     if(istranzit()) level thread connected();
 	if(!istranzit()) level thread raygun_counter();
 	if(istown()) level thread boxlocation();
+	if(istown() || istranzit()) replacefunc(maps\mp\zombies\_zm_weapons::get_pack_a_punch_weapon_options, ::pap_camo);
 }
 
 connected()

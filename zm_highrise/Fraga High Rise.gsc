@@ -12,11 +12,13 @@
 #include scripts\zm\fraga\trackers;
 #include scripts\zm\fraga\character;
 #include scripts\zm\fraga\box;
+#include scripts\zm\fraga\papcamo;
 
 init()
 {
     level thread connected();
 	level thread buildable_controller();
+    replacefunc(maps\mp\zombies\_zm_weapons::get_pack_a_punch_weapon_options, ::pap_camo);
 }
 
 connected()

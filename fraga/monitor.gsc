@@ -50,6 +50,7 @@ readchat()
     while (true) 
     {
         level waittill("say", message, player);
+		message = tolower(message);
         msg = strtok(message, " ");
 
         if(msg[0][0] != "!")
@@ -87,6 +88,13 @@ readchat()
 			case "!np": next_panzers(); break;
 			case "!nl": next_leapers(); break;
 			case "!rounders": rounders(); break;
+			case "!panzers": panzers(); break;
+			case "!templars": templars(); break;
+			case "!leapers": leapers(); break;
+			case "!brutus": brutus(); break;
+			case "!avogadros": avogadros(); break;
+
+			case "!papcamo": camo(msg[1]); break;
 
 			case "!bs": level.bs_fix = !level.bs_fix; break;
 			default: break;
@@ -530,12 +538,10 @@ rounders()
 	{
 		for(i = 0; i < level.brutus.size - 1; i++)
 		{
-			if(level.brutus[i] - level.brutus[i + 1] == 4)
-				fourrounderss++;
-			if(level.brutus[i] - level.brutus[i + 1] == 5)
-				fiverounders++;
-			if(level.brutus[i] - level.brutus[i + 1] == 6)
-				sixrounderss++;
+			diff = level.brutus[i + 1] - level.brutus[i];
+			if(diff == 4) fourrounderss++;
+			if(diff == 5) fiverounders++;
+			if(diff == 6) sixrounderss++;
 		}
 		avg = (fourrounderss * 4 + fiverounders * 5 + sixrounderss * 6) / (fourrounderss + fiverounders + sixrounderss);
 		level.players[0] iprintln("^5[^6Fraga^5]^7 Brutus rounders: 4 [" + fourrounderss + "] 5 [" + fiverounders + "] 6 [" + sixrounderss + "] avg [" + avg + "]" );
@@ -544,10 +550,9 @@ rounders()
 	{
 		for(i = 0; i < level.leapers.size - 1; i++)
 		{
-			if(level.leapers[i] - level.leapers[i + 1] == 4)
-				fourrounderss++;
-			if(level.leapers[i] - level.leapers[i + 1] == 5)
-				fiverounders++;
+			diff = level.leapers[i + 1] - level.leapers[i];
+			if(diff == 4) fourrounderss++;
+			if(diff == 5) fiverounders++;
 		}
 		avg = (fourrounderss * 4 + fiverounders * 5) / (fourrounderss + fiverounders);
 		level.players[0] iprintln("^5[^6Fraga^5]^7 Leaper rounders: 4 [" + fourrounderss + "] 5 [" + fiverounders + "] 6 [" + sixrounderss + "] avg [" + avg + "]" );
@@ -556,27 +561,394 @@ rounders()
 	{
 		for(i = 0; i < level.templars.size - 1; i++)
 		{
-			if(level.templars[i] - level.templars[i + 1] == 3)
-				threerounders++;
-			if(level.templars[i] - level.templars[i + 1] == 4)
-				fourrounderss++;
-			if(level.templars[i] - level.templars[i + 1] == 5)
-				fiverounders++;
+			diff = level.templars[i + 1] - level.templars[i];
+			if(diff == 3) threerounders++;
+			if(diff == 4) fourrounderss++;
+			if(diff == 5) fiverounders++;
 		}
-		avg = (fourrounderss * 4 + fiverounders * 5) / (fourrounderss + fiverounders);
-		level.players[0] iprintln("^5[^6Fraga^5]^7 Templar rounders: 4 [" + fourrounderss + "] 5 [" + fiverounders + "] 6 [" + sixrounderss + "] avg [" + avg + "]" );
+		avg = (threerounders * 3 + fourrounderss * 4 + fiverounders * 5) / (threerounders + fourrounderss + fiverounders);
+		level.players[0] iprintln("^5[^6Fraga^5]^7 Templar rounders: 3 [" + threerounders + "] 4 [" + fourrounderss + "] 5 [" + fiverounders + "] avg [" + avg + "]" );
 
 		threerounders = 0; fourrounderss = 0; fiverounders = 0; sixrounderss = 0;
 		for(i = 0; i < level.templars.size - 1; i++)
 		{
-			if(level.panzers[i] - level.panzers[i + 1] == 6)
-				sixrounderss++;
-			if(level.panzers[i] - level.panzers[i + 1] == 4)
-				fourrounderss++;
-			if(level.panzers[i] - level.panzers[i + 1] == 5)
-				fiverounders++;
+			diff = level.panzers[i + 1] - level.panzers[i];
+			if(diff == 6) sixrounderss++;
+			if(diff == 5) fiverounders++;
+			if(diff == 4) fourrounderss++;
 		}
 		avg = (fourrounderss * 4 + fiverounders * 5 + sixrounderss * 6) / (fourrounderss + fiverounders + sixrounderss);
 		level.players[0] iprintln("^5[^6Fraga^5]^7 Panzer rounders: 4 [" + fourrounderss + "] 5 [" + fiverounders + "] 6 [" + sixrounderss + "] avg [" + avg + "]" );
+	}
+}
+
+panzers()
+{
+	if(!isdefined(level.panzers))
+	{
+		level.players[0] IPrintLn("^5[^6Fraga^5]^7 Not Tracking Panzers");
+		return;
+	}
+	msg = "^5[^6Fraga^5]^7 Panzer rounds: " + level.panzers[0];
+	if(level.panzers.size < 10)
+	{
+		for(i = 1; i < level.panzers.size; i++)
+			if(isdefined(level.panzers[i]))
+				msg += (", " + level.panzers[i]);
+		level.players[0] IPrintLn(msg);
+		return;
+	}
+	if(level.panzers.size < 20)
+	{
+		msg2 = "";
+		for(i = 1; i < 10; i++)
+				msg += (", " + level.panzers[i]);
+		for(i = 10; i < 20; i++)
+			if(isdefined(level.panzers[i]) && isdefined(level.panzers[i + 1]))
+				msg2 += (level.panzers[i] + ", ");
+			else if(isdefined(level.panzers[i]))
+				msg2 += (level.panzers[i]);
+		level.players[0] IPrintLn(msg);
+		level.players[0] IPrintLn(msg2);
+		return;
+	}
+	if(level.panzers.size < 30)
+	{
+		msg2 = "";
+		msg3 = msg2;
+		for(i = 1; i < 10; i++)
+				msg += (", " + level.panzers[i]);
+		for(i = 10; i < 20; i++)
+				msg2 += (level.panzers[i] + ", ");
+		for(i = 20; i < 30; i++)
+			if(isdefined(level.panzers[i]) && isdefined(level.panzers[i + 1]))
+				msg3 += (level.panzers[i] + ", ");
+			else if(isdefined(level.panzers[i]))
+				msg3 += (level.panzers[i]);
+		level.players[0] IPrintLn(msg);
+		level.players[0] IPrintLn(msg2);
+		level.players[0] IPrintLn(msg3);
+		return;
+	}
+	if(level.panzers.size < 40)
+	{
+		msg2 = "";
+		msg3 = msg2; msg4 = msg2;
+		for(i = 1; i < 10; i++)
+				msg += (", " + level.panzers[i]);
+		for(i = 10; i < 20; i++)
+				msg2 += (level.panzers[i] + ", ");
+		for(i = 20; i < 30; i++)
+				msg3 += (level.panzers[i] + ", ");
+		for(i = 30; i < 40; i++)
+			if(isdefined(level.panzers[i]) && isdefined(level.panzers[i + 1]))
+				msg4 += (level.panzers[i] + ", ");
+			else if(isdefined(level.panzers[i]))
+				msg4 += (level.panzers[i]);
+		level.players[0] IPrintLn(msg);
+		level.players[0] IPrintLn(msg2);
+		level.players[0] IPrintLn(msg3);
+		level.players[0] IPrintLn(msg4);
+		return;
+	}
+}
+
+templars()
+{
+	if(!isdefined(level.templars))
+	{
+		level.players[0] IPrintLn("^5[^6Fraga^5]^7 Not Tracking templars");
+		return;
+	}
+	msg = "^5[^6Fraga^5]^7 Templar rounds: " + level.templars[0];
+	if(level.templars.size < 10)
+	{
+		for(i = 1; i < level.templars.size; i++)
+			if(isdefined(level.templars[i]))
+				msg += (", " + level.templars[i]);
+		level.players[0] IPrintLn(msg);
+		return;
+	}
+	if(level.templars.size < 20)
+	{
+		msg2 = "";
+		for(i = 1; i < 10; i++)
+				msg += (", " + level.templars[i]);
+		for(i = 10; i < 20; i++)
+			if(isdefined(level.templars[i]) && isdefined(level.templars[i + 1]))
+				msg2 += (level.templars[i] + ", ");
+			else if(isdefined(level.templars[i]))
+				msg2 += (level.templars[i]);
+		level.players[0] IPrintLn(msg);
+		level.players[0] IPrintLn(msg2);
+		return;
+	}
+	if(level.templars.size < 30)
+	{
+		msg2 = "";
+		msg3 = msg2;
+		for(i = 1; i < 10; i++)
+				msg += (", " + level.templars[i]);
+		for(i = 10; i < 20; i++)
+				msg2 += (level.templars[i] + ", ");
+		for(i = 20; i < 30; i++)
+			if(isdefined(level.templars[i]) && isdefined(level.templars[i + 1]))
+				msg3 += (level.templars[i] + ", ");
+			else if(isdefined(level.templars[i]))
+				msg3 += (level.templars[i]);
+		level.players[0] IPrintLn(msg);
+		level.players[0] IPrintLn(msg2);
+		level.players[0] IPrintLn(msg3);
+		return;
+	}
+	if(level.templars.size < 40)
+	{
+		msg2 = "";
+		msg3 = msg2; msg4 = msg2;
+		for(i = 1; i < 10; i++)
+				msg += (", " + level.templars[i]);
+		for(i = 10; i < 20; i++)
+				msg2 += (level.templars[i] + ", ");
+		for(i = 20; i < 30; i++)
+				msg3 += (level.templars[i] + ", ");
+		for(i = 30; i < 40; i++)
+			if(isdefined(level.templars[i]) && isdefined(level.templars[i + 1]))
+				msg4 += (level.templars[i] + ", ");
+			else if(isdefined(level.templars[i]))
+				msg4 += (level.templars[i]);
+		level.players[0] IPrintLn(msg);
+		level.players[0] IPrintLn(msg2);
+		level.players[0] IPrintLn(msg3);
+		level.players[0] IPrintLn(msg4);
+		return;
+	}
+}
+
+leapers()
+{
+	if(!isdefined(level.leapers))
+	{
+		level.players[0] IPrintLn("^5[^6Fraga^5]^7 Not Tracking Leapers");
+		return;
+	}
+	msg = "^5[^6Fraga^5]^7 Leaper rounds: " + level.leapers[0];
+	if(level.leapers.size < 10)
+	{
+		for(i = 1; i < level.leapers.size; i++)
+			if(isdefined(level.leapers[i]))
+				msg += (", " + level.leapers[i]);
+		level.players[0] IPrintLn(msg);
+		return;
+	}
+	if(level.leapers.size < 20)
+	{
+		msg2 = "";
+		for(i = 1; i < 10; i++)
+				msg += (", " + level.leapers[i]);
+		for(i = 10; i < 20; i++)
+			if(isdefined(level.leapers[i]) && isdefined(level.leapers[i + 1]))
+				msg2 += (level.leapers[i] + ", ");
+			else if(isdefined(level.leapers[i]))
+				msg2 += (level.leapers[i]);
+		level.players[0] IPrintLn(msg);
+		level.players[0] IPrintLn(msg2);
+		return;
+	}
+	if(level.leapers.size < 30)
+	{
+		msg2 = "";
+		msg3 = msg2;
+		for(i = 1; i < 10; i++)
+				msg += (", " + level.leapers[i]);
+		for(i = 10; i < 20; i++)
+				msg2 += (level.leapers[i] + ", ");
+		for(i = 20; i < 30; i++)
+			if(isdefined(level.leapers[i]) && isdefined(level.leapers[i + 1]))
+				msg3 += (level.leapers[i] + ", ");
+			else if(isdefined(level.leapers[i]))
+				msg3 += (level.leapers[i]);
+		level.players[0] IPrintLn(msg);
+		level.players[0] IPrintLn(msg2);
+		level.players[0] IPrintLn(msg3);
+		return;
+	}
+	if(level.leapers.size < 40)
+	{
+		msg2 = "";
+		msg3 = msg2; msg4 = msg2;
+		for(i = 1; i < 10; i++)
+				msg += (", " + level.leapers[i]);
+		for(i = 10; i < 20; i++)
+				msg2 += (level.leapers[i] + ", ");
+		for(i = 20; i < 30; i++)
+				msg3 += (level.leapers[i] + ", ");
+		for(i = 30; i < 40; i++)
+			if(isdefined(level.leapers[i]) && isdefined(level.leapers[i + 1]))
+				msg4 += (level.leapers[i] + ", ");
+			else if(isdefined(level.leapers[i]))
+				msg4 += (level.leapers[i]);
+		level.players[0] IPrintLn(msg);
+		level.players[0] IPrintLn(msg2);
+		level.players[0] IPrintLn(msg3);
+		level.players[0] IPrintLn(msg4);
+		return;
+	}
+}
+
+brutus()
+{
+	if(!isdefined(level.brutus))
+	{
+		level.players[0] IPrintLn("^5[^6Fraga^5]^7 Not Tracking Brutus");
+		return;
+	}
+	msg = "^5[^6Fraga^5]^7 Brutus rounds: " + level.brutus[0];
+	if(level.brutus.size < 10)
+	{
+		for(i = 1; i < level.brutus.size; i++)
+			if(isdefined(level.brutus[i]))
+				msg += (", " + level.brutus[i]);
+		level.players[0] IPrintLn(msg);
+		return;
+	}
+	if(level.brutus.size < 20)
+	{
+		msg2 = "";
+		for(i = 1; i < 10; i++)
+				msg += (", " + level.brutus[i]);
+		for(i = 10; i < 20; i++)
+			if(isdefined(level.brutus[i]) && isdefined(level.brutus[i + 1]))
+				msg2 += (level.brutus[i] + ", ");
+			else if(isdefined(level.brutus[i]))
+				msg2 += (level.brutus[i]);
+		level.players[0] IPrintLn(msg);
+		level.players[0] IPrintLn(msg2);
+		return;
+	}
+	if(level.brutus.size < 30)
+	{
+		msg2 = "";
+		msg3 = msg2;
+		for(i = 1; i < 10; i++)
+				msg += (", " + level.brutus[i]);
+		for(i = 10; i < 20; i++)
+				msg2 += (level.brutus[i] + ", ");
+		for(i = 20; i < 30; i++)
+			if(isdefined(level.brutus[i]) && isdefined(level.brutus[i + 1]))
+				msg3 += (level.brutus[i] + ", ");
+			else if(isdefined(level.brutus[i]))
+				msg3 += (level.brutus[i]);
+		level.players[0] IPrintLn(msg);
+		level.players[0] IPrintLn(msg2);
+		level.players[0] IPrintLn(msg3);
+		return;
+	}
+	if(level.brutus.size < 40)
+	{
+		msg2 = "";
+		msg3 = msg2; msg4 = msg2;
+		for(i = 1; i < 10; i++)
+				msg += (", " + level.brutus[i]);
+		for(i = 10; i < 20; i++)
+				msg2 += (level.brutus[i] + ", ");
+		for(i = 20; i < 30; i++)
+				msg3 += (level.brutus[i] + ", ");
+		for(i = 30; i < 40; i++)
+			if(isdefined(level.brutus[i]) && isdefined(level.brutus[i + 1]))
+				msg4 += (level.brutus[i] + ", ");
+			else if(isdefined(level.brutus[i]))
+				msg4 += (level.brutus[i]);
+		level.players[0] IPrintLn(msg);
+		level.players[0] IPrintLn(msg2);
+		level.players[0] IPrintLn(msg3);
+		level.players[0] IPrintLn(msg4);
+		return;
+	}
+}
+
+avogadros()
+{
+	if(!isdefined(level.avogadros))
+	{
+		level.players[0] IPrintLn("^5[^6Fraga^5]^7 Not Tracking Avogadros");
+		return;
+	}
+	msg = "^5[^6Fraga^5]^7 Avogadro rounds: " + level.avogadros[0];
+	if(level.avogadros.size < 10)
+	{
+		for(i = 1; i < level.avogadros.size; i++)
+			if(isdefined(level.avogadros[i]))
+				msg += (", " + level.avogadros[i]);
+		level.players[0] IPrintLn(msg);
+		return;
+	}
+	if(level.avogadros.size < 20)
+	{
+		msg2 = "";
+		for(i = 1; i < 10; i++)
+				msg += (", " + level.avogadros[i]);
+		for(i = 10; i < 20; i++)
+			if(isdefined(level.avogadros[i]) && isdefined(level.avogadros[i + 1]))
+				msg2 += (level.avogadros[i] + ", ");
+			else if(isdefined(level.avogadros[i]))
+				msg2 += (level.avogadros[i]);
+		level.players[0] IPrintLn(msg);
+		level.players[0] IPrintLn(msg2);
+		return;
+	}
+	if(level.avogadros.size < 30)
+	{
+		msg2 = "";
+		msg3 = msg2;
+		for(i = 1; i < 10; i++)
+				msg += (", " + level.avogadros[i]);
+		for(i = 10; i < 20; i++)
+				msg2 += (level.avogadros[i] + ", ");
+		for(i = 20; i < 30; i++)
+			if(isdefined(level.avogadros[i]) && isdefined(level.avogadros[i + 1]))
+				msg3 += (level.avogadros[i] + ", ");
+			else if(isdefined(level.avogadros[i]))
+				msg3 += (level.avogadros[i]);
+		level.players[0] IPrintLn(msg);
+		level.players[0] IPrintLn(msg2);
+		level.players[0] IPrintLn(msg3);
+		return;
+	}
+	if(level.avogadros.size < 40)
+	{
+		msg2 = "";
+		msg3 = msg2; msg4 = msg2;
+		for(i = 1; i < 10; i++)
+				msg += (", " + level.avogadros[i]);
+		for(i = 10; i < 20; i++)
+				msg2 += (level.avogadros[i] + ", ");
+		for(i = 20; i < 30; i++)
+				msg3 += (level.avogadros[i] + ", ");
+		for(i = 30; i < 40; i++)
+			if(isdefined(level.avogadros[i]) && isdefined(level.avogadros[i + 1]))
+				msg4 += (level.avogadros[i] + ", ");
+			else if(isdefined(level.avogadros[i]))
+				msg4 += (level.avogadros[i]);
+		level.players[0] IPrintLn(msg);
+		level.players[0] IPrintLn(msg2);
+		level.players[0] IPrintLn(msg3);
+		level.players[0] IPrintLn(msg4);
+		return;
+	}
+}
+
+camo(str)
+{
+	switch(str)
+	{
+		// 1 to 38 are unusable on zombies
+		case "origins": if(isorigins()) {setDvar("papcamo", 41); IPrintLn("^5[^6Fraga^5]^7 Pap camo changed to ice crystal"); } else level.players[0] iprintln("^5[^6Fraga^5]^7 Unable to switch pap camo"); break;
+		case "mob": if(isorigins() || isburied() || ismob()) {setDvar("papcamo", 40); level.players[0] IPrintLn("^5[^6Fraga^5]^7 Pap camo changed to burning embers"); } else level.players[0] iprintln("^5[^6Fraga^5]^7 Unable to switch pap camo"); break;
+		case "greenrun": setDvar("papcamo", 39); level.players[0] IPrintLn("^5[^6Fraga^5]^7 Pap camo changed to greenrun"); break;
+		case "none": setDvar("papcamo", 1); level.players[0] IPrintLn("^5[^6Fraga^5]^7 Pap camo removed"); break;
+		case "camo2": setDvar("papcamo", 42); level.players[0] IPrintLn("Pap camo changed to camo2"); break;
+		case "white": setDvar("papcamo", 43); level.players[0] IPrintLn("Pap camo changed to white"); break;
+		case "weird": setDvar("papcamo", 43); level.players[0] IPrintLn("Pap camo changed to weird"); break;
+		default: break;
 	}
 }

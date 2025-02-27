@@ -17,12 +17,14 @@
 #include scripts\zm\fraga\character;
 #include scripts\zm\fraga\timers;
 #include scripts\zm\fraga\trackers;
+#include scripts\zm\fraga\papcamo;
 
 init()
 {
 	replaceFunc( maps\mp\zm_alcatraz_sq::setup_master_key, ::setup_master_key );
     level thread connected();
 	level thread boxlocation();
+    replacefunc(maps\mp\zombies\_zm_weapons::get_pack_a_punch_weapon_options, ::pap_camo);
 }
 
 connected()
