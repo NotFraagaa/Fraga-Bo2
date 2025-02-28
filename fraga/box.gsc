@@ -56,9 +56,7 @@ displayBoxHits()
         level.boxhits.alpha = 1;
     }
 
-    while(!isDefined(level.total_chest_accessed))
-        wait 0.1;
-    while(!isdefined(level.chest_accessed))
+    while(!isdefined(level.total_chest_accessed) || !isdefined(level.chest_accessed))
         wait 0.1;
 
     counter = 0;
