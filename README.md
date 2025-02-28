@@ -256,6 +256,38 @@ Origins
     Tracker de panzers
     Tracker de templarios
     Tracker de tanque
+## Monitor del juego
+### Comandos Disponibles
+- `!fov <valor>` → Cambia el campo de visión (FOV).
+- `!zc <ronda>` → Muestra la cantidad de zombis en la ronda dada.
+- `!tzc <ronda inicio> <rodna final>` → Calcula el total de zombis de una ronda a otra.
+- `!ds <ronda>` → Muestra los drops que han aparecido.
+- `!nightmode` → Activa o desactiva el modo nocturno.
+- `!perkrng` → Activa o desactiva el rng relativo perks.
+- `!firstbox` o `!fb` → Activa o desactiva el rng de la caja.
+- `!templars` → Activa o desactiva que los templarios vayan siempre al generador 4.
+- `!traptimer` o `!tt` → Activa o desactiva el temporizador de trampas.
+- `!box <1 / 2>` → Cambia la ubicación de la caja en mapas con más de una ubicación inicial.
+- `!character <número>` → Selecciona un personaje específico.
+- `!times` → Muestra tiempos relacionados con la partida.
+- `!rt <ronda>` → Muestra los tiempos de rondas.
+- `!t` → Muestra el tiempo total de la partida.
+- `!timer <valor>` → Cambia la configuración del temporizador.
+- `!sph <ronda>` → Muestra el SPH de la ronda.
+- `!test` → Mensaje de prueba (`^5[^6Fraga^5]^7 IT WOKRS!`).
+- `!debug` → Activa o desactiva el modo debug.
+- `!na` → Muestra la siguiente posible ronda de avogadro.
+- `!nb` → Muestra la siguiente posible ronda de Brutus.
+- `!nt` → Muestra la siguiente posible ronda de los templarios.
+- `!np` → Muestra la siguiente posible ronda de panzer.
+- `!nl` → Muestra la siguiente posible ronda de leapers.
+- `!rounders` → Muestra el historial de rondas especiales.
+- `!panzers` → Muestra el historial de panzers.
+- `!templars` → Muestra el historial de templarios.
+- `!leapers` → Muestra el historial de leapers.
+- `!brutus` → Muestra el historial de Brutus.
+- `!avogadros` → Muestra el historial de avogadros.
+- `!papcamo <valor>` → Cambia el camuflaje del Pack-a-Punch.
 
 ## Splits **(r3705+)**
 
