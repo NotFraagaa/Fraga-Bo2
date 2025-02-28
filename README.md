@@ -4,11 +4,11 @@
 
 ## Downloads
 ### New pluto (Recomended version)
-[V15 (beta) | Plutonium r2905+](https://github.com/Fraagaa/Fraga-Bo2/releases/latest/download/Fraga.Plutonium.rar)
+[V15 (beta) | Plutonium r2905+](https://github.com/Fraagaa/Fraga-Bo2/releases/latest/download/Fraga.Plutonium.rar) <br>
 [V14 | Plutonium r2905+](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/Fraga.Plutonium.rar)
   - Round splits only work on the newest version on pluto
 ### Alternative versions
-[V15 (beta) |Ancient y Redacted](https://github.com/Fraagaa/Fraga-Bo2/releases/latest/download/Fraga.Ancient.y.Redacted.rar)
+[V15 (beta) |Ancient y Redacted](https://github.com/Fraagaa/Fraga-Bo2/releases/latest/download/Fraga.Ancient.y.Redacted.rar) <br>
 [V14 | Ancient y Redacted](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/Fraga.Ancient.y.Redacted.rar)
 
 - These versions have some limitations such as 
@@ -400,19 +400,13 @@ Templars [0, 1]
 
 ### DIRECT DOWNLOAD
 
-[Plutonium r2905+](https://github.com/Fraagaa/Fraga-Bo2/releases/latest/download/Fraga.Plutonium.rar)
+[V15 (beta) | Plutonium r2905+](https://github.com/Fraagaa/Fraga-Bo2/releases/latest/download/Fraga.Plutonium.rar) <br>
+[V14 | Plutonium r2905+](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/Fraga.Plutonium.rar) <br>
+[V15 (beta) |Ancient y Redacted](https://github.com/Fraagaa/Fraga-Bo2/releases/latest/download/Fraga.Ancient.y.Redacted.rar) <br>
+[V14 | Ancient y Redacted](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/Fraga.Ancient.y.Redacted.rar) <br>
 
-[Ancient y Redacted](https://github.com/Fraagaa/Fraga-Bo2/releases/latest/download/Fraga.Ancient.y.Redacted.rar)
 
 ### Recent changes
- - **Fixed Origins crash on Ancient/Redacted**
- - **Fixed Raygun counters addind up when raygun was picked up from pap**
- - **Fixed getting tomahawk on mob unintentionally**
- - **Fixed fridge not working when the player only has one weapon**
- - **Added animated timer with /rainbow 1**
- - **Moved tomahawk trigger to the oposite corner**
- - **Fixed game not recognising player outside of mob's firstroom**
- - **Reverted network frame function to the original one**
- - **Added Redacted version**
- - **Fixed box HUD on Ancient and Redacted**
- - **Fixed MOTD crashing on Ancient and Redacted**
+- **Fixed Crashes on Ancient and redacted**
+- **Added game monitor to New Pluto**
+- **Fixed box duplication and box gui**
