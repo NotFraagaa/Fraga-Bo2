@@ -89,6 +89,38 @@ Origins
     Panzer tracker
     Templars tracker
     Tank tracker
+## Game Monitor
+### Available Commands
+- `!fov <value>` → Changes the field of view (FOV).  
+- `!zc <round>` → Displays the number of zombies in the given round.  
+- `!tzc <start round> <end round>` → Calculates the total number of zombies from one round to another.  
+- `!ds <round>` → Displays the drops that have appeared.  
+- `!nightmode` → Toggles night mode on or off.  
+- `!perkrng` → Toggles RNG for perks on or off.  
+- `!firstbox` or `!fb` → Toggles RNG for the mystery box on or off.  
+- `!templars` → Forces Templars to always go to generator 4.  
+- `!traptimer` or `!tt` → Toggles trap timer on or off.  
+- `!box <1 / 2>` → Changes the starting location of the mystery box in maps with multiple starting locations.  
+- `!character <number>` → Selects a specific character.  
+- `!times` → Displays time-related information for the game.  
+- `!rt <round>` → Displays round times.  
+- `!t` → Displays the total game time.  
+- `!timer <value>` → Changes the timer settings.  
+- `!sph <round>` → Displays the SPH (Spawn Per Hour) for the round.  
+- `!test` → Test message (`^5[^6Fraga^5]^7 IT WOKRS!`).  
+- `!debug` → Toggles debug mode on or off.  
+- `!na` → Displays the next possible Avogadro round.  
+- `!nb` → Displays the next possible Brutus round.  
+- `!nt` → Displays the next possible Templars round.  
+- `!np` → Displays the next possible Panzer round.  
+- `!nl` → Displays the next possible Leapers round.  
+- `!rounders` → Shows the history of special rounds.  
+- `!panzers` → Shows the history of Panzers.  
+- `!templars` → Shows the history of Templars.  
+- `!leapers` → Shows the history of Leapers.  
+- `!brutus` → Shows the history of Brutus.  
+- `!avogadros` → Shows the history of Avogadros.  
+- `!papcamo <value>` → Changes the Pack-a-Punch camo.
 
 ## Splits **(r3705+)**
 
