@@ -52,7 +52,6 @@ init()
     level thread firstboxActivated();
     level thread perkrng();
     level thread cheatsActivated();
-    if(!isancient()) level thread changefov();
     while(true)
     {
         level waittill("connecting", player);
@@ -100,15 +99,6 @@ debugmode()
     level.debugmode.alpha = 1;
     level.debugmode.label = &"DEBUG MODE";
 }
-changefov()
-{
-    createDvar("fov", getDvarInt("cg_fov"));
-    while(true)
-    {
-        setDvar("cg_fov", getDvarInt("fov"));
-        wait 0.1;
-    }
-}
 
 fraga_connected()
 {
@@ -126,8 +116,8 @@ fraga_connected()
     }
     else
     {
-        if(!level.onlinegame) self iprintln("^6Fraga^5V14  ^3Active ^4[Redacted, Local mode]");
-        else self iprintln("^6Fraga^5V14  ^3Active ^4[Redacted]");
+        if(!level.onlinegame) self iprintln("^6Fraga^5V15  ^3Active ^4[Redacted, Local mode]");
+        else self iprintln("^6Fraga^5V15  ^3Active ^4[Redacted]");
     }
     if(getDvar("language") == "french") self iprintln("^1Spanish ^3Ruleset  ^1Active");
 }
@@ -844,6 +834,7 @@ raygun_counter()
 
 boxlocation()
 {
+    flag_wait("initial_blackscreen_passed");
     while(!isdefined(level.chests))
         wait 0.1;
     switch(getDvarInt("box"))
@@ -2719,8 +2710,8 @@ firstboxActivated()
     if(getDvarInt("firstbox"))
     while(level.round_number < 2)
     {
-            level.firstbox_active.alpha = 1;
-            wait 0.1;
+        level.firstbox_active.alpha = 1;
+        wait 0.1;
     }
     level.firstbox_active destroy();
 }
@@ -2764,10 +2755,7 @@ cheatsActivated()
 
     while(true)
     {
-        if(getDvarInt("sv_cheats"))
-            level.cheats.alpha = 1;
-        if(!getDvarInt("sv_cheats"))
-            level.cheats.alpha = 0;
+        level.cheats.alpha = getDvarInt("sv_cheats");
         wait 0.1;
     }
 }
