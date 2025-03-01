@@ -91,7 +91,7 @@ Origins
     Panzer tracker
     Templars tracker
     Tank tracker
-## Game Monitor
+## Game Monitor (V15)
 ### Available Commands
 - `!fov <value>` → Changes the field of view (FOV).  
 - `!zc <round>` → Displays the number of zombies in the given round.  
@@ -292,7 +292,7 @@ Origins
     Tracker de panzers
     Tracker de templarios
     Tracker de tanque
-## Monitor del juego
+## Monitor del juego (V15)
 ### Comandos Disponibles
 - `!fov <valor>` → Cambia el campo de visión (FOV).
 - `!zc <ronda>` → Muestra la cantidad de zombis en la ronda dada.
