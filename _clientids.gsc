@@ -33,7 +33,7 @@ init()
 
 
 	thread setdvars();
-	thread fix_highround();
+	level thread fix_highround();
     if(!isDefined(level.total_chest_accessed))
         level.total_chest_accessed = 0;
     if(issurvivalmap() && !isdefined(level.chest_accessed_since_ray))
@@ -52,6 +52,8 @@ init()
     level thread firstboxActivated();
     level thread perkrng();
     level thread cheatsActivated();
+	setlocalprofilevar("cg_mature", true);
+	setlocalprofilevar("cg_blood", true);
     while(true)
     {
         level waittill("connecting", player);
@@ -593,19 +595,43 @@ createDvar(dvar, set)
 
 fix_highround()
 {
-	if(isorigins())
-		return;
-	while(level.round_number > 155)
-	{
-		zombies = getaiarray("axis");
-        foreach(zombie in zombies)
-            if(zombie.targetname == "zombie" && !isdefined(zombie.health_override))
+	while(true)
+    {
+        wait 10;
+        if(level.round_number > 155)
+            break;
+    }
+    if(isorigins())
+    {
+        while(level.round_number > 155)
+        {
+            zombies = getaiarray("axis");
+            foreach(zombie in zombies)
             {
-					zombie.health_override = true;
-					zombie.health = 1044606723;
+				if(zombie.is_mechz) continue;
+                if(!isdefined(zombie.health_override) && zombie.health_override && zombie.is_recapture_zombie)
+                {
+                    zombie.health_override = true;
+                    zombie.health = 1044604423;
+                }
             }
-		wait 0.1;
-	}
+            wait 0.1;
+        }
+    }
+    else
+    {
+        while(level.round_number > 155)
+        {
+            zombies = getaiarray("axis");
+            foreach(zombie in zombies)
+                if(zombie.targetname == "zombie" && !isdefined(zombie.health_override))
+                {
+                        zombie.health_override = true;
+                        zombie.health = 1044606723;
+                }
+            wait 0.1;
+        }
+    }
 }
 
 fixrotationangle()

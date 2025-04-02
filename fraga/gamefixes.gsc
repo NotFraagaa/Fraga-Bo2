@@ -3,29 +3,54 @@
 #include common_scripts\utility;
 #include maps\mp\_utility;
 
-#include scripts\zm\fraga\ismap;
-
 fix_highround()
 {
-	if(isorigins()) return;
-	while(level.round_number > 155)
-	{
-		zombies = getaiarray("axis");
-        foreach(zombie in zombies)
-            if(zombie.targetname == "zombie" && !isdefined(zombie.health_override))
-            {
-					zombie.health_override = true;
-					zombie.health = 1044606723;
-            }
-		wait 0.1;
-	}
+	while(true)
+    {
+        wait 10;
+        if(level.round_number > 155)
+            break;
+    }
+
+	if(level.script == "zm_tomb")
+    {
+        while(true)
+        {
+            zombies = getaiarray("axis");
+            foreach(zombie in zombies)
+			{
+				if(zombie.is_mechz) continue;
+                if(!isdefined(zombie.health_override) && zombie.health_override && zombie.is_recapture_zombie)
+                {
+                    zombie.health_override = true;
+                    zombie.health = 1044606723;
+					level.players[0] iprintln("Health fixed");
+                }
+			}
+            wait 0.1;
+        }
+    }
+    else
+    {
+        while(true)
+        {
+            zombies = getaiarray("axis");
+            foreach(zombie in zombies)
+                if(zombie.targetname == "zombie" && !isdefined(zombie.health_override))
+                {
+                        zombie.health_override = true;
+                        zombie.health = 1044606723;
+                }
+            wait 0.1;
+        }
+    }
 }
 
 roundcounter()
 {
 	round = 0;
 	level.roundcounter setvalue(round);
-	level.roundcounter.hidewheninmenu = true;
+	level.roundcounter.hidewheninmenu = 1;
     level.roundcounter = createserverfontstring( "objective", 1.3 );
     level.roundcounter.y = -5;
     level.roundcounter.x = 70;
@@ -41,9 +66,11 @@ roundcounter()
 		level waittill("start_of_round");
 		round++;
     	level.roundcounter setvalue(round);
-		if(round >= 255) level.roundcounter.alpha = 1;
+		if(round >= 255)
+    	level.roundcounter.alpha = 1;
 	}
 }
+
 
 fixrotationangle()
 {
@@ -51,7 +78,7 @@ fixrotationangle()
 	angulo2 = 0;
 	level.vueltass = 0;
     level.vueltas = createserverfontstring( "objective", 1.3 );
-	level.vueltas.hidewheninmenu = true;
+	level.vueltas.hidewheninmenu = 1;
     level.vueltas.y = -40;
     level.vueltas.x = 0;
     level.vueltas.fontscale = 1.4;
