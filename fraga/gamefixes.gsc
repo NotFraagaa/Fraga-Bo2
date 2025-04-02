@@ -8,40 +8,37 @@ fix_highround()
 	while(true)
     {
         wait 10;
-        if(level.round_number > 155)
-            break;
-    }
-
-	if(level.script == "zm_tomb")
-    {
-        while(true)
+        if(level.script == "zm_tomb")
         {
-            zombies = getaiarray("axis");
-            foreach(zombie in zombies)
-			{
-				if(zombie.is_mechz) continue;
-                if(!isdefined(zombie.health_override) && zombie.health_override && zombie.is_recapture_zombie)
+            while(true)
+            {
+                zombies = getaiarray("axis");
+                foreach(zombie in zombies)
                 {
-                    zombie.health_override = true;
-                    zombie.health = 1044606723;
-					level.players[0] iprintln("Health fixed");
-                }
-			}
-            wait 0.1;
-        }
-    }
-    else
-    {
-        while(true)
-        {
-            zombies = getaiarray("axis");
-            foreach(zombie in zombies)
-                if(zombie.targetname == "zombie" && !isdefined(zombie.health_override))
-                {
+                    if(zombie.is_mechz) continue;
+                    if(!isdefined(zombie.health_override) && zombie.health_override && zombie.is_recapture_zombie)
+                    {
                         zombie.health_override = true;
                         zombie.health = 1044606723;
+                        level.players[0] iprintln("Health fixed");
+                    }
                 }
-            wait 0.1;
+                wait 0.1;
+            }
+        }
+        else
+        {
+            while(true)
+            {
+                zombies = getaiarray("axis");
+                foreach(zombie in zombies)
+                    if(zombie.targetname == "zombie" && !isdefined(zombie.health_override))
+                    {
+                            zombie.health_override = true;
+                            zombie.health = 1044606723;
+                    }
+                wait 0.1;
+            }
         }
     }
 }
