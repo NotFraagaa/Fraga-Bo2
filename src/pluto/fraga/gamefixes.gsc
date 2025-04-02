@@ -3,31 +3,21 @@
 #include common_scripts\utility;
 #include maps\mp\_utility;
 
+#include scripts\zm\fraga\ismap;
+
 fix_highround()
 {
-	if(level.script == "zm_tomb")
-		return;
+	if(isorigins()) return;
 	while(level.round_number > 155)
 	{
 		zombies = getaiarray("axis");
-		i = 0;
-		while(i < zombies.size)
-		{
-			if(zombies[i].targetname != "zombie")
-			{
-				continue;
-			}
-			if(zombies[i].targetname == "zombie")
-			{
-				if(!isdefined(zombies[i].health_override))
-				{
-					zombies[i].health_override = 1;
-					zombies[i].health = 1044606723;
-				}
-			}
-			i++;
-		}
-		wait(0.1);
+        foreach(zombie in zombies)
+            if(zombie.targetname == "zombie" && !isdefined(zombie.health_override))
+            {
+					zombie.health_override = true;
+					zombie.health = 1044606723;
+            }
+		wait 0.1;
 	}
 }
 
@@ -35,7 +25,7 @@ roundcounter()
 {
 	round = 0;
 	level.roundcounter setvalue(round);
-	level.roundcounter.hidewheninmenu = 1;
+	level.roundcounter.hidewheninmenu = true;
     level.roundcounter = createserverfontstring( "objective", 1.3 );
     level.roundcounter.y = -5;
     level.roundcounter.x = 70;
@@ -51,11 +41,9 @@ roundcounter()
 		level waittill("start_of_round");
 		round++;
     	level.roundcounter setvalue(round);
-		if(round >= 255)
-    	level.roundcounter.alpha = 1;
+		if(round >= 255) level.roundcounter.alpha = 1;
 	}
 }
-
 
 fixrotationangle()
 {
@@ -63,7 +51,7 @@ fixrotationangle()
 	angulo2 = 0;
 	level.vueltass = 0;
     level.vueltas = createserverfontstring( "objective", 1.3 );
-	level.vueltas.hidewheninmenu = 1;
+	level.vueltas.hidewheninmenu = true;
     level.vueltas.y = -40;
     level.vueltas.x = 0;
     level.vueltas.fontscale = 1.4;

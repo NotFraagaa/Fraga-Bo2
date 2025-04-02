@@ -37,14 +37,8 @@ Templars( s_last_recapture_zone )
 				}
 			}
 		}
-		else if (GetDvarInt("Templars") != 0)  
-		{
-			s_recapture_zone = level.zone_capture.zones["generator_nml_right"];
-		}
-		else
-		{
-			s_recapture_zone = random( a_s_player_zones );
-		}
+		else if (GetDvarInt("Templars") != 0) s_recapture_zone = level.zone_capture.zones["generator_nml_right"];
+		else s_recapture_zone = random( a_s_player_zones );
 	}
 
 	return s_recapture_zone;
@@ -55,36 +49,25 @@ perkorderorigins( player )
 {
 	if(getDvarInt("perkRNG") == 0)
 	{
-		if(!player hasperk("specialty_armorvest"))
-			return("specialty_armorvest");
-		if(!player hasperk("specialty_rof"))
-			return("specialty_rof");
-		if(!player hasperk("specialty_fastreload"))
-			return("specialty_fastreload");
-		if(!player hasperk("specialty_additionalprimaryweapon"))
-			return("specialty_additionalprimaryweapon");
-		if(!player hasperk("specialty_longersprint"))
-			return("specialty_longersprint");
-		if(!player hasperk("specialty_quickrevive"))
-			return("specialty_quickrevive");
-		if(!player hasperk("specialty_grenadepulldeath"))
-			return("specialty_grenadepulldeath");
-		if(!player hasperk("specialty_flakjacket"))
-			return("specialty_flakjacket");
+		if(!player hasperk("specialty_armorvest")) return("specialty_armorvest");
+		if(!player hasperk("specialty_rof")) return("specialty_rof");
+		if(!player hasperk("specialty_fastreload")) return("specialty_fastreload");
+		if(!player hasperk("specialty_additionalprimaryweapon")) return("specialty_additionalprimaryweapon");
+		if(!player hasperk("specialty_longersprint")) return("specialty_longersprint");
+		if(!player hasperk("specialty_quickrevive")) return("specialty_quickrevive");
+		if(!player hasperk("specialty_grenadepulldeath")) return("specialty_grenadepulldeath");
+		if(!player hasperk("specialty_flakjacket")) return("specialty_flakjacket");
 		return("specialty_deadshot");
 	}
 	else	// Base game code
 	{
 		keys = array_randomize( getarraykeys( level._random_perk_machine_perk_list ) );
 
-		if ( isdefined( level.custom_random_perk_weights ) )
-			keys = player [[ level.custom_random_perk_weights ]]();
+		if ( isdefined( level.custom_random_perk_weights ) ) keys = player [[ level.custom_random_perk_weights ]]();
 		for ( i = 0; i < keys.size; i++ )
 		{
-			if ( player hasperk( level._random_perk_machine_perk_list[keys[i]] ) )
-				continue;
-			else
-				return level._random_perk_machine_perk_list[keys[i]];
+			if ( player hasperk( level._random_perk_machine_perk_list[keys[i]] ) ) continue;
+			else return level._random_perk_machine_perk_list[keys[i]];
 		}
 		return level._random_perk_machine_perk_list[keys[0]];
 	}
@@ -92,10 +75,7 @@ perkorderorigins( player )
 
 perfectperks()
 {
-	if(GetDvarInt("perkrng") == 0)
-	{
-		replaceFunc(maps\mp\zombies\_zm_perks::give_random_perk, ::giverandomperk);
-	}
+	if(GetDvarInt("perkrng") == 0) replaceFunc(maps\mp\zombies\_zm_perks::give_random_perk, ::giverandomperk);
 }
 
 giverandomperk()
@@ -118,9 +98,8 @@ giverandomperk()
 			continue;
 		}
 		if ( !self hasperk( perk ) && !self has_perk_paused( perk ) )
-		{
 			perks[ perks.size ] = perk;
-		}
+
 		i++;
 	}
 	if ( perks.size > 0 )
@@ -138,8 +117,7 @@ giverandomperk()
 		}
 	}
 	else
-	{
 		self playsoundtoplayer( level.zmb_laugh_alias, self );
-	}
+		
 	return random_perk;
 }

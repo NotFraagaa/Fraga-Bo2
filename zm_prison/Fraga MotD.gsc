@@ -16,21 +16,24 @@
 #include scripts\zm\fraga\box;
 #include scripts\zm\fraga\character;
 #include scripts\zm\fraga\timers;
+#include scripts\zm\fraga\trackers;
+#include scripts\zm\fraga\papcamo;
 
 init()
 {
 	replaceFunc( maps\mp\zm_alcatraz_sq::setup_master_key, ::setup_master_key );
     level thread connected();
 	level thread boxlocation();
+    replacefunc(maps\mp\zombies\_zm_weapons::get_pack_a_punch_weapon_options, ::pap_camo);
 }
 
 connected()
 {
-	while(1)
+	while(true)
 	{
 		level waittill("connecting", player);
-		if(getDvarInt("character") != 0)
-			level.givecustomcharacters = ::set_character_option_mob;
+		player thread BrutusTracker();
+		if(getDvarInt("character") != 0) level.givecustomcharacters = ::set_character_option;
 		player thread trap_timer();
 		player thread givetomahawk();
 	}

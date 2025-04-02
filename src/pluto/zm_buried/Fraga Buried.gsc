@@ -25,14 +25,13 @@ init()
 
 connected()
 {
-	while(1)
+	while(true)
 	{
 		level waittill("connecting", player);
 		player thread onconnect();
 		player thread bank();
 		player thread award_permaperks_safe();
-		if(getDvarInt("character") != 0)
-			level.givecustomcharacters = ::set_character_option_buried;
+		if(getDvarInt("character") != 0) level.givecustomcharacters = ::set_character_option;
         player waittill("spawned_player");
 		player thread fridge();
 	}

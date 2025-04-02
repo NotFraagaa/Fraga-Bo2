@@ -4,11 +4,12 @@
 
 ## Downloads
 ### New pluto (Recomended version)
-[Plutonium r2905+](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/FragaV14.Plutonium.rar)
+[V15 (beta) | Plutonium r2905+](https://github.com/Fraagaa/Fraga-Bo2/releases/latest/download/Fraga.Plutonium.rar) <br>
+[V14 | Plutonium r2905+](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/Fraga.Plutonium.rar)
   - Round splits only work on the newest version on pluto
 ### Alternative versions
-[Ancient and Redacted](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/FragaV14.Ancient.y.Redacted.rar)
-
+[V15 (beta) |Ancient y Redacted](https://github.com/Fraagaa/Fraga-Bo2/releases/latest/download/Fraga.Ancient.y.Redacted.rar) <br>
+[V14 | Ancient y Redacted](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/Fraga.Ancient.y.Redacted.rar)
 
 - These versions have some limitations such as 
   - Doesnt have graphic changes nor night mode
@@ -90,6 +91,38 @@ Origins
     Panzer tracker
     Templars tracker
     Tank tracker
+## Game Monitor (V15)
+### Available Commands
+- `!fov <value>` → Changes the field of view (FOV).  
+- `!zc <round>` → Displays the number of zombies in the given round.  
+- `!tzc <start round> <end round>` → Calculates the total number of zombies from one round to another.  
+- `!ds <round>` → Displays the drops that have appeared.  
+- `!nightmode` → Toggles night mode on or off.  
+- `!perkrng` → Toggles RNG for perks on or off.  
+- `!firstbox` or `!fb` → Toggles RNG for the mystery box on or off.  
+- `!templars` → Forces Templars to always go to generator 4.  
+- `!traptimer` or `!tt` → Toggles trap timer on or off.  
+- `!box <1 / 2>` → Changes the starting location of the mystery box in maps with multiple starting locations.  
+- `!character <number>` → Selects a specific character.  
+- `!times` → Displays time-related information for the game.  
+- `!rt <round>` → Displays round times.  
+- `!t` → Displays the total game time.  
+- `!timer <value>` → Changes the timer settings.  
+- `!sph <round>` → Displays the SPH (Spawn Per Hour) for the round.  
+- `!test` → Test message (`^5[^6Fraga^5]^7 IT WOKRS!`).  
+- `!debug` → Toggles debug mode on or off.  
+- `!na` → Displays the next possible Avogadro round.  
+- `!nb` → Displays the next possible Brutus round.  
+- `!nt` → Displays the next possible Templars round.  
+- `!np` → Displays the next possible Panzer round.  
+- `!nl` → Displays the next possible Leapers round.  
+- `!rounders` → Shows the history of special rounds.  
+- `!panzers` → Shows the history of Panzers.  
+- `!templars` → Shows the history of Templars.  
+- `!leapers` → Shows the history of Leapers.  
+- `!brutus` → Shows the history of Brutus.  
+- `!avogadros` → Shows the history of Avogadros.  
+- `!papcamo <value>` → Changes the Pack-a-Punch camo.
 
 ## Splits **(r3705+)**
 
@@ -172,11 +205,12 @@ Templars [0, 1]
 
 ## Descargas
 ### New pluto (Versión recomendada)
-[Plutonium r2905+](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/FragaV14.Plutonium.rar)
+[V15 (beta) | Plutonium r2905+](https://github.com/Fraagaa/Fraga-Bo2/releases/latest/download/Fraga.Plutonium.rar) <br>
+[V14 | Plutonium r2905+](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/Fraga.Plutonium.rar)
   - Los timer de ronda solo funcionan en new pluto.
 ### Versiones alternativas
-[Ancient y Redacted](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/FragaV14.Ancient.y.Redacted.rar)
-
+[V15 (beta) | Ancient y Redacted](https://github.com/Fraagaa/Fraga-Bo2/releases/latest/download/Fraga.Ancient.y.Redacted.rar) <br>
+[V14 | Ancient y Redacted](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/Fraga.Ancient.y.Redacted.rar)
 
 - Estas versiones tienen limitaciones como: 
   - No tiene graficos mejorados ni modo noche
@@ -258,6 +292,38 @@ Origins
     Tracker de panzers
     Tracker de templarios
     Tracker de tanque
+## Monitor del juego (V15)
+### Comandos Disponibles
+- `!fov <valor>` → Cambia el campo de visión (FOV).
+- `!zc <ronda>` → Muestra la cantidad de zombis en la ronda dada.
+- `!tzc <ronda inicio> <rodna final>` → Calcula el total de zombis de una ronda a otra.
+- `!ds <ronda>` → Muestra los drops que han aparecido.
+- `!nightmode` → Activa o desactiva el modo nocturno.
+- `!perkrng` → Activa o desactiva el rng relativo perks.
+- `!firstbox` o `!fb` → Activa o desactiva el rng de la caja.
+- `!templars` → Activa o desactiva que los templarios vayan siempre al generador 4.
+- `!traptimer` o `!tt` → Activa o desactiva el temporizador de trampas.
+- `!box <1 / 2>` → Cambia la ubicación de la caja en mapas con más de una ubicación inicial.
+- `!character <número>` → Selecciona un personaje específico.
+- `!times` → Muestra tiempos relacionados con la partida.
+- `!rt <ronda>` → Muestra los tiempos de rondas.
+- `!t` → Muestra el tiempo total de la partida.
+- `!timer <valor>` → Cambia la configuración del temporizador.
+- `!sph <ronda>` → Muestra el SPH de la ronda.
+- `!test` → Mensaje de prueba (`^5[^6Fraga^5]^7 IT WOKRS!`).
+- `!debug` → Activa o desactiva el modo debug.
+- `!na` → Muestra la siguiente posible ronda de avogadro.
+- `!nb` → Muestra la siguiente posible ronda de Brutus.
+- `!nt` → Muestra la siguiente posible ronda de los templarios.
+- `!np` → Muestra la siguiente posible ronda de panzer.
+- `!nl` → Muestra la siguiente posible ronda de leapers.
+- `!rounders` → Muestra el historial de rondas especiales.
+- `!panzers` → Muestra el historial de panzers.
+- `!templars` → Muestra el historial de templarios.
+- `!leapers` → Muestra el historial de leapers.
+- `!brutus` → Muestra el historial de Brutus.
+- `!avogadros` → Muestra el historial de avogadros.
+- `!papcamo <valor>` → Cambia el camuflaje del Pack-a-Punch.
 
 ## Splits **(r3705+)**
 
@@ -336,18 +402,14 @@ Templars [0, 1]
 
 ### DIRECT DOWNLOAD
 
-[Plutonium r2905+](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/FragaV14.Plutonium.rar)
+[V15 (beta) | Plutonium r2905+](https://github.com/Fraagaa/Fraga-Bo2/releases/latest/download/Fraga.Plutonium.rar) <br>
+[V14 | Plutonium r2905+](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/Fraga.Plutonium.rar) <br>
 
-[Ancient y Redacted](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/FragaV14.Ancient.y.Redacted.rar)
+[V15 (beta) |Ancient y Redacted](https://github.com/Fraagaa/Fraga-Bo2/releases/latest/download/Fraga.Ancient.y.Redacted.rar) <br>
+[V14 | Ancient y Redacted](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/Fraga.Ancient.y.Redacted.rar) <br>
+
 
 ### Recent changes
- - **Fixed Raygun counters addind up when raygun was picked up from pap**
- - **Fixed getting tomahawk on mob unintentionally**
- - **Fixed fridge not working when the player only has one weapon**
- - **Added animated timer with /rainbow 1**
- - **Moved tomahawk trigger to the oposite corner**
- - **Fixed game not recognising player outside of mob's firstroom**
- - **Reverted network frame function to the original one**
- - **Added Redacted version**
- - **Fixed box HUD on Ancient and Redacted**
- - **Fixed MOTD crashing on Ancient and Redacted**
+- **Fixed Crashes on Ancient and redacted**
+- **Added game monitor to New Pluto**
+- **Fixed box duplication and box gui**

@@ -11,16 +11,18 @@
 #include scripts\zm\fraga\buildables;
 #include scripts\zm\fraga\character;
 #include scripts\zm\fraga\box;
+#include scripts\zm\fraga\papcamo;
 
 init()
 {
     level thread connected();
 	level thread buildable_controller();
+    replacefunc(maps\mp\zombies\_zm_weapons::get_pack_a_punch_weapon_options, ::pap_camo);
 }
 
 connected()
 {
-	while(1)
+	while(true)
 	{
 		level waittill("connecting", player);
 		player thread onconnect();
@@ -28,8 +30,7 @@ connected()
     	player thread award_permaperks_safe();
 		self.initial_stats = array();
 		self thread watch_stat("springpad_zm");
-		if(getDvarInt("character") != 0)
-			level.givecustomcharacters = ::set_character_option_dierise;
+		if(getDvarInt("character") != 0) level.givecustomcharacters = ::set_character_option;
         player waittill("spawned_player");
 		player thread fridge();
 	}
