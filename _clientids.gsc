@@ -21,12 +21,11 @@
 #include maps\mp\zombies\_zm_pers_upgrades_functions;
 #include maps\mp\zombies\_zm_pers_upgrades_system;
 #include maps\mp\zombies\_zm_pers_upgrades;
+#include maps\mp\zm_highrise_elevators;
 
 init()
 {
     self endon( "disconnect" );
-
-
     level.debug = getDvarInt("FragaDebug");
 	
 	if(level.debug) level thread debug();
@@ -127,22 +126,10 @@ fraga_connected()
 origins_init()
 {
 	if(!isorigins()) return;
-	level thread origins_connected();	
 	level thread boxlocation();
 }
 
-origins_connected()
-{
-	while(true)
-	{
-		level waittill("connecting", player);
-        // player thread PanzerTracker();
-        // player thread TemplarTracker();
-	}
-}
-
 // Buried
-
 buried_init()
 {
 	if(isburied()) return;
@@ -178,6 +165,7 @@ dierise_init()
 	if(!isdierise()) return;
     level thread dierise_connected();
 	level thread buildable_controller();
+    level thread fixquickreviveoncoop();
 }
 
 dierise_connected()
@@ -188,7 +176,6 @@ dierise_connected()
 		player thread dierise_onconnect();
     	player thread bank();
     	player thread award_permaperks_safe();
-        // player thread leapertracker();
 		self.initial_stats = array();
 		self thread watch_stat("springpad_zm");
         player waittill("spawned_player");
@@ -558,6 +545,7 @@ setDvars()
     setdvar("r_dof_enable", 0);
     
     createDvar("box", 1);
+    createDvar("elevator", 0);
     createDvar("character", 0);
     createDvar("FragaDebug", 0);
     createDvar("sph", 50);
@@ -2781,5 +2769,27 @@ cheatsActivated()
     {
         level.cheats.alpha = getDvarInt("sv_cheats");
         wait 0.1;
+    }
+}
+
+fixquickreviveoncoop()
+{
+    if(!getDvarInt("elevator"))
+        return;
+    while(!isdefined(level.elevators))
+        wait 1;
+    while(true)
+    {
+        flag_clear("solo_game");
+        level notify("revive_off");
+        level notify("revive_hide");
+        foreach(elevator in level.elevators)
+            if(elevator.body.perk_type == "vending_revive")
+            {
+                elevator elevator_set_moving(0);   
+                elevator.body.departing = 0;
+                elevator.body.departing_early = 0;
+            }
+        wait 1.1;
     }
 }
