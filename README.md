@@ -400,11 +400,9 @@ Templars [0, 1]
 
 ### DIRECT DOWNLOAD
 
-[V15 (beta) | Plutonium r2905+](https://github.com/Fraagaa/Fraga-Bo2/releases/latest/download/Fraga.Plutonium.rar) <br>
-[V14 | Plutonium r2905+](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/Fraga.Plutonium.rar) <br>
+[V15 (beta) | Plutonium r2905+](https://github.com/Fraagaa/Fraga-Bo2/releases/latest/download/Fraga.Plutonium.rar)
 
-[V15 (beta) |Ancient y Redacted](https://github.com/Fraagaa/Fraga-Bo2/releases/latest/download/Fraga.Ancient.y.Redacted.rar) <br>
-[V14 | Ancient y Redacted](https://github.com/Fraagaa/Fraga-Bo2/releases/download/FragaV14/Fraga.Ancient.y.Redacted.rar) <br>
+[V15 (beta) |Ancient y Redacted](https://github.com/Fraagaa/Fraga-Bo2/releases/latest/download/Fraga.Ancient.y.Redacted.rar)
 
 
 ### Recent changes
