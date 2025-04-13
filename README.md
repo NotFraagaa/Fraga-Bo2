@@ -21,6 +21,7 @@
 - Animated Skyboxes
 - Night mode
 - Player shadows
+- Perman perks enabled on local (minijug, tombstone & phd)
 
 ## HUD CHANGES
 
