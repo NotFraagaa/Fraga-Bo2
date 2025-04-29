@@ -79,7 +79,7 @@ readchat()
 			case "!timer": setDvar("timer", msg[1]); break;
 			case "!sph": print_sph(msg[1]); break;
 
-			case "!test": level.players[0] iprintln("^5[^6Fraga^5]^7 IT WOKRS!"); break;
+			case "!test": fragaprint("IT WOKRS!"); break;
 			case "!debug": setDvar("fragadebug", !getDvarInt("fragadebug")); break;
 
 			case "!na": next_avogadro(); break;
@@ -111,14 +111,14 @@ fix_bs()
 			setdvar("player_strafeSpeedScale", 1 );
 			setdvar("player_backSpeedScale", 1 );
 			setdvar("r_dof_enable", 0 );
-			level.players[0] iprintln("^5[^6Fraga^5]^7 Back speed fixed!");
+			fragaprint("Back speed fixed!");
 		}
 		else
 		{
 			setdvar("player_strafeSpeedScale", 0.8 );
 			setdvar("player_backSpeedScale", 0.7 );
 			setdvar("r_dof_enable", 1 );
-			level.players[0] iprintln("^5[^6Fraga^5]^7 Back speed unfixed!");
+			fragaprint("Back speed unfixed!");
 		}
 		wait 0.1;
 	}
@@ -128,57 +128,57 @@ print_game_time()
 {
 	time_now = int(gettime() / 1000);
 	game_time = time_now - level.start_time;
-	level.players[0] iprintln("^5[^6Fraga^5]^7 Game time: " + int_to_time(game_time));
+	fragaprint("Game time: " + int_to_time(game_time));
 }
 
 next_leapers()
 {
 	if(!isdefined(level.leapers))
 	{
-		level.players[0] iprintln("^5[^6Fraga^5]^7 Not tracking leapers");
+		fragaprint("Not tracking leapers");
 		return;
 	}
 	n1 = 4 + level.leapers[level.leapers.size - 1];
 	n2 = 5 + level.leapers[level.leapers.size - 1];
-	level.players[0] iprintln("^5[^6Fraga^5]^7 Next potential leaper rounds: " + n1 + ", " + n2);
+	fragaprint("Next potential leaper rounds: " + n1 + ", " + n2);
 }
 
 next_brutus()
 {
 	if(!isdefined(level.brutus))
 	{
-		level.players[0] iprintln("^5[^6Fraga^5]^7 Not tracking brutus");
+		fragaprint("Not tracking brutus");
 		return;
 	}
 	n1 = 4 + level.brutus[level.brutus.size - 1];
 	n2 = 5 + level.brutus[level.brutus.size - 1];
 	n3 = 6 + level.brutus[level.brutus.size - 1];
-	level.players[0] iprintln("^5[^6Fraga^5]^7 Next potential brutus rounds: " + n1 + ", " + n2 + ", " + n3);
+	fragaprint("Next potential brutus rounds: " + n1 + ", " + n2 + ", " + n3);
 }
 
 next_avogadro()
 {
 	if(!isdefined(level.avogadros))
 	{
-		level.players[0] iprintln("^5[^6Fraga^5]^7 Not tracking avogadro");
+		fragaprint("Not tracking avogadro");
 		return;
 	}
 	n1 = 3 + level.avogadros[level.avogadros.size - 1];
 	n2 = 4 + level.avogadros[level.avogadros.size - 1];
 	n3 = 5 + level.avogadros[level.avogadros.size - 1];
-	level.players[0] iprintln("^5[^6Fraga^5]^7 Next potential avogadro rounds: " + n1 + ", " + n2 + ", " + n3);
+	fragaprint("Next potential avogadro rounds: " + n1 + ", " + n2 + ", " + n3);
 }
 
 next_panzers()
 {
 	if(!isdefined(level.panzers))
 	{
-		level.players[0] iprintln("^5[^6Fraga^5]^7 Not tracking panzers");
+		fragaprint("Not tracking panzers");
 		return;
 	}
 	if(level.panzers.size == 0)
 	{
-		level.players[0] iprintln("^5[^6Fraga^5]^7 Next panzer round: 8");
+		fragaprint("Next panzer round: 8");
 		return;
 	}
 	if(level.players.size == 1)
@@ -186,24 +186,24 @@ next_panzers()
 		n1 = 4 + level.panzers[level.panzers.size - 1];
 		n2 = 5 + level.panzers[level.panzers.size - 1];
 		n3 = 6 + level.panzers[level.panzers.size - 1];
-		level.players[0] iprintln("^5[^6Fraga^5]^7 Next potential panzer rounds: " + n1 + ", " + n2);
+		fragaprint("Next potential panzer rounds: " + n1 + ", " + n2);
 		return;
 	}
 	
-	level.players[0] iprintln("^5[^6Fraga^5]^7 Next panzer round: " + level.panzers[level.panzers.size - 1] + 3);
+	fragaprint("Next panzer round: " + level.panzers[level.panzers.size - 1] + 3);
 }
 
 next_templars()
 {
 	if(!isdefined(level.templars))
 	{
-		level.players[0] iprintln("^5[^6Fraga^5]^7 Not tracking templars");
+		fragaprint("Not tracking templars");
 		return;
 	}
 	n1 = 3 + level.templars[level.templars.size - 1];
 	n2 = 4 + level.templars[level.templars.size - 1];
 	n3 = 5 + level.templars[level.templars.size - 1];
-	level.players[0] iprintln("^5[^6Fraga^5]^7 Next potential templar rounds: " + n1 + ", " + n2 + ", " + n3);
+	fragaprint("Next potential templar rounds: " + n1 + ", " + n2 + ", " + n3);
 }
 
 print_drops_spawned(round)
@@ -214,9 +214,9 @@ print_drops_spawned(round)
 		rnd = string_to_float(round);
 	
 	if(rnd > level.round_number)
-		level.players[0] iprintln("^5[^6Fraga^5]^7 You haven't reached round " + rnd + " yet.");
+		fragaprint("You haven't reached round " + rnd + " yet.");
 	else
-		level.players[0] iprintln("^5[^6Fraga^5]^7 Drops spawned on round " + rnd + ": " + level.drops_spawned[rnd]);
+		fragaprint("Drops spawned on round " + rnd + ": " + level.drops_spawned[rnd]);
 }
 
 drops_spawned()
@@ -238,13 +238,13 @@ print_zombies_at_round(round)
 		rnd = level.round_number;
 	else
 		rnd = string_to_float(round);
-	level.players[0] iprintln("^5[^6Fraga^5]^7 Zombies at round " + rnd + ": " + zombies_at_round(rnd) + ", horedes: " + zombies_at_round(rnd) / 24);
+	fragaprint("Zombies at round " + rnd + ": " + zombies_at_round(rnd) + ", horedes: " + zombies_at_round(rnd) / 24);
 }
 
 print_sph(round)
 {
 	rnd = string_to_float(round);
-	level.players[0] iprintln("^5[^6Fraga^5]^7 SPH on round " + rnd + ": " + level.round_times[rnd - 1] / (zombies_at_round(rnd) / 24));
+	fragaprint("SPH on round " + rnd + ": " + level.round_times[rnd - 1] / (zombies_at_round(rnd) / 24));
 }
 
 zombies_at_round(round)
@@ -284,12 +284,12 @@ print_round_times(round)
 	if(rnd <= level.round_number)
 	{
 		if(rnd == level.round_number)
-			level.players[0] iprintln("^5[^6Fraga^5]^7 Round time: " + int_to_time(int(gettime() / 1000) - level.round_start_time / 1000));
+			fragaprint("Round time: " + int_to_time(int(gettime() / 1000) - level.round_start_time / 1000));
 		else
-			level.players[0] iprintln("^5[^6Fraga^5]^7 Round time on " + rnd + ": " + int_to_time(level.round_times[rnd - 1]));
+			fragaprint("Round time on " + rnd + ": " + int_to_time(level.round_times[rnd - 1]));
 	}
 	else
-		level.players[0] iprintln("^5[^6Fraga^5]^7 You havent reach round " + rnd + " yet.");
+		fragaprint("You havent reach round " + rnd + " yet.");
 }
 
 track_round_times()
@@ -418,7 +418,7 @@ print_times()
 	rnd = level.round_number;
 	if(rnd < 10)
 	{
-		level.players[0] iprintln("^5[^6Fraga^5]^7 Times:");
+		fragaprint("Times:");
 		print_times_aux(1, 2);
 		print_times_aux(3, 4);
 		print_times_aux(5, 6);
@@ -428,14 +428,14 @@ print_times()
 	}
 	if(rnd < 20)
 	{
-		level.players[0] iprintln("^5[^6Fraga^5]^7 Times:");
+		fragaprint("Times:");
 		print_times_aux(5, 10);
 		print_times_aux(15);
 		return;
 	}
 	if(rnd < 30)
 	{
-		level.players[0] iprintln("^5[^6Fraga^5]^7 Times:");
+		fragaprint("Times:");
 		print_times_aux(5, 10);
 		print_times_aux(15, 20);
 		print_times_aux(25);
@@ -443,7 +443,7 @@ print_times()
 	}
 	if(rnd < 50)
 	{
-		level.players[0] iprintln("^5[^6Fraga^5]^7 Times:");
+		fragaprint("Times:");
 		print_times_aux(5, 10);
 		print_times_aux(15, 20);
 		print_times_aux(25, 30);
@@ -451,7 +451,7 @@ print_times()
 	}
 	if(rnd < 70)
 	{
-		level.players[0] iprintln("^5[^6Fraga^5]^7 Times:");
+		fragaprint("Times:");
 		print_times_aux(10, 20);
 		print_times_aux(30, 40);
 		print_times_aux(50);
@@ -459,7 +459,7 @@ print_times()
 	}
 	if(rnd < 100)
 	{
-		level.players[0] iprintln("^5[^6Fraga^5]^7 Times:");
+		fragaprint("Times:");
 		print_times_aux(10, 20);
 		print_times_aux(30, 40);
 		print_times_aux(50, 60);
@@ -468,7 +468,7 @@ print_times()
 	}
 	if(rnd < 125)
 	{
-		level.players[0] iprintln("^5[^6Fraga^5]^7 Times:");
+		fragaprint("Times:");
 		print_times_aux(30, 50);
 		print_times_aux(70, 80);
 		print_times_aux(90, 100);
@@ -476,7 +476,7 @@ print_times()
 	}
 	if(rnd < 150)
 	{
-		level.players[0] iprintln("^5[^6Fraga^5]^7 Times:");
+		fragaprint("Times:");
 		print_times_aux(30, 50);
 		print_times_aux(70, 100);
 		print_times_aux(110, 120);
@@ -485,7 +485,7 @@ print_times()
 	}
 	if(rnd < 200)
 	{
-		level.players[0] iprintln("^5[^6Fraga^5]^7 Times:");
+		fragaprint("Times:");
 		print_times_aux(100, 110);
 		print_times_aux(120, 130);
 		print_times_aux(140, 150);
@@ -493,7 +493,7 @@ print_times()
 	}
 	if(rnd < 255)
 	{
-		level.players[0] iprintln("^5[^6Fraga^5]^7 Times:");
+		fragaprint("Times:");
 		print_times_aux(100, 125);
 		print_times_aux(150, 160);
 		print_times_aux(170, 180);
@@ -506,9 +506,9 @@ print_times_aux(r1, r2)
 {
 	wait 0.5;
 	if(isdefined(r2) && isdefined(level.round_total_time[r2]))
-		level.players[0] iprintln("["+(r1)+"]: " + int_to_time(level.round_total_time[r1-1]) + "  "  + "["+(r2)+"]: " + int_to_time(level.round_total_time[r2-1]));
+		fragaprint("["+(r1)+"]: " + int_to_time(level.round_total_time[r1-1]) + "  "  + "["+(r2)+"]: " + int_to_time(level.round_total_time[r2-1]));
 	else
-		level.players[0] iprintln("["+(r1)+"]: " + int_to_time(level.round_total_time[r1-1]));
+		fragaprint("["+(r1)+"]: " + int_to_time(level.round_total_time[r1-1]));
 }
 
 total_zombie_count(iz, dr)
@@ -526,9 +526,9 @@ total_zombie_count(iz, dr)
 			for(i = iz; i <= dr; i++)
 				zm+= zombies_at_round(i);
 	if(!isdefined(dr))
-		level.players[0] iprintln("^5[^6Fraga^5]^7 Zombies from round 1 to round " + iz + ": " + zm);
+		fragaprint("Zombies from round 1 to round " + iz + ": " + zm);
 	else
-		level.players[0] iprintln("^5[^6Fraga^5]^7 Zombies from round " + iz + " to round " + dr + ": " + zm);
+		fragaprint("Zombies from round " + iz + " to round " + dr + ": " + zm);
 }
 
 rounders()
@@ -544,7 +544,7 @@ rounders()
 			if(diff == 6) sixrounderss++;
 		}
 		avg = (fourrounderss * 4 + fiverounders * 5 + sixrounderss * 6) / (fourrounderss + fiverounders + sixrounderss);
-		level.players[0] iprintln("^5[^6Fraga^5]^7 Brutus rounders: 4 [" + fourrounderss + "] 5 [" + fiverounders + "] 6 [" + sixrounderss + "] avg [" + avg + "]" );
+		fragaprint("Brutus rounders: 4 [" + fourrounderss + "] 5 [" + fiverounders + "] 6 [" + sixrounderss + "] avg [" + avg + "]" );
 	}
 	if(isdierise())
 	{
@@ -555,7 +555,7 @@ rounders()
 			if(diff == 5) fiverounders++;
 		}
 		avg = (fourrounderss * 4 + fiverounders * 5) / (fourrounderss + fiverounders);
-		level.players[0] iprintln("^5[^6Fraga^5]^7 Leaper rounders: 4 [" + fourrounderss + "] 5 [" + fiverounders + "] 6 [" + sixrounderss + "] avg [" + avg + "]" );
+		fragaprint("Leaper rounders: 4 [" + fourrounderss + "] 5 [" + fiverounders + "] 6 [" + sixrounderss + "] avg [" + avg + "]" );
 	}
 	if(isorigins())
 	{
@@ -567,7 +567,7 @@ rounders()
 			if(diff == 5) fiverounders++;
 		}
 		avg = (threerounders * 3 + fourrounderss * 4 + fiverounders * 5) / (threerounders + fourrounderss + fiverounders);
-		level.players[0] iprintln("^5[^6Fraga^5]^7 Templar rounders: 3 [" + threerounders + "] 4 [" + fourrounderss + "] 5 [" + fiverounders + "] avg [" + avg + "]" );
+		fragaprint("Templar rounders: 3 [" + threerounders + "] 4 [" + fourrounderss + "] 5 [" + fiverounders + "] avg [" + avg + "]" );
 
 		threerounders = 0; fourrounderss = 0; fiverounders = 0; sixrounderss = 0;
 		for(i = 0; i < level.templars.size - 1; i++)
@@ -578,7 +578,7 @@ rounders()
 			if(diff == 4) fourrounderss++;
 		}
 		avg = (fourrounderss * 4 + fiverounders * 5 + sixrounderss * 6) / (fourrounderss + fiverounders + sixrounderss);
-		level.players[0] iprintln("^5[^6Fraga^5]^7 Panzer rounders: 4 [" + fourrounderss + "] 5 [" + fiverounders + "] 6 [" + sixrounderss + "] avg [" + avg + "]" );
+		fragaprint("Panzer rounders: 4 [" + fourrounderss + "] 5 [" + fiverounders + "] 6 [" + sixrounderss + "] avg [" + avg + "]" );
 	}
 }
 
@@ -586,7 +586,7 @@ panzers()
 {
 	if(!isdefined(level.panzers))
 	{
-		level.players[0] IPrintLn("^5[^6Fraga^5]^7 Not Tracking Panzers");
+		fragaprint("Not Tracking Panzers");
 		return;
 	}
 	msg = "^5[^6Fraga^5]^7 Panzer rounds: " + level.panzers[0];
@@ -595,7 +595,7 @@ panzers()
 		for(i = 1; i < level.panzers.size; i++)
 			if(isdefined(level.panzers[i]))
 				msg += (", " + level.panzers[i]);
-		level.players[0] IPrintLn(msg);
+		fragaprint(msg);
 		return;
 	}
 	if(level.panzers.size < 20)
@@ -608,8 +608,8 @@ panzers()
 				msg2 += (level.panzers[i] + ", ");
 			else if(isdefined(level.panzers[i]))
 				msg2 += (level.panzers[i]);
-		level.players[0] IPrintLn(msg);
-		level.players[0] IPrintLn(msg2);
+		fragaprint(msg);
+		fragaprint(msg2);
 		return;
 	}
 	if(level.panzers.size < 30)
@@ -625,9 +625,9 @@ panzers()
 				msg3 += (level.panzers[i] + ", ");
 			else if(isdefined(level.panzers[i]))
 				msg3 += (level.panzers[i]);
-		level.players[0] IPrintLn(msg);
-		level.players[0] IPrintLn(msg2);
-		level.players[0] IPrintLn(msg3);
+		fragaprint(msg);
+		fragaprint(msg2);
+		fragaprint(msg3);
 		return;
 	}
 	if(level.panzers.size < 40)
@@ -645,10 +645,10 @@ panzers()
 				msg4 += (level.panzers[i] + ", ");
 			else if(isdefined(level.panzers[i]))
 				msg4 += (level.panzers[i]);
-		level.players[0] IPrintLn(msg);
-		level.players[0] IPrintLn(msg2);
-		level.players[0] IPrintLn(msg3);
-		level.players[0] IPrintLn(msg4);
+		fragaprint(msg);
+		fragaprint(msg2);
+		fragaprint(msg3);
+		fragaprint(msg4);
 		return;
 	}
 }
@@ -657,7 +657,7 @@ templars()
 {
 	if(!isdefined(level.templars))
 	{
-		level.players[0] IPrintLn("^5[^6Fraga^5]^7 Not Tracking templars");
+		fragaprint("Not Tracking templars");
 		return;
 	}
 	msg = "^5[^6Fraga^5]^7 Templar rounds: " + level.templars[0];
@@ -666,7 +666,7 @@ templars()
 		for(i = 1; i < level.templars.size; i++)
 			if(isdefined(level.templars[i]))
 				msg += (", " + level.templars[i]);
-		level.players[0] IPrintLn(msg);
+		fragaprint(msg);
 		return;
 	}
 	if(level.templars.size < 20)
@@ -679,8 +679,8 @@ templars()
 				msg2 += (level.templars[i] + ", ");
 			else if(isdefined(level.templars[i]))
 				msg2 += (level.templars[i]);
-		level.players[0] IPrintLn(msg);
-		level.players[0] IPrintLn(msg2);
+		fragaprint(msg);
+		fragaprint(msg2);
 		return;
 	}
 	if(level.templars.size < 30)
@@ -696,9 +696,9 @@ templars()
 				msg3 += (level.templars[i] + ", ");
 			else if(isdefined(level.templars[i]))
 				msg3 += (level.templars[i]);
-		level.players[0] IPrintLn(msg);
-		level.players[0] IPrintLn(msg2);
-		level.players[0] IPrintLn(msg3);
+		fragaprint(msg);
+		fragaprint(msg2);
+		fragaprint(msg3);
 		return;
 	}
 	if(level.templars.size < 40)
@@ -716,10 +716,10 @@ templars()
 				msg4 += (level.templars[i] + ", ");
 			else if(isdefined(level.templars[i]))
 				msg4 += (level.templars[i]);
-		level.players[0] IPrintLn(msg);
-		level.players[0] IPrintLn(msg2);
-		level.players[0] IPrintLn(msg3);
-		level.players[0] IPrintLn(msg4);
+		fragaprint(msg);
+		fragaprint(msg2);
+		fragaprint(msg3);
+		fragaprint(msg4);
 		return;
 	}
 }
@@ -728,7 +728,7 @@ leapers()
 {
 	if(!isdefined(level.leapers))
 	{
-		level.players[0] IPrintLn("^5[^6Fraga^5]^7 Not Tracking Leapers");
+		fragaprint("Not Tracking Leapers");
 		return;
 	}
 	msg = "^5[^6Fraga^5]^7 Leaper rounds: " + level.leapers[0];
@@ -737,7 +737,7 @@ leapers()
 		for(i = 1; i < level.leapers.size; i++)
 			if(isdefined(level.leapers[i]))
 				msg += (", " + level.leapers[i]);
-		level.players[0] IPrintLn(msg);
+		fragaprint(msg);
 		return;
 	}
 	if(level.leapers.size < 20)
@@ -750,8 +750,8 @@ leapers()
 				msg2 += (level.leapers[i] + ", ");
 			else if(isdefined(level.leapers[i]))
 				msg2 += (level.leapers[i]);
-		level.players[0] IPrintLn(msg);
-		level.players[0] IPrintLn(msg2);
+		fragaprint(msg);
+		fragaprint(msg2);
 		return;
 	}
 	if(level.leapers.size < 30)
@@ -767,9 +767,9 @@ leapers()
 				msg3 += (level.leapers[i] + ", ");
 			else if(isdefined(level.leapers[i]))
 				msg3 += (level.leapers[i]);
-		level.players[0] IPrintLn(msg);
-		level.players[0] IPrintLn(msg2);
-		level.players[0] IPrintLn(msg3);
+		fragaprint(msg);
+		fragaprint(msg2);
+		fragaprint(msg3);
 		return;
 	}
 	if(level.leapers.size < 40)
@@ -787,10 +787,10 @@ leapers()
 				msg4 += (level.leapers[i] + ", ");
 			else if(isdefined(level.leapers[i]))
 				msg4 += (level.leapers[i]);
-		level.players[0] IPrintLn(msg);
-		level.players[0] IPrintLn(msg2);
-		level.players[0] IPrintLn(msg3);
-		level.players[0] IPrintLn(msg4);
+		fragaprint(msg);
+		fragaprint(msg2);
+		fragaprint(msg3);
+		fragaprint(msg4);
 		return;
 	}
 }
@@ -799,7 +799,7 @@ brutus()
 {
 	if(!isdefined(level.brutus))
 	{
-		level.players[0] IPrintLn("^5[^6Fraga^5]^7 Not Tracking Brutus");
+		fragaprint("Not Tracking Brutus");
 		return;
 	}
 	msg = "^5[^6Fraga^5]^7 Brutus rounds: " + level.brutus[0];
@@ -808,7 +808,7 @@ brutus()
 		for(i = 1; i < level.brutus.size; i++)
 			if(isdefined(level.brutus[i]))
 				msg += (", " + level.brutus[i]);
-		level.players[0] IPrintLn(msg);
+		fragaprint(msg);
 		return;
 	}
 	if(level.brutus.size < 20)
@@ -821,8 +821,8 @@ brutus()
 				msg2 += (level.brutus[i] + ", ");
 			else if(isdefined(level.brutus[i]))
 				msg2 += (level.brutus[i]);
-		level.players[0] IPrintLn(msg);
-		level.players[0] IPrintLn(msg2);
+		fragaprint(msg);
+		fragaprint(msg2);
 		return;
 	}
 	if(level.brutus.size < 30)
@@ -838,9 +838,9 @@ brutus()
 				msg3 += (level.brutus[i] + ", ");
 			else if(isdefined(level.brutus[i]))
 				msg3 += (level.brutus[i]);
-		level.players[0] IPrintLn(msg);
-		level.players[0] IPrintLn(msg2);
-		level.players[0] IPrintLn(msg3);
+		fragaprint(msg);
+		fragaprint(msg2);
+		fragaprint(msg3);
 		return;
 	}
 	if(level.brutus.size < 40)
@@ -858,10 +858,10 @@ brutus()
 				msg4 += (level.brutus[i] + ", ");
 			else if(isdefined(level.brutus[i]))
 				msg4 += (level.brutus[i]);
-		level.players[0] IPrintLn(msg);
-		level.players[0] IPrintLn(msg2);
-		level.players[0] IPrintLn(msg3);
-		level.players[0] IPrintLn(msg4);
+		fragaprint(msg);
+		fragaprint(msg2);
+		fragaprint(msg3);
+		fragaprint(msg4);
 		return;
 	}
 }
@@ -870,7 +870,7 @@ avogadros()
 {
 	if(!isdefined(level.avogadros))
 	{
-		level.players[0] IPrintLn("^5[^6Fraga^5]^7 Not Tracking Avogadros");
+		fragaprint("Not Tracking Avogadros");
 		return;
 	}
 	msg = "^5[^6Fraga^5]^7 Avogadro rounds: " + level.avogadros[0];
@@ -879,7 +879,7 @@ avogadros()
 		for(i = 1; i < level.avogadros.size; i++)
 			if(isdefined(level.avogadros[i]))
 				msg += (", " + level.avogadros[i]);
-		level.players[0] IPrintLn(msg);
+		fragaprint(msg);
 		return;
 	}
 	if(level.avogadros.size < 20)
@@ -892,8 +892,8 @@ avogadros()
 				msg2 += (level.avogadros[i] + ", ");
 			else if(isdefined(level.avogadros[i]))
 				msg2 += (level.avogadros[i]);
-		level.players[0] IPrintLn(msg);
-		level.players[0] IPrintLn(msg2);
+		fragaprint(msg);
+		fragaprint(msg2);
 		return;
 	}
 	if(level.avogadros.size < 30)
@@ -909,9 +909,9 @@ avogadros()
 				msg3 += (level.avogadros[i] + ", ");
 			else if(isdefined(level.avogadros[i]))
 				msg3 += (level.avogadros[i]);
-		level.players[0] IPrintLn(msg);
-		level.players[0] IPrintLn(msg2);
-		level.players[0] IPrintLn(msg3);
+		fragaprint(msg);
+		fragaprint(msg2);
+		fragaprint(msg3);
 		return;
 	}
 	if(level.avogadros.size < 40)
@@ -929,10 +929,10 @@ avogadros()
 				msg4 += (level.avogadros[i] + ", ");
 			else if(isdefined(level.avogadros[i]))
 				msg4 += (level.avogadros[i]);
-		level.players[0] IPrintLn(msg);
-		level.players[0] IPrintLn(msg2);
-		level.players[0] IPrintLn(msg3);
-		level.players[0] IPrintLn(msg4);
+		fragaprint(msg);
+		fragaprint(msg2);
+		fragaprint(msg3);
+		fragaprint(msg4);
 		return;
 	}
 }
@@ -942,13 +942,19 @@ camo(str)
 	switch(str)
 	{
 		// 1 to 38 are unusable on zombies
-		case "origins": if(isorigins()) {setDvar("papcamo", 41); IPrintLn("^5[^6Fraga^5]^7 Pap camo changed to ice crystal"); } else level.players[0] iprintln("^5[^6Fraga^5]^7 Unable to switch pap camo"); break;
-		case "mob": if(isorigins() || isburied() || ismob()) {setDvar("papcamo", 40); level.players[0] IPrintLn("^5[^6Fraga^5]^7 Pap camo changed to burning embers"); } else level.players[0] iprintln("^5[^6Fraga^5]^7 Unable to switch pap camo"); break;
-		case "greenrun": setDvar("papcamo", 39); level.players[0] IPrintLn("^5[^6Fraga^5]^7 Pap camo changed to greenrun"); break;
-		case "none": setDvar("papcamo", 1); level.players[0] IPrintLn("^5[^6Fraga^5]^7 Pap camo removed"); break;
-		case "camo2": setDvar("papcamo", 42); level.players[0] IPrintLn("Pap camo changed to camo2"); break;
-		case "white": setDvar("papcamo", 43); level.players[0] IPrintLn("Pap camo changed to white"); break;
-		case "weird": setDvar("papcamo", 43); level.players[0] IPrintLn("Pap camo changed to weird"); break;
+		case "origins": if(isorigins()) {setDvar("papcamo", 41); IPrintLn("^5[^6Fraga^5]^7 Pap camo changed to ice crystal"); } else fragaprint("Unable to switch pap camo"); break;
+		case "mob": if(isorigins() || isburied() || ismob()) {setDvar("papcamo", 40); fragaprint("Pap camo changed to burning embers"); } else fragaprint("Unable to switch pap camo"); break;
+		case "greenrun": setDvar("papcamo", 39); fragaprint("Pap camo changed to greenrun"); break;
+		case "none": setDvar("papcamo", 1); fragaprint("Pap camo removed"); break;
+		case "camo2": setDvar("papcamo", 42); fragaprint("Pap camo changed to camo2"); break;
+		case "white": setDvar("papcamo", 43); fragaprint("Pap camo changed to white"); break;
+		case "weird": setDvar("papcamo", 43); fragaprint("Pap camo changed to weird"); break;
 		default: break;
 	}
+}
+
+fragaprint(message)
+{
+	foreach(player in level.players)
+		player IPrintLn("^5[^6Fraga^5]^7 " + message);
 }
