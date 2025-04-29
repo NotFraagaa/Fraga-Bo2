@@ -18,7 +18,6 @@ init()
 	player thread checkpaplocation();
 	level.nextperkindex = -1;
 	replacefunc(maps\mp\zm_nuked_perks::bring_random_perk, ::perk_order);
-    replacefunc(maps\mp\zombies\_zm_weapons::get_pack_a_punch_weapon_options, ::pap_camo);
 }
 
 connected()

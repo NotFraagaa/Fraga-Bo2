@@ -49,21 +49,25 @@ fraga_connected()
 	self endon("disconnect");
 	self waittill("spawned_player");
 
-	self thread timer();
-	self thread timerlocation();
+    if(!isdefined(self.has_timers))
+    {   // No duplicates after bleeding out on coop
+        self thread timer();
+        self thread timerlocation();
+        self.has_timers = true;
+    }
 	self useservervisionset(true);
 	self setvisionsetforplayer(GetDvar( "mapname" ), 1.0 );
 	self thread rotate_skydome();
 	self thread graphic_tweaks();
 	self thread nightmode();
     self thread setFragaLanguage();
-    self thread fixrotationangle();
+    if(self == level.players[0]) self thread fixrotationangle();
     self iprintln("^6Fraga^5V15  ^3Active");
     if(getDvar("language") == "french") self iprintln("^1Spanish ^3Ruleset  ^1Active");
 }
+
 setDvars()
 {
-    createDvar("papcamo", 40);
     setdvar("sv_cheats", 0);
     setdvar("player_strafeSpeedScale", 1);
     setdvar("player_backSpeedScale", 1);

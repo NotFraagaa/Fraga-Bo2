@@ -20,6 +20,7 @@ init()
 		{
 			level waittill( "connected", player );
 			player thread connected();
+    		setlocalprofileint( "cg_mature", 1 );
 		}
 	}
 }

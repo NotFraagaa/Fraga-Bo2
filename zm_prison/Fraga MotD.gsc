@@ -24,7 +24,6 @@ init()
 	replaceFunc( maps\mp\zm_alcatraz_sq::setup_master_key, ::setup_master_key );
     level thread connected();
 	level thread boxlocation();
-    replacefunc(maps\mp\zombies\_zm_weapons::get_pack_a_punch_weapon_options, ::pap_camo);
 }
 
 connected()
@@ -32,7 +31,6 @@ connected()
 	while(true)
 	{
 		level waittill("connecting", player);
-		player thread BrutusTracker();
 		if(getDvarInt("character") != 0) level.givecustomcharacters = ::set_character_option;
 		player thread trap_timer();
 		player thread givetomahawk();

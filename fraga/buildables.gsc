@@ -59,7 +59,7 @@ buildable_hud()
     level.springpad_hud.horzalign = "user_left";
     level.springpad_hud.vertalign = "user_top";
     level.springpad_hud.aligny = "top";
-    level.springpad_hud setvalue( 0 );
+    level.springpad_hud setvalue(0);
 	level.subwoofer_hud.hidewheninmenu = true;
     level.subwoofer_hud = createserverfontstring( "objective", 1.3 );
     level.subwoofer_hud.y = 10;
@@ -69,7 +69,7 @@ buildable_hud()
     level.subwoofer_hud.horzalign = "user_left";
     level.subwoofer_hud.vertalign = "user_top";
     level.subwoofer_hud.aligny = "top";
-    level.subwoofer_hud setvalue( 0 );
+    level.subwoofer_hud setvalue(0);
 	level.turbine_hud.hidewheninmenu = true;
     level.turbine_hud = createserverfontstring( "objective", 1.3 );
     level.turbine_hud.y = 20;
@@ -79,7 +79,7 @@ buildable_hud()
     level.turbine_hud.horzalign = "user_left";
     level.turbine_hud.vertalign = "user_top";
     level.turbine_hud.aligny = "top";
-    level.turbine_hud setvalue( 0 );
+    level.turbine_hud setvalue(0);
     level.turbine_hud.alpha = 0;
     level.subwoofer_hud.alpha = 0;
     level.springpad_hud.alpha = 0;

@@ -19,7 +19,6 @@ init()
     if(istranzit()) level thread connected();
 	if(!istranzit()) level thread raygun_counter();
 	if(istown()) level thread boxlocation();
-	if(istown() || istranzit()) replacefunc(maps\mp\zombies\_zm_weapons::get_pack_a_punch_weapon_options, ::pap_camo);
 }
 
 connected()

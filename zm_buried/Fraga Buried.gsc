@@ -28,7 +28,7 @@ connected()
 	while(true)
 	{
 		level waittill("connecting", player);
-		player thread onconnect();
+		if(!isdefined(player.watching_stats)) player thread onconnect();
 		player thread bank();
 		player thread award_permaperks_safe();
 		if(getDvarInt("character") != 0) level.givecustomcharacters = ::set_character_option;
@@ -40,7 +40,8 @@ connected()
 onconnect()
 {
 	self.initial_stats = array();
-	self thread watch_stat( "springpad_zm", array( "zm_highrise", "zm_buried" ) );
-	self thread watch_stat( "turbine" );
-	self thread watch_stat( "subwoofer_zm" );
+	self thread watch_stat("springpad_zm", array("zm_highrise","zm_buried"));
+	self thread watch_stat("turbine");
+	self thread watch_stat("subwoofer_zm");
+	self.watching_stats = true;
 }

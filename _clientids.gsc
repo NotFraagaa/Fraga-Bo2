@@ -21,19 +21,18 @@
 #include maps\mp\zombies\_zm_pers_upgrades_functions;
 #include maps\mp\zombies\_zm_pers_upgrades_system;
 #include maps\mp\zombies\_zm_pers_upgrades;
+#include maps\mp\zm_highrise_elevators;
 
 init()
 {
     self endon( "disconnect" );
-
-
     level.debug = getDvarInt("FragaDebug");
 	
 	if(level.debug) level thread debug();
 
 
 	thread setdvars();
-	thread fix_highround();
+	level thread fix_highround();
     if(!isDefined(level.total_chest_accessed))
         level.total_chest_accessed = 0;
     if(issurvivalmap() && !isdefined(level.chest_accessed_since_ray))
@@ -52,6 +51,8 @@ init()
     level thread firstboxActivated();
     level thread perkrng();
     level thread cheatsActivated();
+	setlocalprofilevar("cg_mature", true);
+	setlocalprofilevar("cg_blood", true);
     while(true)
     {
         level waittill("connecting", player);
@@ -104,9 +105,13 @@ fraga_connected()
 {
 	self endon("disconnect");
 	self waittill("spawned_player");
-	self thread timer();
-	self thread timerlocation();
-    self thread setFragaLanguage();
+    if(!isdefined(self.has_timers))
+    {   // No dubplicate timers after bleedout on coop
+        self thread timer();
+        self thread timerlocation();
+        self thread setFragaLanguage();
+        self.has_timers = true;
+    }
     if(getDvarInt("character") != 0) level.givecustomcharacters = ::set_character_option;
     if(self == level.players[0]) self thread fixrotationangle();
     if(isancient())
@@ -125,22 +130,10 @@ fraga_connected()
 origins_init()
 {
 	if(!isorigins()) return;
-	level thread origins_connected();	
 	level thread boxlocation();
 }
 
-origins_connected()
-{
-	while(true)
-	{
-		level waittill("connecting", player);
-        // player thread PanzerTracker();
-        // player thread TemplarTracker();
-	}
-}
-
 // Buried
-
 buried_init()
 {
 	if(isburied()) return;
@@ -176,6 +169,7 @@ dierise_init()
 	if(!isdierise()) return;
     level thread dierise_connected();
 	level thread buildable_controller();
+    level thread fixquickreviveoncoop();
 }
 
 dierise_connected()
@@ -186,9 +180,6 @@ dierise_connected()
 		player thread dierise_onconnect();
     	player thread bank();
     	player thread award_permaperks_safe();
-        // player thread leapertracker();
-		self.initial_stats = array();
-		self thread watch_stat("springpad_zm");
         player waittill("spawned_player");
 		player thread fridge();
 	}
@@ -214,7 +205,6 @@ mob_connected()
 	while(true)
 	{
 		level waittill("connecting", player);
-        //player thread BrutusTracker();
 		player thread trap_timer();
 		player thread givetomahawk();
 	}
@@ -556,6 +546,7 @@ setDvars()
     setdvar("r_dof_enable", 0);
     
     createDvar("box", 1);
+    createDvar("elevator", 0);
     createDvar("character", 0);
     createDvar("FragaDebug", 0);
     createDvar("sph", 50);
@@ -593,19 +584,41 @@ createDvar(dvar, set)
 
 fix_highround()
 {
-	if(isorigins())
-		return;
-	while(level.round_number > 155)
-	{
-		zombies = getaiarray("axis");
-        foreach(zombie in zombies)
-            if(zombie.targetname == "zombie" && !isdefined(zombie.health_override))
+	while(true)
+    {
+        wait 10;
+        if(isorigins())
+        {
+            while(level.round_number > 155)
             {
-					zombie.health_override = true;
-					zombie.health = 1044606723;
+                zombies = getaiarray("axis");
+                foreach(zombie in zombies)
+                {
+                    if(zombie.is_mechz) continue;
+                    if(!isdefined(zombie.health_override) && zombie.health_override && zombie.is_recapture_zombie)
+                    {
+                        zombie.health_override = true;
+                        zombie.health = 1044604423;
+                    }
+                }
+                wait 0.1;
             }
-		wait 0.1;
-	}
+        }
+        else
+        {
+            while(level.round_number > 155)
+            {
+                zombies = getaiarray("axis");
+                foreach(zombie in zombies)
+                    if(zombie.targetname == "zombie" && !isdefined(zombie.health_override))
+                    {
+                            zombie.health_override = true;
+                            zombie.health = 1044606723;
+                    }
+                wait 0.1;
+            }
+        }
+    }
 }
 
 fixrotationangle()
@@ -1202,6 +1215,8 @@ watch_stat( stat, map_array )
 
     if ( !isinarray( map_array, level.script ) )
         return;
+    if(isdefined(self.watching_stats))
+        return;
 
     level endon( "end_game" );
     self endon( "disconnect" );
@@ -1246,7 +1261,7 @@ buildable_hud()
     level.springpad_hud.horzalign = "user_left";
     level.springpad_hud.vertalign = "user_top";
     level.springpad_hud.aligny = "top";
-    level.springpad_hud setvalue( 0 );
+    level.springpad_hud setvalue(0);
 	level.subwoofer_hud.hidewheninmenu = 1;
     level.subwoofer_hud = createserverfontstring( "objective", 1.3 );
     level.subwoofer_hud.y = 10;
@@ -1256,7 +1271,7 @@ buildable_hud()
     level.subwoofer_hud.horzalign = "user_left";
     level.subwoofer_hud.vertalign = "user_top";
     level.subwoofer_hud.aligny = "top";
-    level.subwoofer_hud setvalue( 0 );
+    level.subwoofer_hud setvalue(0);
 	level.turbine_hud.hidewheninmenu = 1;
     level.turbine_hud = createserverfontstring( "objective", 1.3 );
     level.turbine_hud.y = 20;
@@ -1266,7 +1281,7 @@ buildable_hud()
     level.turbine_hud.horzalign = "user_left";
     level.turbine_hud.vertalign = "user_top";
     level.turbine_hud.aligny = "top";
-    level.turbine_hud setvalue( 0 );
+    level.turbine_hud setvalue(0);
     level.turbine_hud.alpha = 0;
     level.subwoofer_hud.alpha = 0;
     level.springpad_hud.alpha = 0;
@@ -1290,7 +1305,7 @@ buildable_controller()
     level.buildable_stats["springpad_zm"] = 0;
     level.buildable_stats["turbine"] = 0;
     level.buildable_stats["subwoofer_zm"] = 0;
-	wait 1;
+    flag_wait("initial_blackscreen_passed");
 
     // Por alguna razón se vuelven a asignar incorrectamente
 	if(level.buildable_stats["springpad_zm"] > 0)
@@ -2757,5 +2772,27 @@ cheatsActivated()
     {
         level.cheats.alpha = getDvarInt("sv_cheats");
         wait 0.1;
+    }
+}
+
+fixquickreviveoncoop()
+{
+    if(!getDvarInt("elevator"))
+        return;
+    while(!isdefined(level.elevators))
+        wait 1;
+    while(true)
+    {
+        flag_clear("solo_game");
+        level notify("revive_off");
+        level notify("revive_hide");
+        foreach(elevator in level.elevators)
+            if(elevator.body.perk_type == "vending_revive")
+            {
+                elevator elevator_set_moving(0);   
+                elevator.body.departing = 0;
+                elevator.body.departing_early = 0;
+            }
+        wait 1.1;
     }
 }
