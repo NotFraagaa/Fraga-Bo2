@@ -5,18 +5,43 @@
 
 fix_highround()
 {
-	if(isorigins()) return;
-	while(level.round_number > 155)
-	{
-		zombies = getaiarray("axis");
-        foreach(zombie in zombies)
-            if(zombie.targetname == "zombie" && !isdefined(zombie.health_override))
+    while(level.round_number < 155)
+        wait 1;
+	while(true)
+    {
+        wait 10;
+        if(level.script == "zm_tomb")
+        {
+            while(true)
             {
-					zombie.health_override = true;
-					zombie.health = 1044606723;
+                zombies = getaiarray("axis");
+                foreach(zombie in zombies)
+                {
+                    if(zombie.is_mechz) continue;
+                    if(!isdefined(zombie.health_override) && zombie.health_override && zombie.is_recapture_zombie)
+                    {
+                        zombie.health_override = true;
+                        zombie.health = 1044606723;
+                    }
+                }
+                wait 0.1;
             }
-		wait 0.1;
-	}
+        }
+        else
+        {
+            while(true)
+            {
+                zombies = getaiarray("axis");
+                foreach(zombie in zombies)
+                    if(zombie.targetname == "zombie" && !isdefined(zombie.health_override))
+                    {
+                            zombie.health_override = true;
+                            zombie.health = 1044606723;
+                    }
+                wait 0.1;
+            }
+        }
+    }
 }
 
 roundcounter()
