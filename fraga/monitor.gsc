@@ -44,9 +44,41 @@ monitor_init()
 	if(istranzit()) level thread track_avogadros();
 }
 
-readchat() 
+readchat()
 {
     self endon("end_game");
+	
+	level.FragaCommands = [];
+	level.FragaCommands[level.FragaCommands.size] = "!fov";
+	level.FragaCommands[level.FragaCommands.size] = "!zc";
+	level.FragaCommands[level.FragaCommands.size] = "!tzc";
+	level.FragaCommands[level.FragaCommands.size] = "!ds";
+	level.FragaCommands[level.FragaCommands.size] = "!nightmode";
+	level.FragaCommands[level.FragaCommands.size] = "!perkrng";
+	level.FragaCommands[level.FragaCommands.size] = "!firstbox";
+	level.FragaCommands[level.FragaCommands.size] = "!traptimer";
+	level.FragaCommands[level.FragaCommands.size] = "!box";
+	level.FragaCommands[level.FragaCommands.size] = "!character";
+	level.FragaCommands[level.FragaCommands.size] = "!times";
+	level.FragaCommands[level.FragaCommands.size] = "!rt";
+	level.FragaCommands[level.FragaCommands.size] = "!t";
+	level.FragaCommands[level.FragaCommands.size] = "!timer";
+	level.FragaCommands[level.FragaCommands.size] = "!sph";
+	level.FragaCommands[level.FragaCommands.size] = "!test";
+	level.FragaCommands[level.FragaCommands.size] = "!debug";
+	level.FragaCommands[level.FragaCommands.size] = "!na";
+	level.FragaCommands[level.FragaCommands.size] = "!nb";
+	level.FragaCommands[level.FragaCommands.size] = "!nt";
+	level.FragaCommands[level.FragaCommands.size] = "!np";
+	level.FragaCommands[level.FragaCommands.size] = "!nl";
+	level.FragaCommands[level.FragaCommands.size] = "!rounders";
+	level.FragaCommands[level.FragaCommands.size] = "!panzers";
+	level.FragaCommands[level.FragaCommands.size] = "!templars";
+	level.FragaCommands[level.FragaCommands.size] = "!leapers";
+	level.FragaCommands[level.FragaCommands.size] = "!brutus";
+	level.FragaCommands[level.FragaCommands.size] = "!avogadros";
+	level.FragaCommands[level.FragaCommands.size] = "!papcamo";
+	level.FragaCommands[level.FragaCommands.size] = "!bs";
     while (true) 
     {
         level waittill("say", message, player);
@@ -55,6 +87,12 @@ readchat()
 
         if(msg[0][0] != "!")
             continue;
+
+		if(!in_array(msg[0], level.StratTesterCommands) && (!in_array(msg[0], level.FragaCommands)))
+		{
+			strattesterprint("Unknown command ^1" + message);
+			continue;
+		}
 
         switch(msg[0])
         {
@@ -97,7 +135,7 @@ readchat()
 			case "!papcamo": camo(msg[1]); break;
 
 			case "!bs": level.bs_fix = !level.bs_fix; break;
-			default: break;
+			default: if(!isdefined(level.strat_tester)) fragaprint("Unknown command ^1" + message); break;
         }
     }
 }
