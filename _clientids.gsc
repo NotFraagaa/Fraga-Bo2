@@ -180,6 +180,9 @@ dierise_connected()
 		player thread dierise_onconnect();
     	player thread bank();
     	player thread award_permaperks_safe();
+        // player thread leapertracker();
+		self.initial_stats = array();
+		self thread watch_stat("springpad_zm");
         player waittill("spawned_player");
 		player thread fridge();
 	}
