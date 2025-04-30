@@ -18,10 +18,15 @@ init()
 
 	replacefunc(maps\mp\zombies\_zm_weapons::get_pack_a_punch_weapon_options, ::origins_pap_camo);
 	replaceFunc(maps\mp\zombies\_zm_perk_random::get_weighted_random_perk, ::perkorderorigins);
+    replaceFunc(maps\mp\zm_tomb_tank::tank_push_player_off_edge, ::tank_push_player_off_edge);
 	
 	level thread boxlocation();
 }
 
+tank_push_player_off_edge()
+{
+    return;
+}
 
 connected()
 {
