@@ -90,7 +90,7 @@ readchat()
 
 		if(!in_array(msg[0], level.StratTesterCommands) && (!in_array(msg[0], level.FragaCommands)))
 		{
-			strattesterprint("Unknown command ^1" + message);
+			fragaprint("Unknown command ^1" + message);
 			continue;
 		}
 
@@ -995,4 +995,13 @@ fragaprint(message)
 {
 	foreach(player in level.players)
 		player IPrintLn("^5[^6Fraga^5]^7 " + message);
+}
+
+
+in_array(data, array)
+{
+	foreach(element in array)
+		if(element == data)
+			return true;
+	return false;
 }
