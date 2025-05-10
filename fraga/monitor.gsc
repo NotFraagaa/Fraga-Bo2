@@ -111,6 +111,7 @@ readconsole()
 		if(!in_array(msg[0], level.StratTesterCommands) && (!in_array(msg[0], level.FragaCommands)))
 		{
 			fragaprint("Unknown command ^1" + message);
+			setDvar("chat", "xxxxxxxxxxxx");
 			continue;
 		}
 		if(!isdefined(player))
