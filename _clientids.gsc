@@ -114,13 +114,13 @@ fraga_connected()
     if(self == level.players[0]) self thread fixrotationangle();
     if(isancient())
     {
-        if(!level.onlinegame) self iprintln("^6Fraga^5V15  ^3Active ^4[Ancient, Local mode]");
-        else self iprintln("^6Fraga^5V15  ^3Active ^4[Ancient]");
+        if(!level.onlinegame) self iprintln("^6Fraga^5V15  ^3Active ^5[Ancient, Local mode]");
+        else self iprintln("^6Fraga^5V15  ^3Active ^5[Ancient]");
     }
     else
     {
-        if(!level.onlinegame) self iprintln("^6Fraga^5V15  ^3Active ^4[Redacted, Local mode]");
-        else self iprintln("^6Fraga^5V15  ^3Active ^4[Redacted]");
+        if(!level.onlinegame) self iprintln("^6Fraga^5V15  ^3Active ^5[Redacted, Local mode]");
+        else self iprintln("^6Fraga^5V15  ^3Active ^5[Redacted]");
     }
     if(getDvar("language") == "french") self iprintln("^1Spanish ^3Ruleset  ^1Active");
 }
@@ -827,15 +827,15 @@ raygun_counter()
     {
         if(getDvarInt("avg"))
         {
-            level.total_mk2_display.label = &"^3Raygun MK2 AVG: ^4";
-            level.total_ray_display.label = &"^3Raygun AVG: ^4";
+            level.total_mk2_display.label = &"^3Raygun MK2 AVG: ^5";
+            level.total_ray_display.label = &"^3Raygun AVG: ^5";
             level.total_ray_display setvalue(level.ray_gun_obtained / level.total_ray);
             level.total_mk2_display setvalue(level.mk2_obtained / level.total_mk2);
         }
         else
         {
-            level.total_mk2_display.label = &"^3Total Raygun MK2: ^4";
-            level.total_ray_display.label = &"^3Total Raygun: ^4";
+            level.total_mk2_display.label = &"^3Total Raygun MK2: ^5";
+            level.total_ray_display.label = &"^3Total Raygun: ^5";
             level.total_ray_display setvalue(level.total_ray);
             level.total_mk2_display setvalue(level.total_mk2);
         }
@@ -1283,9 +1283,9 @@ buildable_hud()
     level.turbine_hud.alpha = 0;
     level.subwoofer_hud.alpha = 0;
     level.springpad_hud.alpha = 0;
-	level.springpad_hud.label = &"^3SPRINGPADS: ^4";
-	level.subwoofer_hud.label = &"^3RESONATORS: ^4";
-	level.turbine_hud.label = &"^3TURBINES: ^4";
+	level.springpad_hud.label = &"^3SPRINGPADS: ^5";
+	level.subwoofer_hud.label = &"^3RESONATORS: ^5";
+	level.turbine_hud.label = &"^3TURBINES: ^5";
 
     if (isdierise())
     {
@@ -1714,7 +1714,7 @@ leapertracker()
 	self.lastleaperround.sort = 1;
 	self.lastleaperround.color = (1, 1 ,1);
 	self.lastleaperround.hidewheninmenu = 1;
-	self.lastleaperround.label = &"^3Last leaper round: ^4";
+	self.lastleaperround.label = &"^3Last leaper round: ^5";
 	self.lastleaperround setValue(0);
 	while(true)
 	{
@@ -1740,7 +1740,7 @@ PanzerTracker()
 	self.lastPanzerRound.sort = 1;
 	self.lastPanzerRound.color = (1, 1 ,1);
 	self.lastPanzerRound.hidewheninmenu = 1;
-	self.lastPanzerRound.label = &"^3Last panzer round: ^4";
+	self.lastPanzerRound.label = &"^3Last panzer round: ^5";
 	self.lastPanzerRound setValue(0);
 	while(true)
 	{
@@ -1765,7 +1765,7 @@ TemplarTracker()
 	self.lastTemplarRound.sort = 1;
 	self.lastTemplarRound.color = (1, 1 ,1);
 	self.lastTemplarRound.hidewheninmenu = 1;
-	self.lastTemplarRound.label = &"^3Last templar round: ^4";
+	self.lastTemplarRound.label = &"^3Last templar round: ^5";
 	self.lastTemplarRound setValue(0);
 	while(true)
 	{
@@ -1814,7 +1814,7 @@ BrutusTracker()
 	self.lastBrutusRound.sort = 1;
 	self.lastBrutusRound.color = (1, 1 ,1);
 	self.lastBrutusRound.hidewheninmenu = 1;
-	self.lastBrutusRound.label = &"^3Last brutus round: ^4";
+	self.lastBrutusRound.label = &"^3Last brutus round: ^5";
 	self.lastBrutusRound setValue(0);
 	while(true)
 	{
@@ -2339,77 +2339,77 @@ setFragaLanguage()
     switch(getDvar("language"))
     {
         case "spanish":
-            level.boxhits.label = &"^3Tiradas de caja: ^4";
+            level.boxhits.label = &"^3Tiradas de caja: ^5";
             level.cheats.label = &"^1^FCheats activados";
             level.firstbox_active.label = &"^2^FFirstbox activado";
-            if(isorigins() || isburied() || isnuketown() && !level.debug) level.perkrng_desabled.label = &"^4^FPerk RNG manipulada";
+            if(isorigins() || isburied() || isnuketown() && !level.debug) level.perkrng_desabled.label = &"^5^FPerk RNG manipulada";
             if(isorigins() && !level.debug) level.templar_modiffied.label = &"^6^FTemplarios manipulados";
-            if(isdefined(self.lastBrutusRound)) self.lastBrutusRound.label = &"^3Última ronda de brutus: ^4";
-            if(isdefined(self.lastTemplarRound)) self.lastTemplarRound.label = &"^3Última ronda de templarios: ^4";
-            if(isdefined(self.lastPanzerRound)) self.lastPanzerRound.label = &"^3Última ronda de panzer: ^4";
-            if(isdefined(self.lastleaperround)) self.lastleaperround.label = &"^3Última ronda de novas: ^4";
+            if(isdefined(self.lastBrutusRound)) self.lastBrutusRound.label = &"^3Última ronda de brutus: ^5";
+            if(isdefined(self.lastTemplarRound)) self.lastTemplarRound.label = &"^3Última ronda de templarios: ^5";
+            if(isdefined(self.lastPanzerRound)) self.lastPanzerRound.label = &"^3Última ronda de panzer: ^5";
+            if(isdefined(self.lastleaperround)) self.lastleaperround.label = &"^3Última ronda de novas: ^5";
             flag_wait("initial_blackscreen_passed");
-            if(isdefined(level.springpad_hud)) level.springpad_hud.label = &"^3TRAMPOLINES: ^4";
+            if(isdefined(level.springpad_hud)) level.springpad_hud.label = &"^3TRAMPOLINES: ^5";
             if(isdefined(level.subwoofer_hud))
             {
-                level.springpad_hud.label = &"^3TRAMPOLINES: ^4";
-                level.subwoofer_hud.label = &"^3RESONADORES: ^4";
-                level.turbine_hud.label = &"^3TURBINAS: ^4";
+                level.springpad_hud.label = &"^3TRAMPOLINES: ^5";
+                level.subwoofer_hud.label = &"^3RESONADORES: ^5";
+                level.turbine_hud.label = &"^3TURBINAS: ^5";
             }
             break;
         case "french":
-            level.boxhits.label = &"^3Box hits: ^4";
+            level.boxhits.label = &"^3Box hits: ^5";
             level.cheats.label = &"^1^FCheats actif";
             level.firstbox_active.label = &"^2^FFirstbox actif";
-            if(isorigins() || isburied() || isnuketown()) level.perkrng_desabled.label = &"^4^FLa RNG des atouts est manipulé";
+            if(isorigins() || isburied() || isnuketown()) level.perkrng_desabled.label = &"^5^FLa RNG des atouts est manipulé";
             if(isorigins()) level.templar_modiffied.label = &"^6^FTemplier est manipulé";
-            if(isdefined(self.lastBrutusRound)) self.lastBrutusRound.label = &"^3Dernière manche de brutus: ^4";
-            if(isdefined(self.lastTemplarRound)) self.lastTemplarRound.label = &"^3Dernière manche des templiers: ^4";
-            if(isdefined(self.lastPanzerRound)) self.lastPanzerRound.label = &"^3Dernière manche de panzer: ^4";
-            if(isdefined(self.lastleaperround)) self.lastleaperround.label = &"^3Dernière manche de leapers: ^4";
+            if(isdefined(self.lastBrutusRound)) self.lastBrutusRound.label = &"^3Dernière manche de brutus: ^5";
+            if(isdefined(self.lastTemplarRound)) self.lastTemplarRound.label = &"^3Dernière manche des templiers: ^5";
+            if(isdefined(self.lastPanzerRound)) self.lastPanzerRound.label = &"^3Dernière manche de panzer: ^5";
+            if(isdefined(self.lastleaperround)) self.lastleaperround.label = &"^3Dernière manche de leapers: ^5";
             flag_wait("initial_blackscreen_passed");
-            if(isdefined(level.springpad_hud)) level.springpad_hud.label = &"^3PROPULSEURS: ^4";
+            if(isdefined(level.springpad_hud)) level.springpad_hud.label = &"^3PROPULSEURS: ^5";
             if(isdefined(level.subwoofer_hud))
             {
-                level.springpad_hud.label = &"^3PROPULSEURS: ^4";
-                level.subwoofer_hud.label = &"^3RÉSONATEUR: ^4";
-                level.turbine_hud.label = &"^3TURBINES: ^4";
+                level.springpad_hud.label = &"^3PROPULSEURS: ^5";
+                level.subwoofer_hud.label = &"^3RÉSONATEUR: ^5";
+                level.turbine_hud.label = &"^3TURBINES: ^5";
             }
             break;
         case "japanese":
-            level.boxhits.label = &"^3Box hits: ^4";
+            level.boxhits.label = &"^3Box hits: ^5";
             level.cheats.label = &"^1^FCheats アクティブ";
             level.firstbox_active.label = &"^2^FFirstbox アクティブ";
-            if(isorigins() || isburied() || isnuketown() && !level.debug) level.perkrng_desabled.label = &"^4^F特典 RNG 操作された";
+            if(isorigins() || isburied() || isnuketown() && !level.debug) level.perkrng_desabled.label = &"^5^F特典 RNG 操作された";
             if(isorigins() && !level.debug) level.templar_modiffied.label = &"^6^Fテンプラー 操作された";
-            if(isdefined(self.lastBrutusRound)) self.lastBrutusRound.label = &"^3ブルータス最後のラウンド: ^4";
-            if(isdefined(self.lastTemplarRound)) self.lastTemplarRound.label = &"^3テンプル騎士団の最後のラウンド: ^4";
-            if(isdefined(self.lastPanzerRound)) self.lastPanzerRound.label = &"^3最後の装甲ラウンド: ^4";
-            if(isdefined(self.lastleaperround)) self.lastleaperround.label = &"^3最後のリーパーラウンド: ^4";
+            if(isdefined(self.lastBrutusRound)) self.lastBrutusRound.label = &"^3ブルータス最後のラウンド: ^5";
+            if(isdefined(self.lastTemplarRound)) self.lastTemplarRound.label = &"^3テンプル騎士団の最後のラウンド: ^5";
+            if(isdefined(self.lastPanzerRound)) self.lastPanzerRound.label = &"^3最後の装甲ラウンド: ^5";
+            if(isdefined(self.lastleaperround)) self.lastleaperround.label = &"^3最後のリーパーラウンド: ^5";
             flag_wait("initial_blackscreen_passed");
-            if(isdefined(level.springpad_hud)) level.springpad_hud.label = &"^3スプリングパッド: ^4";
+            if(isdefined(level.springpad_hud)) level.springpad_hud.label = &"^3スプリングパッド: ^5";
             if(isdefined(level.subwoofer_hud))
             {
-                level.springpad_hud.label = &"^3スプリングパッド: ^4";
-                level.subwoofer_hud.label = &"^3レゾネーター: ^4";
-                level.turbine_hud.label = &"^3タービン: ^4";
+                level.springpad_hud.label = &"^3スプリングパッド: ^5";
+                level.subwoofer_hud.label = &"^3レゾネーター: ^5";
+                level.turbine_hud.label = &"^3タービン: ^5";
             }
             break;
         default:
-            level.boxhits.label = &"^3Box hits: ^4";
+            level.boxhits.label = &"^3Box hits: ^5";
             level.cheats.label = &"^1^FCheats active";
             level.firstbox_active.label = &"^2^FFirstbox active";
-            if(isorigins() || isburied() || isnuketown() && !level.debug) level.perkrng_desabled.label = &"^4^FPerk RNG manipulated";
-            if(isdefined(self.lastBrutusRound)) self.lastBrutusRound.label = &"^3Last brutus round: ^4";
-            if(isdefined(self.lastTemplarRound)) self.lastTemplarRound.label = &"^3Last templar round: ^4";
-            if(isdefined(self.lastPanzerRound)) self.lastPanzerRound.label = &"^3Last panzer round: ^4";
-            if(isdefined(self.lastleaperround)) self.lastleaperround.label = &"^3Last leaper round: ^4";
-            if(isdefined(level.springpad_hud)) level.springpad_hud.label = &"^3SPRINGPADS: ^4";
+            if(isorigins() || isburied() || isnuketown() && !level.debug) level.perkrng_desabled.label = &"^5^FPerk RNG manipulated";
+            if(isdefined(self.lastBrutusRound)) self.lastBrutusRound.label = &"^3Last brutus round: ^5";
+            if(isdefined(self.lastTemplarRound)) self.lastTemplarRound.label = &"^3Last templar round: ^5";
+            if(isdefined(self.lastPanzerRound)) self.lastPanzerRound.label = &"^3Last panzer round: ^5";
+            if(isdefined(self.lastleaperround)) self.lastleaperround.label = &"^3Last leaper round: ^5";
+            if(isdefined(level.springpad_hud)) level.springpad_hud.label = &"^3SPRINGPADS: ^5";
             if(isdefined(level.subwoofer_hud))
             {
-                level.springpad_hud.label = &"^3SPRINGPADS: ^4";
-                level.subwoofer_hud.label = &"^3RESONATORS: ^4";
-                level.turbine_hud.label = &"^3TURBINES: ^4";
+                level.springpad_hud.label = &"^3SPRINGPADS: ^5";
+                level.subwoofer_hud.label = &"^3RESONATORS: ^5";
+                level.turbine_hud.label = &"^3TURBINES: ^5";
             }
             break;
     }
@@ -2740,7 +2740,7 @@ perkrng()
     level.perkrng_desabled.horzalign = "user_center";
     level.perkrng_desabled.vertalign = "user_bottom";
     level.perkrng_desabled.aligny = "bottom";
-    level.perkrng_desabled.label = &"^4^FPerk RNG manipulated";
+    level.perkrng_desabled.label = &"^5^FPerk RNG manipulated";
     if(isburied() || isorigins())
     {
         if(!getDvarInt("perkRNG"))

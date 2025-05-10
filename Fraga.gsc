@@ -84,6 +84,7 @@ setDvars()
     createDvar("nightmode", 0);
     createDvar("firstbox", 0);
     createDvar("stop_warning", 0);
+    createDvar("papcamo", 0);
     
     if (issurvivalmap()) createDvar("avg", 1);
     if (isvictismap())
