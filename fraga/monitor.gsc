@@ -28,6 +28,7 @@
 monitor_init()
 {
 	level thread readchat();
+	level thread readconsole();
 	level thread drops_spawned();
 	level thread track_round_times();
 	level thread track_times();
@@ -93,52 +94,79 @@ readchat()
 			fragaprint("Unknown command ^1" + message);
 			continue;
 		}
-
-        switch(msg[0])
-        {
-			case "!fov": setDvar("cg_fov", msg[1]); break;
-
-			case "!zc": print_zombies_at_round(msg[1]); break;
-			case "!tzc": total_zombie_count(msg[1], msg[2]); break;
-			case "!ds": print_drops_spawned(msg[1]); break;
-
-			case "!nightmode": setDvar("nightmode", !getDvarInt("nightmode")); break;
-
-			case "!perkrng": setDvar("perkrng", !getDvarInt("perkrng")); break;
-			case "!firstbox": case "!fb": setDvar("firstbox", !getDvarInt("firstbox")); break;
-			case "!templars": setDvar("templars", !getDvarInt("templars")); break;
-			case "!traptimer": case "tt": setDvar("traptimer", !getDvarInt("traptimer")); break;
-			case "!box": setDvar("box", msg[1]); break;
-			case "!character": setDvar("character", msg[1]); break;
-
-			case "!times": print_times(); break;
-			case "!rt": print_round_times(msg[1]); break;
-			case "!t":  print_game_time(); break;
-			case "!timer": setDvar("timer", msg[1]); break;
-			case "!sph": print_sph(msg[1]); break;
-
-			case "!test": fragaprint("IT WOKRS!"); break;
-			case "!debug": setDvar("fragadebug", !getDvarInt("fragadebug")); break;
-
-			case "!na": next_avogadro(); break;
-			case "!nb": next_brutus(); break;
-			case "!nt": next_templars(); break;
-			case "!np": next_panzers(); break;
-			case "!nl": next_leapers(); break;
-			case "!rounders": rounders(); break;
-			case "!panzers": panzers(); break;
-			case "!templars": templars(); break;
-			case "!leapers": leapers(); break;
-			case "!brutus": brutus(); break;
-			case "!avogadros": avogadros(); break;
-
-			case "!papcamo": camo(msg[1]); break;
-
-			case "!bs": level.bs_fix = !level.bs_fix; break;
-			default: if(!isdefined(level.strat_tester)) fragaprint("Unknown command ^1" + message); break;
-        }
+        level thread commands(msg, player);
     }
 }
+
+readconsole()
+{
+    self endon("end_game");
+    while (true) 
+    {
+		wait 0.05;
+		message = getDvar("chat");
+		if(message == "xxxxxxxxxxxx")
+			continue;
+        msg = strtok(tolower(message), " ");
+		if(!in_array(msg[0], level.StratTesterCommands) && (!in_array(msg[0], level.FragaCommands)))
+		{
+			fragaprint("Unknown command ^1" + message);
+			continue;
+		}
+		if(!isdefined(player))
+			player = level.players[0];
+        level thread commands(msg, player);
+    }
+}
+
+commands(msg, player)
+{
+	switch(msg[0])
+	{
+		case "!fov": setDvar("cg_fov", msg[1]); break;
+
+		case "!zc": print_zombies_at_round(msg[1]); break;
+		case "!tzc": total_zombie_count(msg[1], msg[2]); break;
+		case "!ds": print_drops_spawned(msg[1]); break;
+
+		case "!nightmode": setDvar("nightmode", !getDvarInt("nightmode")); break;
+
+		case "!perkrng": setDvar("perkrng", !getDvarInt("perkrng")); break;
+		case "!firstbox": case "!fb": setDvar("firstbox", !getDvarInt("firstbox")); break;
+		case "!templars": setDvar("templars", !getDvarInt("templars")); break;
+		case "!traptimer": case "tt": setDvar("traptimer", !getDvarInt("traptimer")); break;
+		case "!box": setDvar("box", msg[1]); break;
+		case "!character": setDvar("character", msg[1]); break;
+
+		case "!times": print_times(); break;
+		case "!rt": print_round_times(msg[1]); break;
+		case "!t":  print_game_time(); break;
+		case "!timer": setDvar("timer", msg[1]); break;
+		case "!sph": print_sph(msg[1]); break;
+
+		case "!test": fragaprint("IT WOKRS!"); break;
+		case "!debug": setDvar("fragadebug", !getDvarInt("fragadebug")); break;
+
+		case "!na": next_avogadro(); break;
+		case "!nb": next_brutus(); break;
+		case "!nt": next_templars(); break;
+		case "!np": next_panzers(); break;
+		case "!nl": next_leapers(); break;
+		case "!rounders": rounders(); break;
+		case "!panzers": panzers(); break;
+		case "!templars": templars(); break;
+		case "!leapers": leapers(); break;
+		case "!brutus": brutus(); break;
+		case "!avogadros": avogadros(); break;
+
+		case "!papcamo": camo(msg[1]); break;
+
+		case "!bs": level.bs_fix = !level.bs_fix; break;
+		default: break;
+	}
+	setDvar("chat", "xxxxxxxxxxxx");
+}
+
 
 fix_bs()
 {
