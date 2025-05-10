@@ -148,15 +148,15 @@ raygun_counter()
     {
         if(getDvarInt("avg"))
         {
-            level.total_mk2_display.label = &"^3Raygun MK2 AVG: ^4";
-            level.total_ray_display.label = &"^3Raygun AVG: ^4";
+            level.total_mk2_display.label = &"^3Raygun MK2 AVG: ^5";
+            level.total_ray_display.label = &"^3Raygun AVG: ^5";
             if(isDefined(level.total_ray_display)) level.total_ray_display setvalue(level.total_chest_accessed_ray / level.total_ray);
             if(isDefined(level.total_mk2_display)) level.total_mk2_display setvalue(level.total_chest_accessed_mk2 / level.total_mk2);
         }
         else
         {
-            level.total_mk2_display.label = &"^3Total Raygun MK2: ^4";
-            level.total_ray_display.label = &"^3Total Raygun: ^4";
+            level.total_mk2_display.label = &"^3Total Raygun MK2: ^5";
+            level.total_ray_display.label = &"^3Total Raygun: ^5";
             if(isDefined(level.total_ray_display)) level.total_ray_display setvalue(level.total_ray);
             if(isDefined(level.total_mk2_display)) level.total_mk2_display setvalue(level.total_mk2);
         }
