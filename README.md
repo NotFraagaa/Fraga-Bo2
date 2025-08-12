@@ -4,20 +4,20 @@
 
 ## Downloads
 ### New Pluto 4837+
-[V15 | Plutonium r2905+](https://github.com/NotFraagaa/Fraga-Bo2/releases/latest/download/Fraga.Plutonium.4855+.rar)
-
-### Pluto 2905 - 4837
-[V15 | Plutonium r2905+](https://github.com/Fraagaa/Fraga-Bo2/releases/latest/download/Fraga.Plutonium.rar)
-  - Round splits only work on the newest version on pluto
+[V15 | Plutonium r4855+](https://github.com/NotFraagaa/Fraga-Bo2/releases/latest/download/Fraga.Plutonium.4855+.rar)
 
 ### Alternative versions
+
+[V15 | Plutonium r2905 to r4837](https://github.com/Fraagaa/Fraga-Bo2/releases/latest/download/Fraga.Plutonium.rar)
+
 [V15 | Ancient y Redacted](https://github.com/Fraagaa/Fraga-Bo2/releases/latest/download/Fraga.Ancient.y.Redacted.rar)
 
-- These versions have some limitations such as 
+- The ancient version has some limitations such as 
   - Doesnt have graphic changes nor night mode
   - Wunderfizz is not fixed to gen 4
   - Perk rng can not be manipulated (except pap and jug location on nuketown)
   - Templars can not be manipulated
+
 ## Game Changes
 
 - Backspeed fixed
@@ -206,17 +206,22 @@ Templars [0, 1]
   <summary>Descripción en español:</summary>
 
 ## Descargas
+
 ### New pluto (Versión recomendada)
-[V15 | Plutonium r2905+](https://github.com/Fraagaa/Fraga-Bo2/releases/latest/download/Fraga.Plutonium.rar)
-  - Los timer de ronda solo funcionan en new pluto.
+[V15 | Plutonium r4855+](https://github.com/NotFraagaa/Fraga-Bo2/releases/latest/download/Fraga.Plutonium.4855+.rar)
+
 ### Versiones alternativas
+
+[V15 | Plutonium r2905 to r4837](https://github.com/Fraagaa/Fraga-Bo2/releases/latest/download/Fraga.Plutonium.rar)
+
 [V15 | Ancient y Redacted](https://github.com/Fraagaa/Fraga-Bo2/releases/latest/download/Fraga.Ancient.y.Redacted.rar)
 
-- Estas versiones tienen limitaciones como: 
+- La version de ancient tiene limitaciones como: 
   - No tiene graficos mejorados ni modo noche
   - El wunderfizz no está fijo en el generador 4
   - No se puede manipular el rng de las ventajas (menos el pap y jug en nuketown)
   - Los templarios no se pueden manipular
+  
 ## Cambios del juego
 
 - Velocidad arreglada
@@ -402,7 +407,9 @@ Templars [0, 1]
 
 ### DIRECT DOWNLOAD
 
-[V15 | Plutonium r2905+](https://github.com/Fraagaa/Fraga-Bo2/releases/latest/download/Fraga.Plutonium.rar)
+[V15 | Plutonium r4855+](https://github.com/NotFraagaa/Fraga-Bo2/releases/latest/download/Fraga.Plutonium.4855+.rar)
+
+[V15 | Plutonium r2905 to r4837](https://github.com/Fraagaa/Fraga-Bo2/releases/latest/download/Fraga.Plutonium.rar)
 
 [V15 | Ancient y Redacted](https://github.com/Fraagaa/Fraga-Bo2/releases/latest/download/Fraga.Ancient.y.Redacted.rar)
 
