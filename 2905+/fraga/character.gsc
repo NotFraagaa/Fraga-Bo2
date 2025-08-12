@@ -5,7 +5,7 @@
 #include maps\mp\zm_tomb;
 
 
-#include scripts\fraga\ismap;
+#include scripts\zm\fraga\ismap;
 
 
 set_character_option()

@@ -5,7 +5,7 @@
 #include maps\mp\zombies\_zm_weapons;
 #include maps\mp\zombies\_zm_magicbox;
 
-#include scripts\fraga\ismap;
+#include scripts\zm\fraga\ismap;
 
 detect_cheats()
 {

@@ -7,12 +7,12 @@
 #include maps\mp\zombies\_zm_ai_leaper;
 #include maps\mp\zombies\_zm_perks;
 
-#include scripts\fraga\buildables;
-#include scripts\fraga\victismaps;
-#include scripts\fraga\character;
-#include scripts\fraga\box;
-#include scripts\fraga\papcamo;
-#include scripts\fraga\RNGmoddifier;
+#include scripts\zm\fraga\buildables;
+#include scripts\zm\fraga\victismaps;
+#include scripts\zm\fraga\character;
+#include scripts\zm\fraga\box;
+#include scripts\zm\fraga\papcamo;
+#include scripts\zm\fraga\RNGmoddifier;
 
 init()
 {

@@ -7,7 +7,7 @@
 #include maps\mp\gametypes_zm\_globallogic;
 #include maps\mp\zombies\_zm_craftables;
 
-#include scripts\fraga\ismap;
+#include scripts\zm\fraga\ismap;
 
 
 watch_stat( stat, map_array )

@@ -6,7 +6,7 @@
 #include maps\mp\zombies\_zm_weapons;
 #include maps\mp\zombies\_zm_perks;
 
-#include scripts\fraga\ismap;
+#include scripts\zm\fraga\ismap;
 
 fridge()
 {

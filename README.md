@@ -3,9 +3,13 @@
   <summary>English description:</summary>
 
 ## Downloads
-### New pluto (Recomended version)
+### New Pluto 4837+
+[V15 | Plutonium r2905+](https://github.com/NotFraagaa/Fraga-Bo2/releases/latest/download/Fraga.Plutonium.4855+.rar)
+
+### Pluto 2905 - 4837
 [V15 | Plutonium r2905+](https://github.com/Fraagaa/Fraga-Bo2/releases/latest/download/Fraga.Plutonium.rar)
   - Round splits only work on the newest version on pluto
+
 ### Alternative versions
 [V15 | Ancient y Redacted](https://github.com/Fraagaa/Fraga-Bo2/releases/latest/download/Fraga.Ancient.y.Redacted.rar)
 

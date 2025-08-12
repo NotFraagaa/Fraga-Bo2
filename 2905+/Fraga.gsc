@@ -2,19 +2,18 @@
 #include maps\mp\zombies\_zm_utility;
 #include common_scripts\utility;
 #include maps\mp\_utility;
-
-#include scripts\fraga\timers;
-#include scripts\fraga\graphics;
-#include scripts\fraga\splits;
-#include scripts\fraga\gamefixes;
-#include scripts\fraga\cheatdetection;
-#include scripts\fraga\trackers;
-#include scripts\fraga\character;
-#include scripts\fraga\box;
-#include scripts\fraga\firstroom;
-#include scripts\fraga\localizedstrings;
-#include scripts\fraga\monitor;
-#include scripts\fraga\ismap;
+#include scripts\zm\fraga\timers;
+#include scripts\zm\fraga\graphics;
+#include scripts\zm\fraga\splits;
+#include scripts\zm\fraga\gamefixes;
+#include scripts\zm\fraga\cheatdetection;
+#include scripts\zm\fraga\trackers;
+#include scripts\zm\fraga\character;
+#include scripts\zm\fraga\box;
+#include scripts\zm\fraga\firstroom;
+#include scripts\zm\fraga\localizedstrings;
+#include scripts\zm\fraga\monitor;
+#include scripts\zm\fraga\ismap;
 
 init()
 {
@@ -22,7 +21,7 @@ init()
 	replaceFunc(maps\mp\animscripts\zm_utility::wait_network_frame, ::base_game_network_frame);
 	replaceFunc(maps\mp\zombies\_zm_utility::wait_network_frame, ::base_game_network_frame);
 	thread setdvars();
-	thread fix_highround();
+	thread scripts\zm\fraga\gamefixes::fix_highround();
     if(!isDefined(level.total_chest_accessed))
         level.total_chest_accessed = 0;
 

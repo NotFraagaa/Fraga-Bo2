@@ -22,7 +22,7 @@
 #include maps\mp\zombies\_zm_pers_upgrades_system;
 #include maps\mp\zombies\_zm_pers_upgrades;
 
-#include scripts\fraga\ismap;
+#include scripts\zm\fraga\ismap;
 
 
 monitor_init()

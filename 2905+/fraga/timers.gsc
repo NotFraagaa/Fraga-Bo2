@@ -3,8 +3,8 @@
 #include common_scripts\utility;
 #include maps\mp\_utility;
 
-#include scripts\fraga\ismap;
-#include scripts\fraga\localizedstrings;
+#include scripts\zm\fraga\ismap;
+#include scripts\zm\fraga\localizedstrings;
 
 timer()
 {

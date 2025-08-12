@@ -13,11 +13,11 @@
 #include maps\mp\zombies\_zm_magicbox;
 #include maps\mp\zm_alcatraz_sq;
 
-#include scripts\fraga\box;
-#include scripts\fraga\character;
-#include scripts\fraga\timers;
-#include scripts\fraga\trackers;
-#include scripts\fraga\papcamo;
+#include scripts\zm\fraga\box;
+#include scripts\zm\fraga\character;
+#include scripts\zm\fraga\timers;
+#include scripts\zm\fraga\trackers;
+#include scripts\zm\fraga\papcamo;
 
 init()
 {

@@ -6,7 +6,7 @@
 #include maps\mp\zombies\_zm_perk_random;
 #include maps\mp\zombies\_zm_perks;
 
-#include scripts\fraga\ismap;
+#include scripts\zm\fraga\ismap;
 
 Templars( s_last_recapture_zone )
 {

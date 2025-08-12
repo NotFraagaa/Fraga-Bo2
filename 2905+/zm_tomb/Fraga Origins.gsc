@@ -4,11 +4,11 @@
 #include maps\mp\_utility;
 #include maps\mp\zombies\_zm_perk_random;
 
-#include scripts\fraga\character;
-#include scripts\fraga\trackers;
-#include scripts\fraga\papcamo;
-#include scripts\fraga\RNGmoddifier;
-#include scripts\fraga\box;
+#include scripts\zm\fraga\character;
+#include scripts\zm\fraga\trackers;
+#include scripts\zm\fraga\papcamo;
+#include scripts\zm\fraga\RNGmoddifier;
+#include scripts\zm\fraga\box;
 
 init()
 {

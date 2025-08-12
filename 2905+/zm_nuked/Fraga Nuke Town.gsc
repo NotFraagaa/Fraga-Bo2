@@ -4,10 +4,10 @@
 #include maps\mp\_utility;
 #include maps\mp\zm_nuked_perks;
 
-#include scripts\fraga\RNGmoddifier;
-#include scripts\fraga\character;
-#include scripts\fraga\box;
-#include scripts\fraga\papcamo;
+#include scripts\zm\fraga\RNGmoddifier;
+#include scripts\zm\fraga\character;
+#include scripts\zm\fraga\box;
+#include scripts\zm\fraga\papcamo;
 
 init()
 {

@@ -5,7 +5,7 @@
 #include maps\mp\zombies\_zm_weapons;
 #include maps\mp\zombies\_zm_magicbox;
 
-#include scripts\fraga\ismap;
+#include scripts\zm\fraga\ismap;
 
 boxhits()
 {
@@ -390,11 +390,27 @@ setUpWeapons()
             level.forced_box_guns = array("raygun_mark2_zm", "raygun_mark2_zm", "raygun_mark2_zm", "raygun_mark2_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "slowgun_zm");
             break;
         }
-    if(isorigins())
+    if(isorigins() && getDvarInt("SR") == 30)
         switch(level.players.size)
         {
             case 1: 
             level.forced_box_guns = array("scar_zm", "raygun_mark2_zm", "cymbal_monkey_zm");
+            break;
+            case 2:
+            level.forced_box_guns = array("scar_zm", "scar_zm", "raygun_mark2_zm", "ray_gun_zm", "cymbal_monkey_zm", "cymbal_monkey_zm");
+            break;
+            case 3:
+            level.forced_box_guns = array("scar_zm", "scar_zm", "scar_zm", "raygun_mark2_zm", "ray_gun_zm", "ray_gun_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm");
+            break;
+            case 4:
+            level.forced_box_guns = array("scar_zm", "scar_zm", "scar_zm", "scar_zm", "raygun_mark2_zm", "ray_gun_zm", "ray_gun_zm", "ray_gun_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm", "cymbal_monkey_zm");
+            break;
+        }
+    if(isorigins() && getDvarInt("SR") != 30)
+        switch(level.players.size)
+        {
+            case 1: 
+            level.forced_box_guns = array("scar_zm", "raygun_mark2_zm", "m32_zm", "cymbal_monkey_zm");
             break;
             case 2:
             level.forced_box_guns = array("scar_zm", "scar_zm", "raygun_mark2_zm", "ray_gun_zm", "cymbal_monkey_zm", "cymbal_monkey_zm");
